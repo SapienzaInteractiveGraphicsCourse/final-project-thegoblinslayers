@@ -25,21 +25,31 @@ Each room requires completing a specific interaction to unlock the passage to th
 
 ### Controls
 
-| Key | Action |
-|-----|--------|
+| Key / Input | Action |
+|------------|--------|
 | `W A S D` | Move |
+| `Shift` | Sprint |
 | Mouse | Look around |
 | `E` | Interact / Pick up item |
-| `Left click` | Attack (axe) / Block (shield) |
-| `1` / `2` | Switch equipped item (axe / torch / shield) |
+| `Left click` | Attack (only with axe or sword equipped) |
+| `Right click` (hold) | Block with shield (only with shield equipped) |
+| `I` | Open / Close inventory |
+| Mouse (in inventory) | Drag items between slots |
+
+### Inventory
+
+The inventory (`I`) consists of **4 slots**:
+
+- 🗡️ **Primary Slot** — reserved for weapons (axe, sword): the equipped item appears held in first-person on the right side
+- 🛡️ **Utility Slot** — reserved for torch and shield: the equipped item appears held in first-person on the left side
+- 🎒 **Backpack Slot 1 / Slot 2** — free slots to store items and remove them from the first-person view
 
 ### Technical Features
 
 #### Hierarchical Models
-- **Procedural axe** — cylindrical handle + box blade + box beard, composed as a `THREE.Group` hierarchy; swing animation implemented manually via root node rotation
-- **Portable torch** — handle + flame + ember particle system hierarchy, all animated in the render loop
-- **Corridor pendulums** — pivot–shaft–head hierarchical model with sinusoidal animation in JavaScript
-- **Chandelier** — hierarchy of candles and lights with individual flicker animation
+- **Corridor pendulums** — `root` (ceiling anchor) → `pendulumGroup` (chain + blade) hierarchy; sinusoidal animation implemented in JavaScript rotates only the parent node, propagating to all children
+- **Double door** — `door.group` → `leftPivot` / `rightPivot` → door leaves; the opening animation rotates only the pivot nodes, the leaves follow through transform inheritance
+- **Procedural barrel** — `root` → `barrelCore` + `staveGroup` + `middleRingGroup` + rings + rivets; progressive destruction acts on specific hierarchical layers (`staveGroup.visible`, `middleRingGroup.visible`)
 
 #### Lights and Textures
 - **Full PBR textures** on floors, walls, and ceilings: albedo, normal map, roughness map, displacement map
@@ -51,7 +61,8 @@ Each room requires completing a specific interaction to unlock the passage to th
 - **Raycast** interaction system (key `E`) for picking up objects and activating mechanisms
 - **Torch system**: proximity-based ignition from ignition sources (lit wall torch → portable torch and vice versa)
 - **AABB collision detection** with walls for player movement
-- **Combat system**: axe hitbox via raycast, timed damage windows, shield parry system
+- **Combat system**: axe hitbox via raycast, timed damage windows, shield block system
+- **Inventory** with typed slots and drag-and-drop between slots
 - **Pressure plate trigger** that locks the Room 2 entrance door on contact
 - **Respawn system** after player death
 
@@ -61,21 +72,21 @@ Each room requires completing a specific interaction to unlock the passage to th
 - **Torch lighting** animation (`_litProgress` with ease-out curve `Math.pow(p, 0.55)`, clamped deltaTime)
 - **Pendulum** animation (sinusoidal oscillation using `Math.sin(t)` and deltaTime)
 - **Rolling boulder** animation (translation + self-axis rotation)
-- **Door opening** animation (gradual translation with lerp)
+- **Door opening** animation (gradual pivot rotation using `moveTowards`)
 - **Lever** animation (rotation on pivot node)
-- **Barrel destruction** animation (progressive deformation over 3 hit stages)
+- **Barrel destruction** animation (progressive layer-based deformation over 3 hit stages)
 - **Mob death and dissolve** animation (opacity fade on `transparent` materials)
 - ⚠️ *Locomotion and attack animations of the ogre (mob) are imported from GLTF/FBX files*
 
 #### Procedurally Generated Objects
 - **Dungeon** (rooms, corridors, geometry) — `THREE.BoxGeometry` / `PlaneGeometry`
-- **Barrel** — procedural cylinder + staves
-- **Pendulums** — spheres + cylinders
-- **Boulder** — `THREE.SphereGeometry` with displacement
+- **Barrel** — cylinder + staves + rings + rivets, entirely built with `THREE.CylinderGeometry` / `BoxGeometry` / `TorusGeometry`
+- **Pendulums** — ceiling anchor + chain links + blade using `THREE.ExtrudeGeometry`
+- **Boulder** — `THREE.SphereGeometry`
 
 ### Libraries Used
 - [Three.js](https://threejs.org/) — WebGL rendering, scene management, materials, lights, animations
-- [GLTFLoader](https://threejs.org/docs/#examples/en/loaders/GLTFLoader) — ogre model loading
+- [GLTFLoader](https://threejs.org/docs/#examples/en/loaders/GLTFLoader) — 3D model loading (ogre, door, torches)
 - Web Audio API — ambient and gameplay audio system
 
 ***
