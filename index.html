@@ -1,50 +1,58 @@
 <!DOCTYPE html>
 <html lang="it">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dungeon Explorer - FPS Controller</title>
-  <link rel="stylesheet" href="./style.css" />
-  <link rel="icon" href="data:,">
-</head>
-  <!-- ── HOME SCREEN ─────────────────────────────────────────────────────── -->
-  <div id="home-screen">
-    <div id="home-content">
-      <h1 id="home-title">Dungeon Explorer</h1>
-      <div id="home-buttons">
-        <button id="btn-start" class="home-btn">Inizia Partita</button>
-        <button id="btn-exit"  class="home-btn home-btn--secondary">Esci</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dungeon Explorer - FPS Controller</title>
+
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="icon" href="data:,">
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.164.1/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.164.1/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+
+    <!-- 🌀 LOADING SCREEN -->
+    <div id="loading-screen" style = "display:none;">
+      <div class="spinner"></div>
+      <p>Loading game...</p>
+    </div>
+
+    <!-- 🏠 HOME SCREEN -->
+    <div id="home-screen">
+      <div id="home-content">
+        <h1 id="home-title">Dungeon Explorer</h1>
+        <div id="home-buttons">
+          <button id="btn-start" class="home-btn">Inizia Partita</button>
+          <button id="btn-exit" class="home-btn home-btn--secondary">Esci</button>
+        </div>
       </div>
     </div>
-  </div>
-  <!-- ─────────────────────────────────────────────────────────────────────── -->
-  <div id="crosshair"></div>
 
-<!-- ── DAMAGE VIGNETTE (player subisce danno) ─────────────────────── -->
-<div id="damage-vignette"></div>
+    <!-- 🎯 UI GAME -->
+    <div id="crosshair"></div>
 
+    <div id="damage-vignette"></div>
 
+    <div id="noclip-hud" style="
+      display: none; position: fixed; top: 12px; right: 16px;
+      background: rgba(220,50,0,0.85); color: #fff;
+      font-family: monospace; font-size: 13px; font-weight: bold;
+      padding: 4px 10px; border-radius: 4px; z-index: 9999;
+      pointer-events: none;">
+      👻 NOCLIP &nbsp;[C per disattivare]
+    </div>
 
-  <script type="importmap">
-    {
-    "imports": {
-        "three": "https://unpkg.com/three@0.164.1/build/three.module.js",
-        "three/addons/": "https://unpkg.com/three@0.164.1/examples/jsm/"
-    }
-    }
-  </script>
+    <!-- 🎮 GAME SCRIPT -->
+    <script type="module" src="./js/core/main.js"></script>
 
-<script type="module" src="./js/core/main.js"></script>
-
-<div id="noclip-hud" style="
-  display: none; position: fixed; top: 12px; right: 16px;
-  background: rgba(220,50,0,0.85); color: #fff;
-  font-family: monospace; font-size: 13px; font-weight: bold;
-  padding: 4px 10px; border-radius: 4px; z-index: 9999;
-  pointer-events: none;">
-  👻 NOCLIP &nbsp;[C per disattivare]
-</div>
-
-
-</body>
+  </body>
 </html>
