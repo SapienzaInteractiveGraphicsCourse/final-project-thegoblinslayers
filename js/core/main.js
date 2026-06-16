@@ -14,10 +14,11 @@ import { INTERACTION_DISTANCE, PLAYER_HEIGHT }                      from './conf
 import { updateInteraction, tryInteract }                           from '../systems/interactionSystem.js';
 import { createRoomOneSystem }                                      from '../systems/roomOneSystem.js';
 import { createRoomTwoSystem } from '../systems/roomTwoSystem.js';
-import { startAxeSwing }                                            from '../world/axe.js';
+import { preloadAxeModel, prewarmViewAxe,startAxeSwing }            from '../world/axe.js';
 import { preloadTorchModel, prewarmViewTorch }                      from '../world/torch.js';
 import { createInventoryUI }                                        from '../ui/inventory.js';
-import { preloadShieldModel, updateShield, ensureViewShield }                         from '../world/shield.js';
+import { prewarmViewShield, preloadShieldModel, 
+          updateShield, ensureViewShield }                          from '../world/shield.js';
 import { startSwordSwing, updateSword }                             from '../world/sword.js';
 import { createCorridorOneSystem }                                  from '../systems/corridorOneSystem.js';
 import { createCorridorTwoSystem }                                  from '../systems/corridorTwoSystem.js';
@@ -25,11 +26,12 @@ import { createDeathOverlay }                                       from '../ui/
 import { initDeathSystem,updateDeathSystem,updatePendulumHazards }  from '../systems/deathSystem.js';
 
 import { preloadSound, startLoopingSound, 
-        stopLoopingSound, setLoopVolume, warmupAudioContext, setAudioContext, getAudioContext, playSound} from '../systems/audioManager.js';
+        stopLoopingSound, setLoopVolume, warmupAudioContext,
+        setAudioContext, getAudioContext, playSound}                from '../systems/audioManager.js';
 
-import { setupDebugPositionLogger } from '../systems/debugPosition.js';
-import { createCombatHUD }             from '../ui/hud.js';
-import { showPlayerHealthBar, updatePlayerHealthBar } from '../world/mob.js';
+import { setupDebugPositionLogger }                                 from '../systems/debugPosition.js';
+import { createCombatHUD }                                          from '../ui/hud.js';
+import { showPlayerHealthBar, updatePlayerHealthBar }               from '../world/mob.js';
 
 
 
@@ -146,21 +148,24 @@ async function init() {
   await Promise.all([
     preloadTorchModel('./assets/models/torch/scene.gltf'),
     preloadTorchModel('./assets/models/manor_torch/manor_torch.glb'),
+    preloadAxeModel(),
     preloadShieldModel()
   ]);
 
   await createDungeon(gameState, (object) => registerObstacle(gameState, object));
 
   prewarmViewTorch(gameState, './assets/models/manor_torch/manor_torch.glb');
+  prewarmViewAxe(gameState, gameState.renderer);   
+  prewarmViewShield(gameState, gameState.renderer);
 
-  ensureViewShield(gameState);
+  //ensureViewShield(gameState);
   if (gameState.viewShieldHolder) {
     gameState.viewShieldHolder.visible = false;
   }
   gameState.hasShield        = false;
   gameState.isShieldEquipped = false;
 
-  gameState.renderer.compile(gameState.scene, gameState.camera);
+  
 
   setupDebugPositionLogger(gameState);
 
@@ -171,6 +176,14 @@ async function init() {
   createDeathOverlay(gameState);
   initDeathSystem(gameState);
   createCombatHUD();
+
+  // ── Shader warm-up: pre-compila TUTTI i materiali prima del gameplay ──────
+  // Questo evita gli spike di compilazione shader al primo render di ogni oggetto.
+  // Teoricamente: WebGL compila ogni shader program GLSL la prima volta che 
+  // un materiale entra nel frustum — renderer.compile() forza questo lavoro 
+  // durante il loading invece che durante il gameplay.
+  gameState.renderer.compile(gameState.scene, gameState.camera);
+
 
   // Spawn iniziale del dungeon
   gameState.spawnPoint.set(0, PLAYER_HEIGHT * 0.5, 8);

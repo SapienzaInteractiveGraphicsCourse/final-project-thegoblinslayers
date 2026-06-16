@@ -107,13 +107,21 @@ export function setTorchLitState(torch, isLit, instant = false) {
   if (!isLit) {
     clearTorchEmbers(torch);
     torch._litProgress = 0.0;
-    if (torch.flamePivot) torch.flamePivot.visible = false;
+    
+    // In questo modo WebGL include la mesh nel compile() e pre-compila lo shader variant
+    if (torch.flamePivot) {
+      torch.flamePivot.visible = true;           // ← rimane visibile per il compile
+      torch.flamePivot.scale.setScalar(0.0001);  // ← scala quasi zero: non si vede
+    }
     if (torch.flameMaterials) {
       for (const mat of torch.flameMaterials) {
         mat.opacity = 0;
+        mat.transparent = true;                  // già presente, lo confermiamo
+        mat.depthWrite = false;                  // già presente, lo confermiamo
         if ('emissiveIntensity' in mat) mat.emissiveIntensity = 0;
       }
     }
+
   } else {
     // instant = true: usato per torce che nascono già accese, salta la transizione
     torch._litProgress = instant ? 1.0 : 0.0;

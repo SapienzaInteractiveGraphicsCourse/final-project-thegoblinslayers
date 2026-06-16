@@ -12,21 +12,40 @@ const _gltfLoader = new GLTFLoader();
 // Path del modello 3D dell'ascia
 const AXE_MODEL_PATH = './assets/models/axe_2/scene.gltf';
 
+let _cachedAxeScene = null;
+
+export function preloadAxeModel() {
+  return new Promise((resolve, reject) => {
+    if (_cachedAxeScene) { resolve(_cachedAxeScene); return; }
+    _gltfLoader.load(
+      AXE_MODEL_PATH,
+      (gltf) => { _cachedAxeScene = gltf.scene; resolve(gltf.scene); },
+      undefined,
+      reject
+    );
+  });
+}
+
 // ─── Funzione helper: carica il modello e lo aggiunge al gruppo root ──────────
 function loadAxeModel(root, onLoaded) {
+  if (_cachedAxeScene) {
+    // Cache hit: clona sincrono, zero latenza
+    const model = _cachedAxeScene.clone(true);
+    model.scale.setScalar(0.10);
+    model.rotation.set(0, 0, 0);
+    root.add(model);
+    if (onLoaded) onLoaded(model);
+    return;
+  }
+  // Fallback: carica e salva in cache (non dovrebbe mai succedere se
+  // preloadAxeModel() viene chiamato correttamente all'init)
   _gltfLoader.load(
     AXE_MODEL_PATH,
     (gltf) => {
-      const model = gltf.scene;
-
-      // Il modello Sketchfab esce con scala enorme, lo normalizziamo
-      // Questi valori vanno calibrati in base a quanto appare grande nel gioco
+      _cachedAxeScene = gltf.scene;
+      const model = gltf.scene.clone(true);
       model.scale.setScalar(0.10);
-
-      // Correzione orientamento: Sketchfab ruota il modello di -90° su X
-      // Azzeriamo la rotazione del nodo radice e la gestiamo noi
       model.rotation.set(0, 0, 0);
-
       root.add(model);
       if (onLoaded) onLoaded(model);
     },
@@ -324,4 +343,31 @@ function easeInCubic(t) {
 
 function easeInOutQuad(t) {
   return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+}
+
+/**
+ * Prewarm del viewmodel ascia.
+ * Va chiamata UNA VOLTA sola durante il loading, DOPO preloadAxeModel().
+ * Crea il viewmodel, lo aggiunge alla camera, forza il renderer a
+ * compilare tutti gli shader, poi lo nasconde.
+ * Al pickup successivo ensureViewAxe() trova già tutto pronto.
+ */
+export function prewarmViewAxe(state, renderer) {
+  if (!state.camera || !renderer) return;
+
+  // Costruisce il viewmodel completo (stesso codice di ensureViewAxe)
+  const holder = ensureViewAxe(state);
+  if (!holder) return;
+
+  // Lo rende visibile per UN frame (necessario per triggherare la compilazione shader)
+  holder.visible = true;
+
+  // renderer.compile() forza la GPU a compilare tutti i programmi shader
+  // presenti nella scena + camera in questo momento.
+  renderer.compile(state.scene, state.camera);
+
+  // Subito nascosto: il giocatore non vede nulla
+  holder.visible = false;
+
+  console.log('[axe] prewarm completato — shader ascia compilati');
 }

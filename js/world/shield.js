@@ -194,3 +194,21 @@ export function updateShield(state, deltaTime) {
   holder.rotation.y = THREE.MathUtils.lerp(holder.rotation.y, targetRot.y, alpha);
   holder.rotation.z = THREE.MathUtils.lerp(holder.rotation.z, targetRot.z, alpha);
 }
+
+/**
+ * Prewarm del viewmodel scudo.
+ * Va chiamata UNA VOLTA sola durante il loading, DOPO preloadShieldModel().
+ * Elimina il freeze al primo switch torcia → scudo.
+ */
+export function prewarmViewShield(state, renderer) {
+  if (!state.camera || !renderer) return;
+
+  const holder = ensureViewShield(state);
+  if (!holder) return;
+
+  holder.visible = true;
+  renderer.compile(state.scene, state.camera);
+  holder.visible = false;
+
+  console.log('[shield] prewarm completato — shader scudo compilati');
+}

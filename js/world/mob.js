@@ -1445,6 +1445,9 @@ this._onBlockHit            = null;
     });
     }
 
+
+
+
     // Parte subito con IdlePatrol in loop
     mob._playAnim(ANIM.IDLE_PATROL, true);
 
