@@ -255,3 +255,29 @@ canvas {
   0%   { opacity: 0.75; }
   100% { opacity: 0; }
 }
+
+
+/* ── Loading bar ── */
+#loading-bar-wrap {
+  width: 260px;
+  height: 6px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 3px;
+  margin: 10px auto 6px;
+  overflow: hidden;
+}
+
+#loading-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: #e8a830;
+  border-radius: 3px;
+  transition: width 0.25s ease;
+}
+
+#loading-percent {
+  font-size: 13px;
+  color: rgba(255,255,255,0.55);
+  margin: 0;
+  letter-spacing: 0.05em;
+}

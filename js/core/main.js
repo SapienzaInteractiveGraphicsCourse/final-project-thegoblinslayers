@@ -140,6 +140,10 @@ btnStart.addEventListener('click', async () => {
   // 3. Avvia il caricamento del dungeon
   await init();
   gameState.isLoading = false;
+
+  // Aspetta 1 secondo a "Pronto!" prima di nascondere la loading screen
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
   document.getElementById("loading-screen").style.display = "none";
   gameState.isInitialized = true;
 
@@ -181,6 +185,18 @@ function onWakeUpComplete() {
   setupPointerLock(gameState);
 }
 
+
+// ── Progress bar manuale a fasi ───────────────────────────────────────────
+function setLoadingProgress(pct, label) {
+  const fill = document.getElementById('loading-bar-fill');
+  const perc = document.getElementById('loading-percent');
+  const lbl  = document.getElementById('loading-label');
+  if (fill) fill.style.width  = Math.min(100, pct) + '%';
+  if (perc) perc.textContent  = Math.min(100, pct) + '%';
+  if (lbl)  lbl.textContent   = label;
+}
+// ─────────────────────────────────────────────────────────────────────────
+
 async function init() {
   // ── Flag: blocca il render loop finché tutto non è pronto ─────────────────
   gameState.isInitialized = false;
@@ -197,6 +213,8 @@ async function init() {
   createInventoryUI(gameState);
   createCamera(gameState);
 
+  setLoadingProgress(5, 'Inizializzazione...'); 
+
   const audioListener = new THREE.AudioListener();
   gameState.camera.add(audioListener);
   gameState.audioListener = audioListener;
@@ -211,6 +229,8 @@ async function init() {
   gameState.scene.add(gameState.camera);
   createLights(gameState);
 
+  setLoadingProgress(15, 'Caricamento modelli...');
+
   await Promise.all([
     preloadTorchModel('./assets/models/torch/scene.gltf'),
     preloadTorchModel('./assets/models/manor_torch/manor_torch.glb'),
@@ -218,7 +238,11 @@ async function init() {
     preloadShieldModel()
   ]);
 
+  setLoadingProgress(40, 'Costruzione dungeon...');
+
   await createDungeon(gameState, (object) => registerObstacle(gameState, object));
+
+  setLoadingProgress(60, 'Preparazione oggetti...');
 
   prewarmViewTorch(gameState, './assets/models/manor_torch/manor_torch.glb');
   prewarmViewAxe(gameState, gameState.renderer);   
@@ -235,6 +259,8 @@ async function init() {
 
   setupDebugPositionLogger(gameState);
 
+  setLoadingProgress(70, 'Caricamento stanze...'); 
+
   createRoomOneSystem(gameState, { showErrorOverlay });
   createCorridorOneSystem(gameState, {showErrorOverlay});
   await createCorridorTwoSystem(gameState, {showErrorOverlay});
@@ -242,6 +268,9 @@ async function init() {
   createDeathOverlay(gameState);
   initDeathSystem(gameState);
   createCombatHUD();
+
+
+  setLoadingProgress(85, 'Compilazione shader...');
 
   // Pre-carica texture in VRAM
   /*gameState.scene.traverse((child) => {
@@ -318,6 +347,8 @@ for (const l of _warmHiddenLights)   l.visible = false;
 for (const p of _warmRescaledPivots) p.scale.setScalar(0.0001);
 for (const m of _warmHiddenMeshes)   m.visible = false;
 // ─────────────────────────────────────────────────────────────────────────
+
+setLoadingProgress(100, 'Pronto!');
 
 // ── Shader warm-up completo: pre-compila tutti i variant shader ───────────
 // Il problema: Three.js genera shader variant diversi in base al numero di
