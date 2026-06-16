@@ -93,4 +93,4 @@ The inventory (`I`) consists of **4 slots**:
 
 ***
 
-*Sapienza Università di Roma — Interactive Graphics 2024/25*
+*Sapienza Università di Roma — Interactive Graphics 2025/26*
