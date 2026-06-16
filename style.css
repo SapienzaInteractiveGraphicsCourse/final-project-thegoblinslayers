@@ -102,7 +102,7 @@ canvas {
 }
 
 #win-screen.fade-out {
-  animation: home-fadeout 0.8s ease-in forwards;
+  animation: home-fadeout 0.3s ease-in forwards;
 }
 
 @keyframes home-fadeout {
