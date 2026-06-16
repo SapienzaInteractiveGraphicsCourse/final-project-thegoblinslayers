@@ -61,13 +61,14 @@ The inventory (`I`) consists of **4 slots**:
 - **Raycast** interaction system (key `E`) for picking up objects and activating mechanisms
 - **Torch system**: proximity-based ignition from ignition sources (lit wall torch → portable torch and vice versa)
 - **AABB collision detection** with walls for player movement
-- **Combat system**: axe hitbox via raycast, timed damage windows, shield block system
+- **Combat system**: axe/sword hitbox via raycast, timed damage windows, shield block system
 - **Inventory** with typed slots and drag-and-drop between slots
 - **Pressure plate trigger** that locks the Room 2 entrance door on contact
 - **Respawn system** after player death
 
 #### Animations (all implemented in JavaScript)
 - **Axe swing** animation (eased rotation on root node)
+- **Sword swing** animation (eased rotation on root node)
 - **Torch flame** animation (scaling + sinusoidal rotation + ember particles)
 - **Torch lighting** animation (`_litProgress` with ease-out curve `Math.pow(p, 0.55)`, clamped deltaTime)
 - **Pendulum** animation (sinusoidal oscillation using `Math.sin(t)` and deltaTime)
