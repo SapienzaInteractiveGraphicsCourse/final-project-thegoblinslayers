@@ -47,7 +47,7 @@ const homeScreen = document.getElementById('home-screen');
 const btnStart   = document.getElementById('btn-start');
 const btnExit    = document.getElementById('btn-exit');
 
-btnStart.addEventListener('click', () => {
+btnStart.addEventListener('click', async () => {
   warmupAudioContext();
 
 
@@ -66,6 +66,9 @@ btnStart.addEventListener('click', () => {
   homeScreen.classList.add('fade-out');
   homeScreen.addEventListener('animationend', () => homeScreen.remove(), { once: true });
 
+  gameState.isLoading = true;
+  document.getElementById("loading-screen").style.display = "flex";
+
   // 2. Sblocca AudioContext
   const listener = gameState.audioListener;
   if (listener) {
@@ -74,7 +77,11 @@ btnStart.addEventListener('click', () => {
   }
 
   // 3. Avvia il caricamento del dungeon
-  init();
+  await init();
+  gameState.isLoading = false;
+  document.getElementById("loading-screen").style.display = "none";
+  gameState.isInitialized = true;
+
   animate();
 });
 
@@ -187,9 +194,6 @@ async function init() {
 
   // Il canvas overlay di wakeUpSequence è ora attivo → rimuovi il div iniziale
   initBlack.remove();
-
-  // ── Ora il render loop può partire ────────────────────────────────────────
-  gameState.isInitialized = true;
 
   window.addEventListener('resize', () => onWindowResize(gameState));
 
