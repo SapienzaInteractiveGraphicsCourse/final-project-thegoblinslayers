@@ -46,10 +46,12 @@ document.body.appendChild(initBlack);
 
 // ── Home screen logic ─────────────────────────────────────────────────────────
 const homeScreen = document.getElementById('home-screen');
-const btnStart   = document.getElementById('btn-start');
-const btnExit    = document.getElementById('btn-exit');
+const btnStart1   = document.getElementById('btn-start1');
+const btnExit1    = document.getElementById('btn-exit1');
+const btnStart2   = document.getElementById('btn-start2');
+const btnExit2    = document.getElementById('btn-exit2');
 
-btnStart.addEventListener('click', async () => {
+btnStart1.addEventListener('click', async () => {
   warmupAudioContext();
 
 
@@ -87,7 +89,55 @@ btnStart.addEventListener('click', async () => {
   animate();
 });
 
-btnExit.addEventListener('click', () => {
+btnStart2.addEventListener('click', async () => {
+  warmupAudioContext();
+
+
+  preloadSound('pickupItem',   './assets/audio/pickup_item.mp3');
+  preloadSound('fireIgnition', './assets/audio/fire_ignition.mp3');
+  preloadSound('torchOnView',  './assets/audio/fire_manor_torch_onview.mp3');
+
+
+  // ── Suono click menu ──────────────────────────────────────────────────
+  const menuSound = new Audio('./assets/audio/Menu_Open.mp3');
+  menuSound.volume = 0.8;
+  menuSound.play();
+  // ─────────────────────────────────────────────────────────────────────
+
+  // 1. Feedback visivo immediato: fade-out home
+  homeScreen.classList.add('fade-out');
+  homeScreen.addEventListener('animationend', () => homeScreen.remove(), { once: true });
+
+  gameState.isLoading = true;
+  document.getElementById("loading-screen").style.display = "flex";
+
+  // 2. Sblocca AudioContext
+  const listener = gameState.audioListener;
+  if (listener) {
+    const ctx = listener.context;
+    if (ctx && ctx.state === 'suspended') ctx.resume();
+  }
+
+  // 3. Avvia il caricamento del dungeon
+  await init();
+  gameState.isLoading = false;
+  document.getElementById("loading-screen").style.display = "none";
+  gameState.isInitialized = true;
+
+  animate();
+});
+
+btnExit1.addEventListener('click', () => {
+  // window.close() funziona solo se la tab è stata aperta da JS
+  // In caso contrario mostra un messaggio discreto
+  const closed = window.close();
+  if (!closed) {
+    btnExit.textContent = 'Chiudi il browser per uscire';
+    btnExit.style.pointerEvents = 'none';
+  }
+});
+
+btnExit2.addEventListener('click', () => {
   // window.close() funziona solo se la tab è stata aperta da JS
   // In caso contrario mostra un messaggio discreto
   const closed = window.close();
@@ -295,9 +345,6 @@ async function init() {
   document.addEventListener('click', startAmbientOnce);
 }
 
-
-
-
 function updatePendulumAudio(state) {
   if (!state.pendulums || state.pendulums.length === 0) return;
   if (state.isDead) return;
@@ -321,6 +368,19 @@ function updatePendulumAudio(state) {
   } else {
     stopLoopingSound('whoosh');
   }
+}
+
+// function for showing the win screen and freezing the gameplay when the player wins
+function triggerWin(){
+  if (gameState.hasWon) return;
+  gameState.hasWon = true;
+
+  gameState.isDead = true; // reused for freezeng the gameplay
+  gameState.isInitialized = false;
+  stopLoopingSound('footsteps');
+
+  const winScreen = document.getElementById("win-screen");
+  winScreen.classList.add("active"); // changes css  for the winning screen
 }
 
 function animate() {
@@ -381,6 +441,18 @@ function animate() {
   updateShield(gameState, deltaTime);
   updateSword(gameState, deltaTime);
   updateCameraTransform(gameState);
+  // implementation of the win zone
+  if(!gameState.hasWon && gameState.camera){
+    const x = gameState.camera.position.x;
+    const z = gameState.camera.position.z;
+
+    const winZone = (
+      x<32 && x>31 && z>-25-1.2 && z<-25+1.2
+    );
+    if(winZone){
+      triggerWin();
+    }
+  }
 
   gameState.renderer.render(gameState.scene, gameState.camera);
 }
