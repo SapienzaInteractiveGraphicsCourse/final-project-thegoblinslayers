@@ -35,6 +35,65 @@ import { showPlayerHealthBar, updatePlayerHealthBar }               from '../wor
 
 
 
+/**
+ * Pre-compila tutti i variant shader WebGL per evitare spike durante il gameplay.
+ * 
+ * Teoria: WebGL compila un programma GLSL la prima volta che viene usato (onFirstUse).
+ * Three.js genera variant diversi in base al numero di luci attive nella scena.
+ * Accendendo tutte le luci prima del compile, forziamo la compilazione di tutti
+ * i variant necessari durante il loading, non durante il gameplay.
+ */
+
+/*async function _prewarmAllShaders(state) {
+  const { scene, renderer, camera } = state;
+
+  // 1. Raccogli tutte le luci spente e le flamePivot con scala zero
+  const hiddenLights = [];
+  const rescaledPivots = [];
+
+  scene.traverse((child) => {
+    // Accendi temporaneamente le luci spente
+    if ((child.isPointLight || child.isSpotLight || child.isDirectionalLight) && !child.visible) {
+      child.visible = true;
+      hiddenLights.push(child);
+    }
+    // Ripristina temporaneamente le flamePivot scalate a zero
+    if (child.name && child.name.toLowerCase().includes('flame') && child.scale.x < 0.001) {
+      child.scale.setScalar(1.0);
+      rescaledPivots.push(child);
+    }
+  });
+
+  // 2. Rendi visibili le mesh degli oggetti con visible=false per il compile
+  const hiddenObjects = [];
+  scene.traverse((child) => {
+    if (child.isMesh && !child.visible) {
+      child.visible = true;
+      hiddenObjects.push(child);
+    }
+  });
+
+  // 3. Compila in modo asincrono — non blocca il main thread
+  // compileAsync è disponibile da Three.js r156+
+  if (typeof renderer.compileAsync === 'function') {
+    await renderer.compileAsync(scene, camera);
+  } else {
+    // Fallback per versioni precedenti
+    renderer.compile(scene, camera);
+  }
+
+  // 4. Ripristina tutto allo stato originale
+  for (const light of hiddenLights) {
+    light.visible = false;
+  }
+  for (const pivot of rescaledPivots) {
+    pivot.scale.setScalar(0.0001); // rimane "invisibile" fino all'accensione
+  }
+  for (const obj of hiddenObjects) {
+    obj.visible = false;
+  }
+}*/
+
 // Vettore riutilizzabile per calcoli di distanza nel loop (evita allocazioni ogni frame)
 const _tempVec = new THREE.Vector3();
 
@@ -184,12 +243,89 @@ async function init() {
   initDeathSystem(gameState);
   createCombatHUD();
 
-  // ── Shader warm-up: pre-compila TUTTI i materiali prima del gameplay ──────
-  // Questo evita gli spike di compilazione shader al primo render di ogni oggetto.
-  // Teoricamente: WebGL compila ogni shader program GLSL la prima volta che 
-  // un materiale entra nel frustum — renderer.compile() forza questo lavoro 
-  // durante il loading invece che durante il gameplay.
+  // Pre-carica texture in VRAM
+  /*gameState.scene.traverse((child) => {
+    if (!child.isMesh) return;
+    const mats = Array.isArray(child.material) ? child.material : [child.material];
+    for (const mat of mats) {
+      if (!mat) continue;
+      if (mat.map)             gameState.renderer.initTexture(mat.map);
+      if (mat.normalMap)       gameState.renderer.initTexture(mat.normalMap);
+      if (mat.roughnessMap)    gameState.renderer.initTexture(mat.roughnessMap);
+      if (mat.metalnessMap)    gameState.renderer.initTexture(mat.metalnessMap);
+      if (mat.displacementMap) gameState.renderer.initTexture(mat.displacementMap);
+      if (mat.aoMap)           gameState.renderer.initTexture(mat.aoMap);
+      if (mat.emissiveMap)     gameState.renderer.initTexture(mat.emissiveMap);
+    }
+  });*/
+
+  // ── Warm-up unificato: un solo traverse per texture + shader + luci ───────
+// Teoria: WebGL compila shader variant diversi per ogni combinazione di luci
+// attive. initTexture() pre-carica le texture in VRAM. Facendo tutto in un
+// unico traverse evitiamo 3 passate separate sullo scene graph (O(n) invece O(3n)).
+const _warmHiddenLights   = [];
+const _warmRescaledPivots = [];
+const _warmHiddenMeshes   = [];
+
+gameState.scene.traverse((child) => {
+
+  // Accendi temporaneamente le luci spente → compile variant "luce accesa"
+  if (
+    (child.isPointLight || child.isSpotLight || child.isDirectionalLight)
+    && !child.visible
+  ) {
+    child.visible = true;
+    _warmHiddenLights.push(child);
+  }
+
+  // Ripristina flamePivot scalate a zero → incluse nel compile
+  if (child.name?.toLowerCase().includes('flame') && child.scale.x < 0.001) {
+    child.scale.setScalar(1.0);
+    _warmRescaledPivots.push(child);
+  }
+
+  // Mesh: rendile visibili + pre-carica tutte le texture in VRAM
+  if (child.isMesh) {
+    if (!child.visible) {
+      child.visible = true;
+      _warmHiddenMeshes.push(child);
+    }
+    const mats = Array.isArray(child.material) ? child.material : [child.material];
+    for (const mat of mats) {
+      if (!mat) continue;
+      const textures = [
+        mat.map, mat.normalMap, mat.roughnessMap,
+        mat.metalnessMap, mat.displacementMap,
+        mat.aoMap, mat.emissiveMap
+      ];
+      for (const tex of textures) {
+        if (tex) gameState.renderer.initTexture(tex);
+      }
+    }
+  }
+});
+
+// Compila tutti gli shader variant in modo asincrono (non blocca il main thread
+// se il driver GPU supporta l'estensione KHR_parallel_shader_compile)
+if (typeof gameState.renderer.compileAsync === 'function') {
+  await gameState.renderer.compileAsync(gameState.scene, gameState.camera);
+} else {
   gameState.renderer.compile(gameState.scene, gameState.camera);
+}
+
+// Ripristina tutto allo stato originale (luci spente, flame invisibili, mesh nascoste)
+for (const l of _warmHiddenLights)   l.visible = false;
+for (const p of _warmRescaledPivots) p.scale.setScalar(0.0001);
+for (const m of _warmHiddenMeshes)   m.visible = false;
+// ─────────────────────────────────────────────────────────────────────────
+
+// ── Shader warm-up completo: pre-compila tutti i variant shader ───────────
+// Il problema: Three.js genera shader variant diversi in base al numero di
+// luci attive. Se una luce è spenta (visible=false) al momento del compile,
+// il variant "con quella luce accesa" non viene compilato → spike al primo accesso.
+// Soluzione: accendiamo temporaneamente TUTTE le luci, compiliamo, rispegniamo.
+//await _prewarmAllShaders(gameState);
+// ─────────────────────────────────────────────────────────────────────────
 
 
   // Spawn iniziale del dungeon
