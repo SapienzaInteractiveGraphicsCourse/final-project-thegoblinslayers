@@ -114,7 +114,33 @@ canvas {
   text-align: center;
 }
 
+#win-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+  text-align: center;
+}
+
 #home-title {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 400;
+  color: #c8a96e;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+
+  /* Glow medievale */
+  text-shadow:
+    0 0 40px rgba(200, 169, 110, 0.4),
+    0 0 80px rgba(200, 169, 110, 0.15);
+
+  /* Fade-in lento al caricamento */
+  animation: title-fadein 1.8s ease-out forwards;
+  opacity: 0;
+}
+
+#win-title {
   font-family: 'Georgia', 'Times New Roman', serif;
   font-size: clamp(2.5rem, 6vw, 5rem);
   font-weight: 400;
@@ -137,13 +163,11 @@ canvas {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-#home-buttons {
+.menu-buttons {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  animation: title-fadein 1.8s ease-out 0.4s forwards;
-  opacity: 0;
 }
 
 .home-btn {
@@ -249,6 +273,47 @@ canvas {
   to {
     transform: rotate(360deg);
   }
+}
+
+#win-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 20000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0,0,0,0);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1.5s ease, background 1.5s ease;
+}
+
+#win-screen.active {
+  opacity: 1;
+  background: rgba(0,0,0,0.92);
+  pointer-events: auto;
+}
+
+#win-screen h1 {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: clamp(3rem, 7vw, 6rem);
+  letter-spacing: 0.2em;
+  color: #c8a96e;
+
+  text-transform: uppercase;
+  text-shadow:
+    0 0 40px rgba(200,169,110,0.4),
+    0 0 80px rgba(200,169,110,0.15);
+
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 1s ease;
+}
+
+#win-screen.active h1 {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 @keyframes hit-flash-anim {

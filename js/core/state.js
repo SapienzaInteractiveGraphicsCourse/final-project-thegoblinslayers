@@ -139,4 +139,5 @@ export const gameState = {
     bag2:      null,   // secondo slot zaino (nuovo)
   },
   isInventoryOpen: false,
+  hasWon: false,
 };
