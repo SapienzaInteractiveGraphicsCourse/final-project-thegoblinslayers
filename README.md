@@ -52,10 +52,11 @@ The inventory (`I`) consists of **4 slots**:
 - **Procedural barrel** — `root` → `barrelCore` + `staveGroup` + `middleRingGroup` + rings + rivets; progressive destruction acts on specific hierarchical layers (`staveGroup.visible`, `middleRingGroup.visible`)
 
 #### Lights and Textures
-- **Full PBR textures** on floors, walls, and ceilings: albedo, normal map, roughness map, displacement map
-- Dynamic **PointLights** on wall torches with randomized flicker (intensity and color variation per frame)
-- Dark **AmbientLight** for dungeon atmosphere
-- **SpotLight** on key scene elements
+- **Full PBR textures** on floors, walls, and ceilings: albedo, normal map, roughness map; 
+  displacement map on floors only (96×96 vertex subdivision)
+- Dynamic **PointLights** on all wall torches and chandelier with multi-frequency flicker 
+  (slow + medium + detail sine waves, deltaTime-clamped)
+- **SpotLight** on the held torch (hand-carried pickup), providing a directional warm cone of light
 
 #### User Interaction
 - **Raycast** interaction system (key `E`) for picking up objects and activating mechanisms
