@@ -20,7 +20,7 @@ solve environmental puzzles by interacting with the surrounding world (pulling l
 
 Each room requires completing a specific interaction to unlock the passage to the next:
 
-- **Room 1** — Pick up the axe, destroy the barrel (3 hits), pull the lever, light the unlit wall torch
+- **Room 1** — Pick up the axe, destroy the barrel, pull the lever, light the unlit wall torch
 - **Corridor** — Dodge the swinging pendulum traps in the first section; avoid the rolling boulder in the second
 - **Room 2** — Step on the pressure plate (which locks the entrance door), defeat the ogre to open the exit
 
