@@ -154,41 +154,7 @@ btnStart1.addEventListener('click', async () => {
 });
 
 btnStart2.addEventListener('click', async () => {
-  warmupAudioContext();
-
-
-  preloadSound('pickupItem',   './assets/audio/pickup_item.mp3');
-  preloadSound('fireIgnition', './assets/audio/fire_ignition.mp3');
-  preloadSound('torchOnView',  './assets/audio/fire_manor_torch_onview.mp3');
-
-
-  // ── Suono click menu ──────────────────────────────────────────────────
-  const menuSound = new Audio('./assets/audio/Menu_Open.mp3');
-  menuSound.volume = 0.8;
-  menuSound.play();
-  // ─────────────────────────────────────────────────────────────────────
-
-  // 1. Feedback visivo immediato: fade-out home
-  winScreen.classList.add('fade-out');
-  winScreen.addEventListener('animationend', () => winScreen.remove(), { once: true });
-
-  gameState.isLoading = true;
-  document.getElementById("loading-screen").style.display = "flex";
-
-  // 2. Sblocca AudioContext
-  const listener = gameState.audioListener;
-  if (listener) {
-    const ctx = listener.context;
-    if (ctx && ctx.state === 'suspended') ctx.resume();
-  }
-
-  // 3. Avvia il caricamento del dungeon
-  await init();
-  gameState.isLoading = false;
-  document.getElementById("loading-screen").style.display = "none";
-  gameState.isInitialized = true;
-
-  animate();
+  window.location.reload();
 });
 
 btnExit1.addEventListener('click', () => {
