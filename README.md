@@ -1,5 +1,5 @@
 # 🗡️ Dungeon Explorer — The Goblin Slayers
-> Final project for the **Interactive Graphics** course — Sapienza University of Rome
+> Final project for the **Interactive Graphics** course, Sapienza University of Rome
 
 ***
 
@@ -7,7 +7,7 @@
 
 **[▶ Click here to play](https://sapienzainteractivegraphicscourse.github.io/final-project-thegoblinslayers/)**
 
-> ⏳ The game may take a while to load — assets are heavy and patience is the virtue of the strong. Hang tight, it's worth it.
+> ⏳ The game may take a while to load, assets are heavy and patience is the virtue of the strong. Hang tight, it's worth it.
 
 ***
 
@@ -94,4 +94,3 @@ The inventory (`I`) consists of **4 slots**:
 
 ***
 
-*Sapienza Università di Roma — Interactive Graphics 2025/26*
