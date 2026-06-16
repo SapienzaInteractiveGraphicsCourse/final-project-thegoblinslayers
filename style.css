@@ -1,0 +1,228 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #0f1115;
+  font-family: Arial, sans-serif;
+  color: #f5f5f5;
+}
+
+canvas {
+  display: block;
+}
+
+#ui {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 10;
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  pointer-events: none;
+  max-width: 360px;
+}
+
+#ui h1 {
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+
+#ui p {
+  font-size: 14px;
+  opacity: 0.9;
+  margin-bottom: 4px;
+  line-height: 1.4;
+}
+
+#ui p:last-child {
+  margin-bottom: 0;
+}
+
+#crosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  transform: translate(-50%, -50%);
+  z-index: 9;
+  pointer-events: none;
+}
+
+#crosshair::before,
+#crosshair::after {
+  content: "";
+  position: absolute;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+#crosshair::before {
+  left: 5px;
+  top: 0;
+  width: 2px;
+  height: 12px;
+}
+
+#crosshair::after {
+  left: 0;
+  top: 5px;
+  width: 12px;
+  height: 2px;
+}
+
+/* ── HOME SCREEN ────────────────────────────────────────────────────────────── */
+#home-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Sfondo atmosferico: vignette radiale */
+  background:
+    radial-gradient(ellipse at center,
+      rgba(30, 15, 5, 0.0) 0%,
+      rgba(0, 0, 0, 0.95) 70%
+    ),
+    #0a0806;
+}
+
+#home-screen.fade-out {
+  animation: home-fadeout 0.8s ease-in forwards;
+}
+
+@keyframes home-fadeout {
+  from { opacity: 1; }
+  to   { opacity: 0; pointer-events: none; }
+}
+
+#home-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+  text-align: center;
+}
+
+#home-title {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 400;
+  color: #c8a96e;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+
+  /* Glow medievale */
+  text-shadow:
+    0 0 40px rgba(200, 169, 110, 0.4),
+    0 0 80px rgba(200, 169, 110, 0.15);
+
+  /* Fade-in lento al caricamento */
+  animation: title-fadein 1.8s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes title-fadein {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+#home-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  animation: title-fadein 1.8s ease-out 0.4s forwards;
+  opacity: 0;
+}
+
+.home-btn {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #c8a96e;
+  background: transparent;
+  border: 1px solid rgba(200, 169, 110, 0.4);
+  padding: 0.75rem 3rem;
+  cursor: pointer;
+  transition: color 200ms ease, border-color 200ms ease, background 200ms ease;
+  min-width: 220px;
+}
+
+.home-btn:hover {
+  color: #f0d090;
+  border-color: rgba(200, 169, 110, 0.9);
+  background: rgba(200, 169, 110, 0.08);
+}
+
+.home-btn:active {
+  background: rgba(200, 169, 110, 0.15);
+}
+
+.home-btn--secondary {
+  color: rgba(200, 169, 110, 0.5);
+  border-color: rgba(200, 169, 110, 0.2);
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
+}
+
+.home-btn--secondary:hover {
+  color: rgba(200, 169, 110, 0.8);
+  border-color: rgba(200, 169, 110, 0.5);
+  background: rgba(200, 169, 110, 0.05);
+}
+/* ─────────────────────────────────────────────────────────────────────────── */
+
+
+
+/* ── DAMAGE VIGNETTE ────────────────────────────────────────────────────────── */
+#damage-vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 40%,
+    rgba(180, 0, 0, 0.85) 100%
+  );
+}
+
+#damage-vignette.active {
+  animation: vignette-fade 1.0s ease-out forwards;
+}
+
+@keyframes vignette-fade {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ── HIT FLASH ──────────────────────────────────────────────────────────────── */
+#hit-flash {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  pointer-events: none;
+  opacity: 0;
+  background: #ffffff;
+}
+
+#hit-flash.active {
+  animation: hit-flash-anim 0.25s ease-out forwards;
+}
+
+@keyframes hit-flash-anim {
+  0%   { opacity: 0.75; }
+  100% { opacity: 0; }
+}
