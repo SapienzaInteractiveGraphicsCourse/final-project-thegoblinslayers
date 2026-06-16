@@ -11,8 +11,8 @@
     <script type="importmap">
       {
         "imports": {
-          "three": "https://unpkg.com/three@0.164.1/build/three.module.js",
-          "three/addons/": "https://unpkg.com/three@0.164.1/examples/jsm/"
+          "three": "https://esm.sh/three@0.164.1",
+          "three/addons/": "https://esm.sh/three@0.164.1/examples/jsm/"
         }
       }
     </script>
@@ -21,9 +21,13 @@
   <body>
 
     <!-- 🌀 LOADING SCREEN -->
-    <div id="loading-screen" style = "display:none;">
+    <div id="loading-screen" style="display:none;">
       <div class="spinner"></div>
-      <p>Loading game...</p>
+      <p id="loading-label">Caricamento dungeon...</p>
+      <div id="loading-bar-wrap">
+        <div id="loading-bar-fill"></div>
+      </div>
+      <p id="loading-percent">0%</p>
     </div>
 
     <!-- 🏠 HOME SCREEN -->
