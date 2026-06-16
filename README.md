@@ -1,10 +1,15 @@
 # 🗡️ Dungeon Explorer — The Goblin Slayers
 > Final project for the **Interactive Graphics** course — Sapienza University of Rome
 
-Link for executing the code: https://sapienzainteractivegraphicscourse.github.io/final-project-thegoblinslayers/
-
 ***
 
+## 🎮 Play the Game
+
+**[▶ Click here to play](https://sapienzainteractivegraphicscourse.github.io/final-project-thegoblinslayers/)**
+
+> ⏳ The game may take a while to load — assets are heavy and patience is the virtue of the strong. Hang tight, it's worth it.
+
+***
 
 ### Description
 
