@@ -1,10 +1,10 @@
 # 🗡️ Dungeon Explorer — The Goblin Slayers
 > Final project for the **Interactive Graphics** course — Sapienza University of Rome
+
 Link for executing the code: https://sapienzainteractivegraphicscourse.github.io/final-project-thegoblinslayers/
 
 ***
 
-## 🇬🇧 English
 
 ### Description
 
