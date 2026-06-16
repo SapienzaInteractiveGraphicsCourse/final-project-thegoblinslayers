@@ -240,18 +240,25 @@ update(deltaTime, state) {
   if (this._isBlocking) {
   this._blockTimer += deltaTime;
 
+  // DOPO (fix):
   if (this._blockTimer >= this._blockDuration) {
-    this._isBlocking = false;
-    this._blockTimer = 0;
-      this._blockReactionCount = 0;     
-  this._blockReactionCooldown = 0; 
-    this._attackPhase = 'idle';
-    this._currentAction = null;
-    this._currentAnimName = null;
-    _log(`🛡️ Block END`, `torno a rincorrere`);
+      this._isBlocking = false;
+      this._blockTimer = 0;
+      this._blockReactionCount = 0;
+      this._blockReactionCooldown = 0;
+      this._attackPhase = 'idle';
+      _log(`🛡️ Block END`, `torno a rincorrere`);
+
+      // FIX T-POSE: avvia subito RUN senza azzerare _currentAction prima.
+      // Ogre_Block è ancora attiva con weight=1 nel mixer — se la azzeriamo
+      // e aspettiamo update() c'è un frame di gap a T-pose. 
+      // _playAnim() trova _currentAction=Ogre_Block, la fa fadeOut(FADE)
+      // e avvia RUN con fadeIn(FADE) in modo fluido senza gap.
+      this._playAnim(ANIM.RUN, true, 1.0);
   }
 
   return;
+
 }
 
   this.group.getWorldPosition(_mobPos);
@@ -882,14 +889,17 @@ if (this._isBlocking) {
       return false;
     }
 
+    // DOPO (fix):
     const onLowerEnd = (e) => {
-      if (e.action !== lowerAction) return;
-      this._mixer.removeEventListener('finished', onLowerEnd);
-      _log(`🛡️ Block Lower END`, `riprendo attacco`);
-      this._attackPhase = 'idle';
-      this._attackStep = 0;
-      this._currentAction = null;
-      this._currentAnimName = null;
+        if (e.action !== lowerAction) return;
+        this._mixer.removeEventListener('finished', onLowerEnd);
+        _log(`🛡️ Block Lower END`, `riprendo attacco`);
+        this._attackPhase = 'idle';
+        this._attackStep = 0;
+        // FIX: NON azzerare _currentAction. lowerAction è ancora nel mixer con
+        // clampWhenFinished=true e peso 1. _playAnim() la trova tramite
+        // _currentAction e fa fadeOut(FADE) pulito prima di avviare RUN.
+        this._playAnim(ANIM.RUN, true, 1.0);
     };
     this._mixer.addEventListener('finished', onLowerEnd);
     return false;
@@ -1033,13 +1043,19 @@ _playShieldSequence(state) {
   }
 
   const onBash = (e3) => {
-  if (e3.action !== bashAction) return;
-  this._mixer.removeEventListener('finished', onBash);
-  this._isShielding = false;
-  this._currentAction = null;
-  this._currentAnimName = null;
-  this._attackPhase = 'idle';
-  _log(`🛡️ Shield sequence END — torno normale`);
+      if (e3.action !== bashAction) return;
+      this._mixer.removeEventListener('finished', onBash);
+
+      this._isShielding = false;
+      this._attackPhase = 'idle';
+      _log(`🛡️ Shield sequence END — torno normale`);
+
+      // FIX T-POSE: avvia subito RUN in crossfade senza aspettare update().
+      // bashAction è clampata all'ultimo frame con peso 1: se aspettiamo
+      // il prossimo update() c'è un frame di gap in cui il mixer ha un'action
+      // congelata e nessuna attiva → T-pose. Avviando RUN qui il fadeIn
+      // copre immediatamente il fadeOut di bashAction.
+      this._playAnim(ANIM.RUN, true, 1.0);
   };
 
   this._mixer.addEventListener('finished', onBash);
@@ -1105,15 +1121,18 @@ _playStagger() {
   const onStaggerEnd = (e) => {
     if (e.action !== staggerAction) return;
     this._mixer.removeEventListener('finished', onStaggerEnd);
-    this._isStaggering    = false;
-    this._currentAction   = null;
-    this._currentAnimName = null;
+    this._isStaggering = false;
+    this._attackPhase = 'idle';
+    _log(`✅ Stagger END torno ad idle — update() decide il prossimo stato`);
 
-
-
-    this._attackPhase     = 'idle';
-    _log(`✅ Stagger END`, `torno ad idle — update() decide il prossimo stato`);
-  };
+    // FIX T-POSE: NON azzerare _currentAction prima di avviare RUN.
+    // staggerAction è ancora in _currentAction con clampWhenFinished=true:
+    // lasciamo che _playAnim() la chiami con fadeOut(FADE) in modo che
+    // la transizione RUN parta immediatamente senza gap a T-pose.
+    // update() vedrà isStaggering=false e _currentAnimName='Ogre_RunForward',
+    // quindi non rilancerà nulla di duplicato.
+    this._playAnim(ANIM.RUN, true, 1.0);
+};
 
   this._mixer.addEventListener('finished', onStaggerEnd);
 },
@@ -1131,7 +1150,41 @@ _playAnim(name, loop = true, timeScale = 1.0) {
 
   _log(`🎬 _playAnim`, `${name} | loop:${loop} | speed:${timeScale}x | prev:${this._currentAnimName ?? 'none'}`);
 
-  if (this._currentAction) this._currentAction.fadeOut(FADE);
+  // fadeOut sull'action corrente (se esiste e non è la stessa che stiamo avviando)
+  if (this._currentAction && this._currentAction !== action) {
+    this._currentAction.fadeOut(FADE);
+  }
+
+  // ── FIX: ferma esplicitamente qualsiasi action con clampWhenFinished attiva
+  // Dopo uno stagger/shield/block, _currentAction viene azzerato a null ma
+  // l'action corrispondente rimane "congelata" all'ultimo frame nel mixer
+  // con peso 1 e clampWhenFinished=true. Se non la fermiamo, si sovrappone
+  // alle animazioni successive producendo blend spuri (braccio accorciato, ecc.)
+  const clampedCandidates = [
+    this._getAction(ANIM.STAGGER),
+    this._getAction(ANIM.RECOIL_IDLE),
+    this._getAction(ANIM.SHIELD_ENTER),
+    this._getAction(ANIM.SHIELD_IDLE),
+    this._getAction(ANIM.SHIELD_BASH),
+    this._getAction(ANIM.BLOCK_ENTER),
+    this._getAction(ANIM.BLOCK),
+    this._getAction(ANIM.BLOCK_LOWER),
+    this._getAction(ANIM.BLOCK_REACTION),
+    this._getAction(ANIM.ATK_ENTER),
+    this._getAction(ANIM.ATK_ENTER_R),
+    this._getAction(ANIM.ATK_DAMAGE),
+    this._getAction(ANIM.ATK_DAMAGE_R),
+    this._getAction(ANIM.POWER_ATTACK),
+  ].filter(Boolean);
+
+  for (const candidate of clampedCandidates) {
+    // Ferma solo le action finite (time >= duration) o con peso ancora attivo
+    // che non siano quella che stiamo avviando
+    if (candidate !== action && candidate.clampWhenFinished && !candidate.isRunning()) {
+      candidate.stop();
+    }
+  }
+  // ── fine FIX
 
   action.reset();
   action.setLoop(loop ? THREE.LoopRepeat : THREE.LoopOnce, loop ? Infinity : 1);
@@ -1178,6 +1231,8 @@ _die(state) {
   this._isShielding = false;
   this._isStaggering = false;
   this._hitCounter = 0;
+
+  this._stopAllCombatSounds();
 
   this._deathState = 'stagger';
   this._deathTimer = 0;
@@ -1251,24 +1306,27 @@ this._normalAttackHitLanded = false;
   this._currentAnimName = ANIM.STAGGER;
 
   const onDeathStaggerEnd = (e) => {
-    if (e.action !== staggerAction) return;
-    this._mixer.removeEventListener('finished', onDeathStaggerEnd);
+      if (e.action !== staggerAction) return;
+      this._mixer.removeEventListener('finished', onDeathStaggerEnd);
 
-    if (!this.isDead) return;
+      if (!this.isDead) return;
 
-    _log(`☠️ STAGGER END`, `passo a recoil idle`);
+      _log(`☠️ STAGGER END`, `passo a recoil idle`);
 
-    recoilAction.reset();
-    recoilAction.setLoop(THREE.LoopRepeat, Infinity);
-    recoilAction.clampWhenFinished = true;
-    recoilAction.timeScale = 1.0;
-    recoilAction.fadeIn(0.1).play();
+      // FIX T-POSE: fadeOut esplicito su staggerAction prima di avviare recoil.
+      staggerAction.fadeOut(0.1);
 
-    this._currentAction = recoilAction;
-    this._currentAnimName = ANIM.RECOIL_IDLE;
+      recoilAction.reset();
+      recoilAction.setLoop(THREE.LoopRepeat, Infinity);
+      recoilAction.clampWhenFinished = false; // loop → non serve clamp
+      recoilAction.timeScale = 1.0;
+      recoilAction.fadeIn(0.1).play();
 
-    this._deathState = 'recoil';
-    this._deathTimer = 0;
+      this._currentAction = recoilAction;
+      this._currentAnimName = ANIM.RECOIL_IDLE;
+
+      this._deathState = 'recoil';
+      this._deathTimer = 0;
   };
 
   this._mixer.addEventListener('finished', onDeathStaggerEnd);
