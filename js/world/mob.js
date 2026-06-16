@@ -8,44 +8,10 @@ import { registerObstacle } from '../player/collision.js';
 import { playSound, startLoopingSound, stopLoopingSound } from '../systems/audioManager.js';
 import { triggerDamageVignette,   } from '../ui/screenEffects.js';
 
-// ── Costanti di gioco (invariate) ─────────────────────────────────────────────
-const MOB_HP_MAX       = 300;
-const MOB_SPEED        = 3.8;
-const MOB_ATTACK_RANGE = 2.0;
-const MOB_CHAIN_HIT_RANGE = 2.25;   // hit effettiva attackChain
-const MOB_POWER_HIT_RANGE = 2.45;   // hit effettiva powerAttack
-const MOB_SHIELD_BASH_HIT_RANGE = 2.55; // hit effettiva bash
-//const MOB_ATTACK_RATE  = 1.8;
-const MOB_STOP_RADIUS  = 1.0;
-const ACTIVATE_DELAY   = 1.5;
-const MOB_HALF_W       = 0.35;
-
-
-// Danno per tipo di attacco — valori separati e bilanciati
-const MOB_CHAIN_DAMAGE        = 12;   // colpo normale: rapido, basso
-const MOB_POWER_DAMAGE        = 35;   // power attack: lento, devastante
-const MOB_SHIELD_BASH_DAMAGE  = 25;   // shield bash: break guardia + danno fisso
-
-
-// timeScale > 1 = animazione più veloce, < 1 = più lenta.
-// Calibra questo valore fino a ottenere ~1.5s per catena completa.
-const ATK_TIME_SCALE = 1.6;
-const POWER_ATTACK_TIME_SCALE = 1.35;
-const SHIELD_BASH_TIME_SCALE = 1.45;
-
-
-const SHIELD_HIT_THRESHOLD = 2; // colpi ricevuti prima di attivare lo scudo
-const PHASE2_SHIELD_HIT_THRESHOLD = 1;
-const PHASE2_BLOCK_CHANCE = 0.55;
-
-const MOB_MAX_BLOCK_REACTIONS = 3;       // colpi prima di abbassare lo scudo
-const MOB_BLOCK_REACTION_COOLDOWN = 0.4; // secondi minimi tra una reaction e l'altra
-
-
-const PHASE2_POWER_BASE_CHANCE = 0.30;
-const PHASE2_POWER_BONUS_AFTER_2_CHAINS = 0.45;
-const PHASE2_POWER_FORCED_AFTER_3_CHAINS = true;
-const POWER_ATTACK_COOLDOWN = 2.5;
+import { MOB_HP_MAX, MOB_SPEED, MOB_ATTACK_RANGE,MOB_CHAIN_HIT_RANGE,MOB_POWER_HIT_RANGE,MOB_SHIELD_BASH_HIT_RANGE,MOB_STOP_RADIUS,
+         ACTIVATE_DELAY,MOB_HALF_W,MOB_CHAIN_DAMAGE,MOB_POWER_DAMAGE,MOB_SHIELD_BASH_DAMAGE,ATK_TIME_SCALE,POWER_ATTACK_TIME_SCALE,SHIELD_BASH_TIME_SCALE,
+         SHIELD_HIT_THRESHOLD,PHASE2_SHIELD_HIT_THRESHOLD,PHASE2_BLOCK_CHANCE,MOB_MAX_BLOCK_REACTIONS,MOB_BLOCK_REACTION_COOLDOWN,PHASE2_POWER_BASE_CHANCE,
+         PHASE2_POWER_BONUS_AFTER_2_CHAINS,PHASE2_POWER_FORCED_AFTER_3_CHAINS,POWER_ATTACK_COOLDOWN } from './mobConfig.js';
 
 const ROOM2_MIN_X =  14.0;
 const ROOM2_MAX_X =  31.5;
