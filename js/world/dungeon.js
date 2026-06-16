@@ -615,7 +615,7 @@ function getRoomTwoWallSpecs() {
     { width: 7, height: ROOM_HEIGHT, depth: sideSegmentDepth, x: 31+3, y, z: -34 + sideSegmentDepth * 0.5, tint },
     //Muro posteriore sinistro (opposto all'ingresso) — pieno, x=31
     { width: 7, height: ROOM_HEIGHT, depth: sideSegmentDepth, x: 31+3, y, z: -16 - sideSegmentDepth * 0.5, tint },
-
+    {width:1, height: ROOM_HEIGHT, depth: 2.4, x: 34+3.5, y, z: -25, tint},
     // Muro frontale superiore: da z=-16 a z=-34 — senza apertura
     { width: 18, height: ROOM_HEIGHT, depth: 1, x: 22, y, z: -16, tint },
 
