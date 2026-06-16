@@ -206,9 +206,27 @@ export function prewarmViewShield(state, renderer) {
   const holder = ensureViewShield(state);
   if (!holder) return;
 
+  // Accendiamo temporaneamente le luci della torcia portatile
+  // in modo che il compile includa il variant shader
+  // "scudo + spotLight + fillLight attive" — quello che serve durante il gameplay.
+  // Se heldTorch non esiste ancora, il compile avverrà senza quelle luci
+  // ma il warm-up del traverse in main.js le avrà già coperte.
+  const torchLights = [];
+  if (state.heldTorch?.spotLight) {
+    state.heldTorch.spotLight.visible = true;
+    torchLights.push(state.heldTorch.spotLight);
+  }
+  if (state.heldTorch?.fillLight) {
+    state.heldTorch.fillLight.visible = true;
+    torchLights.push(state.heldTorch.fillLight);
+  }
+
   holder.visible = true;
   renderer.compile(state.scene, state.camera);
   holder.visible = false;
 
-  console.log('[shield] prewarm completato — shader scudo compilati');
+  // Rispegni le luci — lo stato reale rimane spento
+  for (const l of torchLights) l.visible = false;
+
+  console.log('[shield] prewarm completato — shader scudo compilati con luci torcia');
 }
