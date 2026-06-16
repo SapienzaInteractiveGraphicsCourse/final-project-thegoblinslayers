@@ -105,6 +105,7 @@ document.body.appendChild(initBlack);
 
 // ── Home screen logic ─────────────────────────────────────────────────────────
 const homeScreen = document.getElementById('home-screen');
+const winScreen = document.getElementById('win-screen');
 const btnStart1   = document.getElementById('btn-start1');
 const btnExit1    = document.getElementById('btn-exit1');
 const btnStart2   = document.getElementById('btn-start2');
@@ -164,8 +165,8 @@ btnStart2.addEventListener('click', async () => {
   // ─────────────────────────────────────────────────────────────────────
 
   // 1. Feedback visivo immediato: fade-out home
-  homeScreen.classList.add('fade-out');
-  homeScreen.addEventListener('animationend', () => homeScreen.remove(), { once: true });
+  winScreen.classList.add('fade-out');
+  winScreen.addEventListener('animationend', () => winScreen.remove(), { once: true });
 
   gameState.isLoading = true;
   document.getElementById("loading-screen").style.display = "flex";
