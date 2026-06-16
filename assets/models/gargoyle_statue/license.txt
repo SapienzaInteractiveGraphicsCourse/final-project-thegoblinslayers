@@ -1,0 +1,11 @@
+Model Information:
+* title:	Gargoyle  (8.5K Tris)
+* source:	https://sketchfab.com/3d-models/gargoyle-85k-tris-6ee63765c42642928c61510dac7b3df4
+* author:	adamvfc (https://sketchfab.com/adamvfc)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Gargoyle  (8.5K Tris)" (https://sketchfab.com/3d-models/gargoyle-85k-tris-6ee63765c42642928c61510dac7b3df4) by adamvfc (https://sketchfab.com/adamvfc) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

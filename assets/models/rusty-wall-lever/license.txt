@@ -1,0 +1,11 @@
+Model Information:
+* title:	Rusty Wall Lever
+* source:	https://sketchfab.com/3d-models/rusty-wall-lever-455bbb6486e3438cb83834b5f28ef77b
+* author:	Jimmy Johansson (https://sketchfab.com/Jimmy_Johansson)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Rusty Wall Lever" (https://sketchfab.com/3d-models/rusty-wall-lever-455bbb6486e3438cb83834b5f28ef77b) by Jimmy Johansson (https://sketchfab.com/Jimmy_Johansson) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

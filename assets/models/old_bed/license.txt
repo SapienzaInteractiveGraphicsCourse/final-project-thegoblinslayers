@@ -1,0 +1,11 @@
+Model Information:
+* title:	Old Bed - Low-Poly Game Asset
+* source:	https://sketchfab.com/3d-models/old-bed-low-poly-game-asset-9e22468d22414f1e8e58ecdc7dbeae96
+* author:	Desolation Forge (https://sketchfab.com/Desolation_Forge)
+
+Model License:
+* license type:	CC-BY-ND-4.0 (http://creativecommons.org/licenses/by-nd/4.0/)
+* requirements:	Author must be credited. Modified versions can not be distributed. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Old Bed - Low-Poly Game Asset" (https://sketchfab.com/3d-models/old-bed-low-poly-game-asset-9e22468d22414f1e8e58ecdc7dbeae96) by Desolation Forge (https://sketchfab.com/Desolation_Forge) licensed under CC-BY-ND-4.0 (http://creativecommons.org/licenses/by-nd/4.0/)
