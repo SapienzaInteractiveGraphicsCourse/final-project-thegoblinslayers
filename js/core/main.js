@@ -60,9 +60,7 @@ document.body.appendChild(initBlack);
 const homeScreen = document.getElementById('home-screen');
 const winScreen = document.getElementById('win-screen');
 const btnStart1   = document.getElementById('btn-start1');
-const btnExit1    = document.getElementById('btn-exit1');
 const btnStart2   = document.getElementById('btn-start2');
-const btnExit2    = document.getElementById('btn-exit2');
 
 btnStart1.addEventListener('click', async () => {
   warmupAudioContext();
@@ -108,26 +106,6 @@ btnStart1.addEventListener('click', async () => {
 
 btnStart2.addEventListener('click', async () => {
   window.location.reload();
-});
-
-btnExit1.addEventListener('click', () => {
-  // window.close() works only if the tab was opened by JS 
-// Otherwise show a discrete message
-  const closed = window.close();
-  if (!closed) {
-    btnExit1.textContent = 'Chiudi il browser per uscire';
-    btnExit1.style.pointerEvents = 'none';
-  }
-});
-
-btnExit2.addEventListener('click', () => {
-  // window.close() works only if the tab was opened by JS 
-// Otherwise show a discrete message
-  const closed = window.close();
-  if (!closed) {
-    btnExit2.textContent = 'Chiudi il browser per uscire';
-    btnExit2.style.pointerEvents = 'none';
-  }
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
