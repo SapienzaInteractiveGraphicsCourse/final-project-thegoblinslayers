@@ -115,8 +115,8 @@ btnExit1.addEventListener('click', () => {
 // Otherwise show a discrete message
   const closed = window.close();
   if (!closed) {
-    btnExit.textContent = 'Chiudi il browser per uscire';
-    btnExit.style.pointerEvents = 'none';
+    btnExit1.textContent = 'Chiudi il browser per uscire';
+    btnExit1.style.pointerEvents = 'none';
   }
 });
 
@@ -125,8 +125,8 @@ btnExit2.addEventListener('click', () => {
 // Otherwise show a discrete message
   const closed = window.close();
   if (!closed) {
-    btnExit.textContent = 'Chiudi il browser per uscire';
-    btnExit.style.pointerEvents = 'none';
+    btnExit2.textContent = 'Chiudi il browser per uscire';
+    btnExit2.style.pointerEvents = 'none';
   }
 });
 

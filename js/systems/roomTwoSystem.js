@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { createDoor }          from '../world/door.js';
 import { setTorchLitState }    from '../world/torch.js';
 import { createMob, showMobHealthBar, showPlayerHealthBar, updateMobHealthBar, updatePlayerHealthBar } from '../world/mob.js';
+import { registerObstacle } from '../player/collision.js';
 
 // Costanti pedana
 const PLATE_WIDTH    = 1.6;
@@ -43,6 +44,7 @@ export async function createRoomTwoSystem(state, { showErrorOverlay }) {
   // ── Porta di uscita ─────────────────────────────────────────────────────
   const exitDoor = createDoor({
     scene:            state.scene,
+    registerObstacle: (object) => registerObstacle(state, object),
     position:         new THREE.Vector3(31, 0, -25),
     rotation:         new THREE.Euler(0, Math.PI / 2, 0),
     showErrorOverlay
