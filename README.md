@@ -91,5 +91,17 @@ The inventory (`I`) consists of **4 slots**:
 - [GLTFLoader](https://threejs.org/docs/#examples/en/loaders/GLTFLoader) — 3D model loading (ogre, door, torches, ecc...)
 - Web Audio API — ambient and gameplay audio system
 
+### 👥 Authors
+
+| Name | Student ID | Email |
+|------|-----------|-------|
+| Agostini Antonio | 1995653 | agostini.1995653@studenti.uniroma1.it |
+|  |  | .@studenti.uniroma1.it |
+
+### 📄 Licenze Asset / Asset Licenses
+
+The source code is released under the [MIT License](LICENSE).  
+Third-party assets (3D models, textures, audio) and their respective licenses are listed in [CREDITS.md](CREDITS.md).
+
 ***
 
