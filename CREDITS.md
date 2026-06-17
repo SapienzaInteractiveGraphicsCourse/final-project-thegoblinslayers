@@ -1,4 +1,4 @@
-"""# Credits & Third-Party Assets
+# Credits & Third-Party Assets
 
 All third-party assets are used in compliance with their respective licenses.
 The source code of this project is released under the MIT License.
@@ -49,4 +49,4 @@ All audio assets are sourced from [Pixabay](https://pixabay.com) and released un
 | Library | Version | License |
 |---------|---------|---------|
 | [Three.js](https://threejs.org) | r160+ | MIT |
-"""
+
