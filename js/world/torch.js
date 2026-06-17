@@ -628,6 +628,13 @@ export async function createTorchInstance({
   const outwardAngle = Math.atan2(normal.x, normal.z);
 
   const model = cloneTorchModel(modelUrl);
+
+  model.traverse((child) => {
+    if (!child.isMesh) return;
+    child.castShadow    = false;  // le torce non proiettano ombre
+    child.receiveShadow = false;  // né le ricevono
+  });
+
   if (!model) return null;
 
   model.rotation.y = outwardAngle;

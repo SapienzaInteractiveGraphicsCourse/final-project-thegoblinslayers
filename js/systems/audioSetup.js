@@ -68,6 +68,10 @@ export async function initAmbientAudio() {
     preloadSound('whoosh',       './assets/audio/whoosh_axe_trap.mp3');
     preloadSound('axeTrapHit',   './assets/audio/axe_trap_hit_player.mp3');
 
+    preloadSound('pickupItem',   './assets/audio/pickup_item.mp3');
+    preloadSound('fireIgnition', './assets/audio/fire_ignition.mp3');
+    preloadSound('torchOnView',  './assets/audio/fire_manor_torch_onview.mp3');
+
     preloadSound('damagePlayer', './assets/audio/damage_for_player.mp3');
     preloadSound('deathByMob', './assets/audio/death_player_by_mob.mp3');
 

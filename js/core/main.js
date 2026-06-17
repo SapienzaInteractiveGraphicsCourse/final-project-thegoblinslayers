@@ -66,11 +66,6 @@ btnStart1.addEventListener('click', async () => {
   warmupAudioContext();
 
 
-  preloadSound('pickupItem',   './assets/audio/pickup_item.mp3');
-  preloadSound('fireIgnition', './assets/audio/fire_ignition.mp3');
-  preloadSound('torchOnView',  './assets/audio/fire_manor_torch_onview.mp3');
-
-
   // ── Suono click menu ──────────────────────────────────────────────────
   const menuSound = new Audio('./assets/audio/Menu_Open.mp3');
   menuSound.volume = 0.8;
@@ -169,6 +164,8 @@ async function init() {
 
   setAudioContext(audioListener.context);
 
+  preloadGameSounds(); // avvia il preload in background durante il loading
+
   const audioLoader = new THREE.AudioLoader();
   audioLoader.load('./assets/audio/sword_sfx.wav', (buffer) => {
     gameState.swordSfxBuffer = buffer;
@@ -231,23 +228,25 @@ const _warmHiddenMeshes   = [];
 
 gameState.scene.traverse((child) => {
 
+  // ── Early return: salta Group vuoti, Bone, Object3D decorativi ───────────
+  const isLight  = child.isPointLight || child.isSpotLight || child.isDirectionalLight;
+  const isMesh   = child.isMesh;
+  const isFlame  = child.name?.toLowerCase().includes('flame') && child.scale.x < 0.001;
+  
+  if (!isLight && !isMesh && !isFlame) return;
+  
   //Temporarily turn off lights -> compile variant "lights on"
-  if (
-    (child.isPointLight || child.isSpotLight || child.isDirectionalLight)
-    && !child.visible
-  ) {
+  if (isLight && !child.visible) {
     child.visible = true;
     _warmHiddenLights.push(child);
   }
 
-  // Reset flamePivot scaled to zero -> included in the compile
-  if (child.name?.toLowerCase().includes('flame') && child.scale.x < 0.001) {
+  if (isFlame) {
     child.scale.setScalar(1.0);
     _warmRescaledPivots.push(child);
   }
 
-  // Mesh: make them visible + pre-load all textures into VRAM
-  if (child.isMesh) {
+  if (isMesh) {
     if (!child.visible) {
       child.visible = true;
       _warmHiddenMeshes.push(child);
@@ -313,7 +312,7 @@ setLoadingProgress(100, 'Ready!');
 
 
   const startAmbientOnce = () => {
-    preloadGameSounds();      
+    //preloadGameSounds();      
     initAmbientAudio();       
     document.removeEventListener('click', startAmbientOnce);
   };

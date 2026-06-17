@@ -79,7 +79,7 @@ export async function createGargoyleStatues(state, registerObstacle) {  // ← a
         state.scene.add(rightCollider);
         registerObstacle(rightCollider);
 
-        console.log('[GargoyleStatues] Gargoyle e collider aggiunti.');
+        
         resolve({ left: leftRoot, right: rightRoot });
       },
 

@@ -47,10 +47,11 @@ import { createSpikes }          from './spikes.js';
  * L'attenuazione quadratica (decay=1.8) simula la fisica reale dell'energia luminosa che decade con il quadrato della distanza.*/
 export function createLights(state) {
   const roomOneCenterLight = new THREE.PointLight(0xffc27a, 0.8, 18, 1.8);
+  
   roomOneCenterLight.position.set(0, 2.6, 0);
   roomOneCenterLight.castShadow = true;
-  roomOneCenterLight.shadow.mapSize.width  = 1024;
-  roomOneCenterLight.shadow.mapSize.height = 1024;
+  roomOneCenterLight.shadow.mapSize.width  = 512;
+  roomOneCenterLight.shadow.mapSize.height = 512;
   roomOneCenterLight.shadow.bias = -0.0008;
 
   state.scene.add(roomOneCenterLight);
@@ -192,16 +193,10 @@ async function createWallTorches(state) {
     return _worldPos.x >= 13;
   });
 
-  console.log('[RoomTwo] Torce trovate:', state.roomTwoPuzzleTorches.length);
+  
 
   state.roomTwoPuzzleTorches.forEach((torch, i) => {
     torch.group.getWorldPosition(_worldPos);
-    console.log(
-      `[RoomTwo] Torch ${i} | id=${torch.id}`,
-      `x=${_worldPos.x.toFixed(2)}`,
-      `y=${_worldPos.y.toFixed(2)}`,
-      `z=${_worldPos.z.toFixed(2)}`
-    );
     torch.isRoomTwoTorch  = true;
     torch.isPuzzleTorch   = true;
     setTorchLitState(torch, false);
@@ -328,8 +323,10 @@ export function updateTorches(state, deltaTime, elapsedTime) {
  * Tutti gli await sono necessari: i passi successivi dipendono dalle texture caricate (i materiali clonano da state.floorAlbedoBase ecc.).*/
 export async function createDungeon(state, registerObstacle) {
   // ── 1. Texture PBR ────────────────────────────────────────────────────────
-  await loadFloorTextures(state);
-  await loadWallTextures(state);
+  await Promise.all([
+    loadFloorTextures(state),
+    loadWallTextures(state)
+  ]);
 
   // ── 2. Geometria ──────────────────────────────────────────────────────────
   createFloorLayout(state);

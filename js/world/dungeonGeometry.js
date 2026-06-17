@@ -46,10 +46,10 @@ export async function loadFloorTextures(state) {
     state.floorNormalBase,
     state.floorRoughnessBase
   ] = await Promise.all([
-    loadTextureAsync(loader, './textures/stone_floor_4k/textures/stone_floor_diff_4k.jpg', true),
-    loadTextureAsync(loader, './textures/stone_floor_4k/textures/stone_floor_disp_4k.png'),
-    loadTextureAsync(loader, './textures/stone_floor_4k/textures/stone_floor_nor_gl_4k.png'),
-    loadTextureAsync(loader, './textures/stone_floor_4k/textures/stone_floor_rough_4k.png')
+    loadTextureAsync(loader, './textures/stone_floor_4k/textures/stone_floor_diff_1k.jpg', true),
+    loadTextureAsync(loader, './textures/stone_floor_4k/textures/stone_floor_disp_1k.jpg'),
+    loadTextureAsync(loader, './textures/stone_floor_4k/textures/stone_floor_nor_gl_1k.jpg'),
+    loadTextureAsync(loader, './textures/stone_floor_4k/textures/stone_floor_rough_1k.jpg')
   ]);
 }
 
@@ -64,9 +64,9 @@ export async function loadWallTextures(state) {
     state.wallNormalBase,
     state.wallRoughnessBase
   ] = await Promise.all([
-    loadTextureAsync(loader, './textures/rock_wall_08_4k/textures/rock_wall_08_diff_4k.jpg', true),
-    loadTextureAsync(loader, './textures/rock_wall_08_4k/textures/rock_wall_08_nor_gl_4k.png'),
-    loadTextureAsync(loader, './textures/rock_wall_08_4k/textures/rock_wall_08_rough_4k.png')
+    loadTextureAsync(loader, './textures/rock_wall_08_4k/textures/rock_wall_08_diff_1k.jpg', true),
+    loadTextureAsync(loader, './textures/rock_wall_08_4k/textures/rock_wall_08_nor_gl_1k.jpg'),
+    loadTextureAsync(loader, './textures/rock_wall_08_4k/textures/rock_wall_08_rough_1k.jpg')
   ]);
 }
 
@@ -185,7 +185,7 @@ export function createCeilingMaterial(state, repeatX, repeatY) {
  * Senza suddivisione, la normale del piano è unica e il displacement non è visibile.
  * rotation.x = -PI/2 → ruota il piano (originariamente orizzontale in XY) sul piano XZ.*/
 export function createFloorSection(state, width, depth, x, z, repeatX, repeatY) {
-  const geometry = new THREE.PlaneGeometry(width, depth, 96, 96);
+  const geometry = new THREE.PlaneGeometry(width, depth, 48, 48);
   const material = createFloorMaterial(state, repeatX, repeatY);
 
   const floor = new THREE.Mesh(geometry, material);
