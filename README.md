@@ -74,7 +74,8 @@ Each room requires completing a specific interaction to unlock the passage to th
 - **Lever** animation (rotation on pivot node)
 - **Barrel destruction** animation (progressive layer-based deformation over hit stages)
 - **Mob death and dissolve** animation (opacity fade on `transparent` materials)
-  ⚠️ *Locomotion and attack animations of the ogre (mob) are imported from GLTF/FBX files*
+
+*Locomotion and attack animations of the ogre (mob) are imported from GLTF/FBX files*
 
 #### Procedurally Generated Objects
 - **Dungeon** (rooms, corridors, geometry) — `THREE.BoxGeometry` / `PlaneGeometry`
