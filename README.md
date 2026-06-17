@@ -55,8 +55,7 @@ The inventory (`I`) consists of **4 slots**:
 #### Lights and Textures
 - **Full PBR textures** on floors, walls, and ceilings: albedo, normal map, roughness map; 
   displacement map on floors only (96×96 vertex subdivision)
-- Dynamic **PointLights** on all wall torches and chandelier with multi-frequency flicker 
-  (slow + medium + detail sine waves, deltaTime-clamped)
+- **PointLights** on all wall torches and chandelier with multi-frequency flicker 
 - **SpotLight** on the held torch (hand-carried pickup), providing a directional warm cone of light
 
 #### User Interaction
