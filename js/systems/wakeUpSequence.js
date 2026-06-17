@@ -117,7 +117,7 @@ function createSleepScreen() {
 
   const hint = document.createElement('p');
   hint.id = 'wakeup-hint';
-  hint.textContent = 'Premi E per svegliarti';
+  hint.textContent = 'Press E to wake up';
   hint.style.cssText = `
     color: rgba(255,255,255,0.0);
     font-size: clamp(1rem, 2vw, 1.4rem);

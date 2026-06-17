@@ -27,10 +27,10 @@ const ITEM_ICONS = {
 };
 
 const ITEM_LABELS = {
-  [ITEM_TYPES.AXE]:    'Ascia',
-  [ITEM_TYPES.TORCH]:  'Torcia',
-  [ITEM_TYPES.SHIELD]: 'Scudo',
-  [ITEM_TYPES.SWORD]:  'Spada',
+  [ITEM_TYPES.AXE]:    'Axe',
+  [ITEM_TYPES.TORCH]:  'Torch',
+  [ITEM_TYPES.SHIELD]: 'Shield',
+  [ITEM_TYPES.SWORD]:  'Sword',
 };
 
 // ─── Statistiche oggetto per il tooltip ────────────────────────────────────────
@@ -43,23 +43,23 @@ const ITEM_STATS = {
   [ITEM_TYPES.AXE]: {
     attackSpeed:  0.48,
     damage:       5,
-    description:  'Colpo pesante. Richiede 3 colpi per sfondare un barile.',
+    description:  'Heavy blow. Requires 3 hits to break through a barrel.',
   },
   [ITEM_TYPES.SWORD]: {
     attackSpeed:  0.28,
     damage:       3,
-    description:  'Colpo rapido. Richiede 5 colpi per sfondare un barile.',
+    description:  'Quick shot. Requires 5 hits to break through a barrel.',
   },
   // Torcia e scudo non hanno stats di attacco — il tooltip mostra solo il nome
   [ITEM_TYPES.TORCH]: {
     attackSpeed:  null,
     damage:       null,
-    description:  'Illumina il dungeon. Può accendere torce spente.',
+    description:  'Light up the dungeon. Can light unlit torches.',
   },
   [ITEM_TYPES.SHIELD]: {
     attackSpeed:  null,
     damage:       null,
-    description:  'Blocca i colpi nemici. Tieni premuto tasto destro.',
+    description:  'Blocks enemy shots. Press and hold right button.',
   },
 };
 
@@ -84,7 +84,7 @@ export function createInventoryUI(state) {
   overlayEl.id = 'inventory-overlay';
   Object.assign(overlayEl.style, {
     position:      'absolute',
-    top:           '170px',
+    top:           '190px',
     left:          '16px',
     zIndex:        '20',
     padding:       '12px 16px',
@@ -100,7 +100,7 @@ export function createInventoryUI(state) {
 
   // Titolo
   const title = document.createElement('p');
-  title.textContent = '🎒 Inventario';
+  title.textContent = '🎒 Inventory';
   Object.assign(title.style, {
     margin:        '0 0 10px 0',
     fontWeight:    'bold',
@@ -121,10 +121,10 @@ export function createInventoryUI(state) {
 
   // Definizione dei 4 slot con label
   const SLOT_LABELS = {
-    primary:   '⚔️ Arma',
+    primary:   '⚔️ Weapon',
     secondary: '🕯️ Utility',
-    bag1:      '🎒 Zaino 1',
-    bag2:      '🎒 Zaino 2',
+    bag1:      '🎒 Slot Bag 1',
+    bag2:      '🎒 Slot Bag 2',
   };
 
   ['primary', 'secondary', 'bag1', 'bag2'].forEach((slotName) => {
@@ -176,7 +176,7 @@ export function createInventoryUI(state) {
 
   // Hint tasto F
   const hint = document.createElement('p');
-  hint.textContent = 'F — chiudi inventario';
+  hint.textContent = 'F — close inventory';
   Object.assign(hint.style, {
     margin:   '10px 0 0 0',
     fontSize: '10px',
@@ -416,8 +416,8 @@ function showTooltip(slotName) {
   if (stats.attackSpeed !== null) {
     // Formatta la velocità come ms per chiarezza visiva
     const speedMs = Math.round(stats.attackSpeed * 1000);
-    html += `<div style="color:#aaa;margin-bottom:2px;">⏱ Velocità:  <span style="color:#f0f0f0">${speedMs} ms</span></div>`;
-    html += `<div style="color:#aaa;margin-bottom:2px;">⚔ Danno:    <span style="color:#f0f0f0">${stats.damage} / colpo</span></div>`;
+    html += `<div style="color:#aaa;margin-bottom:2px;">⏱ Speed:  <span style="color:#f0f0f0">${speedMs} ms</span></div>`;
+    html += `<div style="color:#aaa;margin-bottom:2px;">⚔ Damage:    <span style="color:#f0f0f0">${stats.damage} / hit</span></div>`;
   }
 
   html += `<div style="color:#888;font-size:10px;margin-top:5px;border-top:1px solid rgba(255,255,255,0.1);padding-top:4px;">${stats.description}</div>`;

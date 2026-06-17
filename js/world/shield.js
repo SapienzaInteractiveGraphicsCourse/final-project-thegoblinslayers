@@ -57,8 +57,8 @@ export function createShieldPickup({ state, position, rotationY = 0, rotationZ =
   const interactable = {
     type: 'shield-pickup',
     getPrompt: () => pickup.isBlocked?.()
-      ? 'Rompi il barile per raggiungere lo scudo'
-      : 'Premi E per raccogliere lo scudo',
+      ? 'Break the barrel to reach the shield' 
+      : 'Press E to collect the shield',
     canInteract: () => !state.hasShield && !pickup.isBlocked?.(),
     interact: () => {
       if (state.hasShield) return;

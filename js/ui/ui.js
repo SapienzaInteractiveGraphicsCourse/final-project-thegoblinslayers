@@ -22,11 +22,12 @@ export function createUI(state) {
   });
 
   state.uiElement.innerHTML = `
-    <p>Click per attivare la visuale in prima persona</p>
-    <p>WASD per muoverti, mouse per guardarti attorno</p>
-    <p>ESC per liberare il cursore</p>
-    <p>F per aprire/chiudere l'inventario</p>
-    <p>Shift per iniziare a correre</p>
+    <p>Click to activate first-person view</p> 
+    <p>WASD to move, mouse to look around</p> 
+    <p>ESC to free the cursor</p> 
+    <p>F to open/close inventory</p> 
+    <p>Shift to start running</p>
+    <p>Left click to attack, right click to block</p>
   `;
 
   // ── Testo interazione: elemento indipendente, centrato in basso ──────────
@@ -54,7 +55,7 @@ export function createUI(state) {
     textAlign:     'center',
     whiteSpace:    'nowrap',
     display:       'block'    // ← assicura che sia visibile
-    // ← RIMUOVI la riga: textContent: ''
+    
   });
 
   // Inizializzazione del testo sul DOM (NON dentro Object.assign)
@@ -126,7 +127,7 @@ export function showErrorOverlay(message) {
   }
 
   console.error('Error overlay shown:', message);
-}  // ← chiusura di showErrorOverlay
+}  
 
 // ─── STAMINA BAR ──────────────────────────────────────────────────────────────
 let _staminaBarContainer = null;

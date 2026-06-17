@@ -183,7 +183,7 @@ async function init() {
   createInventoryUI(gameState);
   createCamera(gameState);
 
-  setLoadingProgress(5, 'Inizializzazione...'); 
+  setLoadingProgress(5, 'Initialization...'); 
 
   const audioListener = new THREE.AudioListener();
   gameState.camera.add(audioListener);
@@ -199,7 +199,7 @@ async function init() {
   gameState.scene.add(gameState.camera);
   createLights(gameState);
 
-  setLoadingProgress(15, 'Caricamento modelli...');
+  setLoadingProgress(15, 'Loading models...');
 
   await Promise.all([
     preloadTorchModel('./assets/models/torch/scene.gltf'),
@@ -208,11 +208,11 @@ async function init() {
     preloadShieldModel()
   ]);
 
-  setLoadingProgress(40, 'Costruzione dungeon...');
+  setLoadingProgress(40, 'Dungeon construction...');
 
   await createDungeon(gameState, (object) => registerObstacle(gameState, object));
 
-  setLoadingProgress(60, 'Preparazione oggetti...');
+  setLoadingProgress(60, 'Preparation of objects...');
 
   prewarmViewTorch(gameState, './assets/models/manor_torch/manor_torch.glb');
   prewarmViewAxe(gameState, gameState.renderer);   
@@ -229,7 +229,7 @@ async function init() {
 
   setupDebugPositionLogger(gameState);
 
-  setLoadingProgress(70, 'Caricamento stanze...'); 
+  setLoadingProgress(70, 'Loading rooms...'); 
 
   createRoomOneSystem(gameState, { showErrorOverlay });
   createCorridorOneSystem(gameState, {showErrorOverlay});
@@ -240,7 +240,7 @@ async function init() {
   createCombatHUD();
 
 
-  setLoadingProgress(85, 'Compilazione shader...');
+  setLoadingProgress(85, 'Compiling shader...');
 
 
 // ── Unified warm-up: one traverse for textures + shaders + lights ───────

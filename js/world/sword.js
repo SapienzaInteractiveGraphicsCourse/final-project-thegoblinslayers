@@ -73,8 +73,8 @@ export function createSwordPickup({
   const interactable = {
     type:        'sword-pickup',
     getPrompt: () => pickup.isBlocked?.()
-      ? 'Rompi il barile per estrarre la spada'
-      : 'Premi E per estrarre la spada',
+      ? 'Break the barrel to extract the sword' 
+      : 'Press E to draw sword',
     canInteract: () => !state.hasSword && !(pickup.isBlocked?.()),
     interact:    () => {
       if (state.hasSword) return;

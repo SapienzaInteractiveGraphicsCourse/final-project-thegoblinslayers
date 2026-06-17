@@ -96,7 +96,7 @@ export function createCombatHUD() {
   const mobBar = document.createElement('div');
   mobBar.id = 'mob-hp-bar';
   mobBar.innerHTML = `
-    <div id="mob-hp-label">⚔ Guardiano</div>
+    <div id="mob-hp-label">⚔ Guardian Ogre</div>
     <div id="mob-hp-track">
       <div id="mob-hp-fill"></div>
     </div>

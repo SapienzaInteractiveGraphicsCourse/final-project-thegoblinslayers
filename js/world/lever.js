@@ -90,11 +90,11 @@ export function createLever({
       const interactableData = {
         type: 'lever',
         getPrompt: () => {
-          if (lever.isActivated) return 'La leva è già attivata';
+          if (lever.isActivated) return 'The lever is already activated';
           if (typeof lever.isBlocked === 'function' && lever.isBlocked()) {
-            return 'La leva è bloccata da qualcosa davanti';
+            return 'The lever is blocked by something in front';
           }
-          return 'Premi E per attivare la leva';
+          return 'Press E to activate the lever';
         },
         canInteract: () => {
           if (lever.isActivated) return false;

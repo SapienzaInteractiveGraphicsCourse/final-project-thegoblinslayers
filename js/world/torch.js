@@ -337,8 +337,8 @@ export function makeWallTorchIgnitionSource(torch, state) {
       // Nessun prompt se la torcia non è equipaggiata in mano
       if (!state.isTorchEquipped || !state.heldTorch) return '';
 
-      if (!state.heldTorch.isLit && torch.isLit)  return 'Premi E per accendere la tua torcia';
-      if (state.heldTorch.isLit  && !torch.isLit) return 'Premi E per accendere la torcia a muro';
+      if (!state.heldTorch.isLit && torch.isLit)  return 'Press E to turn on your torch';
+      if (state.heldTorch.isLit  && !torch.isLit) return 'Press E to light the torch on the wall';
       return '';
     },
 
@@ -525,7 +525,7 @@ export function makeTorchPickupable(torch, state) {
 
   const interactable = {
     type: 'torch-pickup',
-    getPrompt: () => 'Premi E per raccogliere la torcia',
+    getPrompt: () => 'Press E to collect the torch',
     canInteract: () => !state.hasTorch,
     interact: () => {
       if (state.hasTorch) return;

@@ -5,20 +5,20 @@ import { prepareHighlightMaterials, applyHighlight } from '../systems/highlight.
 const PAPER_POSITION = new THREE.Vector3(0.2, 0.05, 0.9);
 const PAPER_SCALE    = 0.005;
 
-const PAPER_TEXT = `"Viaggiatore,
+const PAPER_TEXT = `"Traveler,
 
-Se stai leggendo queste parole, vuol dire che
-ti sei svegliato da un sonno profondo.
+If you are reading these words, it means that
+you woke up from a deep sleep.
 
-La leva non funzionerà finché il barile non sarà
-ridotto in schegge.
+The lever will not work until the barrel is
+reduced to splinters.
 
-Le torce devono ardere prima che la porta si apra.
+The torches must burn before the door opens.
 
-Non fermarti. La via d'uscita esiste.
-PS: preparati a combattere l'oscurità più totale.
+Don't stop. The way out exists.
+PS: Prepare to fight total darkness.
 
-— L'Architetto del Dungeon"`;
+— The Dungeon Architect"`;
 
 
 // ── Audio ──────────────────────────────────────────────────────────────────
@@ -117,7 +117,7 @@ function makePaperInteractable(meshes, state) {
     setHighlightT: (t) => applyHighlight(highlightMats, t),
 
     getPrompt() {
-      return state.isReading ? 'Premi E per smettere di leggere' : 'Premi E per leggere il foglio';
+      return state.isReading ? 'Press E to stop reading' : 'Press E to read the paper';
     },
 
     canInteract() { return true; },

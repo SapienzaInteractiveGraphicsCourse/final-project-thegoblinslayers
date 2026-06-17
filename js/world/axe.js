@@ -69,7 +69,7 @@ export function createAxePickup({
 
   const interactable = {
     type: 'axe-pickup',
-    getPrompt: () => 'Premi E per raccogliere l\'ascia',
+    getPrompt: () => 'Press E to pick up the axe',
     canInteract: () => !state.hasAxe,
     interact: () => {
       if (state.hasAxe) return;

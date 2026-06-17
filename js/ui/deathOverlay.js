@@ -44,7 +44,7 @@ export function createDeathOverlay(state) {
   title.style.color = '#ff8a8a';
 
   const text = document.createElement('p');
-  text.textContent = 'La trappola ti ha colpito. Riparti dall’inizio del dungeon senza perdere i progressi già fatti.';
+  text.textContent = 'You\'re dead. Start again from the beginning of the dungeon without losing the progress already made.';
   text.style.margin = '0 0 18px 0';
   text.style.lineHeight = '1.5';
   text.style.color = '#e9dede';
