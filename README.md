@@ -15,6 +15,7 @@
 
 **Dungeon Explorer** is a first-person action-adventure game set in a medieval dungeon. The player must explore interconnected rooms,
 solve environmental puzzles by interacting with the surrounding world (pulling levers, lighting torches, and destroying obstacles) and defeat a guardian enemy to reach the exit
+**[▶ Click here to read the presentation](https://github.com/SapienzaInteractiveGraphicsCourse/final-project-thegoblinslayers/blob/main/project_presentation.pdf)**
 
 ### 🗂️ Project Structure
 
