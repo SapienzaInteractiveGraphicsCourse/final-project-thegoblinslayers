@@ -303,7 +303,7 @@ for (const p of _warmRescaledPivots) p.scale.setScalar(0.0001);
 for (const m of _warmHiddenMeshes)   m.visible = false;
 // ─────────────────────────────────────────────────────────────────────────
 
-setLoadingProgress(100, 'Pronto!');
+setLoadingProgress(100, 'Ready!');
 
 // ── Shader warm-up complete: pre-compile all variant shaders ───────────
 // The problem: Three.js generates different variant shaders based on the number of
