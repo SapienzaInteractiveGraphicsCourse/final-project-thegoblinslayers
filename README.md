@@ -11,10 +11,14 @@
 
 ***
 
-### Description
+### Game Description
 
 **Dungeon Explorer** is a first-person action-adventure game set in a medieval dungeon. The player must explore interconnected rooms,
 solve environmental puzzles by interacting with the surrounding world (pulling levers, lighting torches, and destroying obstacles) and defeat a guardian enemy to reach the exit
+
+### Project Structure
+
+...
 
 ### Gameplay
 
@@ -36,14 +40,6 @@ Each room requires completing a specific interaction to unlock the passage to th
 | `Right click` (hold) | Block with shield (only with shield equipped) |
 | `F` | Open / Close inventory |
 | Mouse (in inventory) | Drag items between slots |
-
-### Inventory
-
-The inventory (`F`) consists of **4 slots**:
-
-- 🗡️ **Primary Slot** — reserved for weapons (axe, sword): the equipped item appears held in first-person on the right side
-- 🛡️ **Utility Slot** — reserved for torch and shield: the equipped item appears held in first-person on the left side
-- 🎒 **Backpack Slot 1 / Slot 2** — free slots to store items and remove them from the first-person view
 
 ### Technical Features
 
