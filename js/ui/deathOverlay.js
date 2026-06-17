@@ -38,7 +38,7 @@ export function createDeathOverlay(state) {
   });
 
   const title = document.createElement('h2');
-  title.textContent = 'Sei morto';
+  title.textContent = 'You died';
   title.style.margin = '0 0 10px 0';
   title.style.fontSize = '34px';
   title.style.color = '#ff8a8a';
@@ -50,7 +50,7 @@ export function createDeathOverlay(state) {
   text.style.color = '#e9dede';
 
   const button = document.createElement('button');
-  button.textContent = 'Ricomincia';
+  button.textContent = 'Restart';
   Object.assign(button.style, {
     padding: '12px 22px',
     fontSize: '16px',
