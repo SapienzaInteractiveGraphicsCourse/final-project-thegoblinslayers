@@ -34,12 +34,12 @@ Each room requires completing a specific interaction to unlock the passage to th
 | `E` | Interact / Pick up item |
 | `Left click` | Attack (only with axe or sword equipped) |
 | `Right click` (hold) | Block with shield (only with shield equipped) |
-| `I` | Open / Close inventory |
+| `F` | Open / Close inventory |
 | Mouse (in inventory) | Drag items between slots |
 
 ### Inventory
 
-The inventory (`I`) consists of **4 slots**:
+The inventory (`F`) consists of **4 slots**:
 
 - 🗡️ **Primary Slot** — reserved for weapons (axe, sword): the equipped item appears held in first-person on the right side
 - 🛡️ **Utility Slot** — reserved for torch and shield: the equipped item appears held in first-person on the left side
