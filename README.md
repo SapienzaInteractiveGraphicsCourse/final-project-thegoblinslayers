@@ -96,7 +96,7 @@ The inventory (`I`) consists of **4 slots**:
 | Name | Student ID | Email |
 |------|-----------|-------|
 | Agostini Antonio | 1995653 | agostini.1995653@studenti.uniroma1.it |
-|  |  | .@studenti.uniroma1.it |
+| Istoc Julia Claudia | 2058878 | istoc.2058878@studenti.uniroma1.it |
 
 ### 📄 Asset Licenses
 
