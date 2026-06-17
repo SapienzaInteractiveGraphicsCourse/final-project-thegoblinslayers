@@ -88,7 +88,7 @@ The inventory (`I`) consists of **4 slots**:
 
 ### Libraries Used
 - [Three.js](https://threejs.org/) — WebGL rendering, scene management, materials, lights, animations
-- [GLTFLoader](https://threejs.org/docs/#examples/en/loaders/GLTFLoader) — 3D model loading (ogre, door, torches)
+- [GLTFLoader](https://threejs.org/docs/#examples/en/loaders/GLTFLoader) — 3D model loading (ogre, door, torches, ecc...)
 - Web Audio API — ambient and gameplay audio system
 
 ***
