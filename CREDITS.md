@@ -44,9 +44,4 @@ All audio assets are sourced from [Pixabay](https://pixabay.com) and released un
 
 ---
 
-## Libraries & Frameworks
-
-| Library | Version | License |
-|---------|---------|---------|
-| [Three.js](https://threejs.org) | r160+ | MIT |
 
