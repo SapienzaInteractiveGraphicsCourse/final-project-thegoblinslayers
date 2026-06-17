@@ -21,7 +21,7 @@ export function makePlayerBox(position) {
 }
 
 export function collidesAt(state, position) {
-  // --- NOCLIP MODE: nessuna collisione, il player passa ovunque ---
+  // --- NOCLIP MODE: no collision, the player goes everywhere ---
   if (state.noclip) return false;
 
   const playerBox = makePlayerBox(position);

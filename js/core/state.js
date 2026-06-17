@@ -1,6 +1,5 @@
-// Contratto globale dei dati di gioco.
-// Ogni modulo importa { gameState } da qui — nessun altro stato globale esiste fuori da questo file.
-
+// Global Game Data Agreement.
+// Each module imports { gameState } from here — no other global state exists outside of this file.
 import * as THREE from 'three';
 
 export const gameState = {
@@ -8,7 +7,7 @@ export const gameState = {
   camera:   null,
   renderer: null,
   clock:    null,
-  noclip:   false,  // per debug: attraversa muri e disabilita collisioni
+  noclip:   false,  // for debug: walk through walls and disable collisions
 
   player: null,
 
@@ -21,7 +20,7 @@ export const gameState = {
   yaw:   0,
   pitch: 0,
 
-  // ── Oggetti di scena / logica stanza ────────────────────────────────────────
+  // ── scene obj / room logic ────────────────────────────────────────
   isLeverActivated: false,
   currentInteractable: null,
 
@@ -41,16 +40,16 @@ export const gameState = {
   interactionTextElement:  null,
   
 
-  // ── Morte e respawn ─────────────────────────────────────────────────────────
+  // ── death and respawn ─────────────────────────────────────────────────────────
   inputLockedByDeath: false,
   footstepSound: null,
 
-  // ── Collisioni e interazione ─────────────────────────────────────────────────
+  // ── Collision and Interactions ─────────────────────────────────────────────────
   obstacleObjects:    [],
   interactableMeshes: [],
 
   
-    // ── Materiali (caricati una volta e riutilizzati) ───────────────────────────────
+    // ── Materials (loaded once and reused) ───────────────────────────────
   floorAlbedoBase:       null,
   floorDisplacementBase: null,
 
@@ -64,7 +63,7 @@ export const gameState = {
     ShiftRight:  false,
   },
 
-  // ── Vettori di movimento (riutilizzati ogni frame per evitare GC) ────────────
+  // ── Motion vectors (reused every frame to avoid GC) ────────────
   moveDirection:    new THREE.Vector3(),
   forward:          new THREE.Vector3(),
   right:            new THREE.Vector3(),
@@ -77,15 +76,15 @@ export const gameState = {
   attackRaycaster:    new THREE.Raycaster(),
   tempObstacleBox:    new THREE.Box3(),
 
-  // ── ASCIA ───────────────────────────────────────────────────────────────────
+  // ── AXE ───────────────────────────────────────────────────────────────────
   hasAxe:           false,
   isAxeEquipped:    false,
   isAxeSwinging:    false,
   axeSwingElapsed:  0,
-  axeSwingDuration: 1.2,   // durata totale animazione swing ascia (secondi)
+  axeSwingDuration: 1.2,   // total ax swing animation duration (seconds)
   axeHitApplied:    false,
   axeHitDistance:   2.1,
-  axeHitCount:      0,      // colpi dati con l'ascia sul barile corrente (max 3)
+  axeHitCount:      0,      // hits given with the ax on the current barrel (max 3)
 
   axePickup:        null,
   barrel:           null,
@@ -96,15 +95,15 @@ export const gameState = {
   axeIdleRotation:  new THREE.Euler(),
   axeSwingSoundPlayed: false,
 
-  // ── SPADA ───────────────────────────────────────────────────────────────────
+  // ── SWORD ───────────────────────────────────────────────────────────────────
   hasSword:             false,
   isSwordEquipped:      false,
   isSwordSwinging:      false,
   swordSwingElapsed:    0,
-  swordSwingDuration:   0.28,  // animazione più veloce dell'ascia (0.48s → 0.28s)
+  swordSwingDuration:   0.28,  // faster ax animation (0.48s -> 0.28s)
   swordHitApplied:      false,
-  swordHitDistance:     2.1,   // stessa portata dell'ascia
-  swordHitCount:        0,     // colpi dati con la spada sul barile corrente (max 5)
+  swordHitDistance:     2.1,   // same range as the axe
+  swordHitCount:        0,     // sword hits on the current barrel (max 5)
 
   swordPickup:          null,
   viewSwordHolder:      null,
@@ -112,7 +111,7 @@ export const gameState = {
   swordIdlePosition:    new THREE.Vector3(),
   swordIdleRotation:    new THREE.Euler(),
 
-  // ── TORCIA ──────────────────────────────────────────────────────────────────
+  // ── TORCH ──────────────────────────────────────────────────────────────────
   hasTorch:         false,
   isTorchEquipped:  false,
 
@@ -120,23 +119,23 @@ export const gameState = {
   heldTorch:          null,
   viewTorchHolder:    null,
 
-  // ── SCUDO ───────────────────────────────────────────────────────────────────
+  // ── SWORD ───────────────────────────────────────────────────────────────────
   hasShield:         false,
   isShieldEquipped:  false,
   isBlocking:        false,
   viewShieldHolder:  null,
-  shieldHP:          3,     // colpi che lo scudo può assorbire prima di rompersi
-  shieldBroken:      false, // flag one-shot per evitare doppi trigger
+  shieldHP:          3,     // hits that the shield can absorb before breaking
+  shieldBroken:      false, // one-shot flag to avoid double triggers
 
-  // ── INVENTARIO ──────────────────────────────────────────────────────────────
-  // primary   → arma in mano destra (ascia o spada)
-  // secondary → utility in mano sinistra (torcia, scudo)
-  // bag1/bag2 → zaino (due slot, accettano qualsiasi tipo)
+// ── INVENTORY ─────────────────────────────── ─────────────────────────────── 
+// primary -> weapon in right hand (axe or sword) 
+// secondary -> utility in left hand (torch, shield) 
+// bag1/bag2 -> backpack (two slots, accept any type)
   inventory: {
     primary:   null,
     secondary: null,
-    bag1:      null,   // primo slot zaino
-    bag2:      null,   // secondo slot zaino (nuovo)
+    bag1:      null,   // first backpack slot
+    bag2:      null,   // second backpack slot
   },
   isInventoryOpen: false,
   hasWon: false,

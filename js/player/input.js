@@ -34,7 +34,7 @@ export function setupInput(state, onInteract, onPrimaryAction) {
       });
     }
 
-    // Noclip da developer: premi C per attraversare i muri
+    // Noclip from developer: Press C to walk through walls
     if (event.code === 'KeyC') {
       state.noclip = !state.noclip;
       const hud = document.getElementById('noclip-hud');

@@ -27,6 +27,6 @@ export const LEVER_HANDLE_ROTATION_SPEED = 4.0;
 export const MOUSE_SENSITIVITY = 0.0025;
 export const MAX_PITCH = Math.PI / 2 - 0.1;
 
-export const SPRINT_MULTIPLIER = 1.85;   // velocità sprint rispetto al walk
-export const STAMINA_DRAIN_RATE = 1 / 3; // si esaurisce in 3s
-export const STAMINA_REGEN_RATE = 1 / 2; // si ricarica in 2s
+export const SPRINT_MULTIPLIER = 1.85;   // sprint speed compared to walk
+export const STAMINA_DRAIN_RATE = 1 / 3; // runs out in 3s
+export const STAMINA_REGEN_RATE = 1 / 2; // recharges in 2s

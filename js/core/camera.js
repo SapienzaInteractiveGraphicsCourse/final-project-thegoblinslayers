@@ -15,10 +15,10 @@ export function createCamera(state) {
 export function updateCameraTransform(state) {
   if (!state.camera) return;
 
-  // Durante la wake-up sequence il player non esiste ancora:
-  // la camera staziona allo spawn point e usa pitch/yaw dallo state
+// During the wake-up sequence the player does not yet exist:
+// the camera stands at the spawn point and uses pitch/yaw from the state
   if (!state.player) {
-    // Posizione fissa allo spawn (stessa usata da createPlayer)
+    // Fixed position at spawn (same used by createPlayer)
     state.camera.position.set(
       state.spawnPosition?.x ?? 0,
       (state.spawnPosition?.y ?? 0) + (EYE_HEIGHT - PLAYER_HEIGHT * 0.5),
@@ -30,7 +30,7 @@ export function updateCameraTransform(state) {
     return;
   }
 
-  // Comportamento normale post-wake-up
+  // Normal post-wake-up behavior
   state.camera.position.set(
     state.player.position.x,
     state.player.position.y + (EYE_HEIGHT - PLAYER_HEIGHT * 0.5),

@@ -19,7 +19,7 @@ export function createPlayer(state) {
 
 export function updatePlayer(state, deltaTime) {
 
-  // Blocca il player mentre legge
+  // Freeze the player while reading
   if (state.isReading) return;
 
   // ── Stamina logic ──────────────────────────────────────────────────────────
@@ -27,30 +27,30 @@ export function updatePlayer(state, deltaTime) {
   const isMoving  = state.keys.KeyW || state.keys.KeyS || state.keys.KeyA || state.keys.KeyD;
 
   if (shiftHeld && isMoving && !state.staminaExhausted && state.stamina > 0) {
-    // Sprint attivo: drena stamina
+    // Active Sprint: Drains stamina
     state.isSprinting = true;
     state.stamina = Math.max(0, state.stamina - STAMINA_DRAIN_RATE * deltaTime);
 
     if (state.stamina === 0) {
-      state.staminaExhausted = true; // blocca sprint finché non ricarica del tutto
+      state.staminaExhausted = true; // freeze sprint until it fully reloads
       state.isSprinting = false;
     }
   } else {
-    // Nessuno sprint: ricarica stamina
+    // No sprinting: recharges stamina
     state.isSprinting = false;
     state.stamina = Math.min(1, state.stamina + STAMINA_REGEN_RATE * deltaTime);
 
-    // Sblocca sprint solo quando stamina è piena al 100%
+    // Unlock sprints only when stamina is 100% full
     if (state.staminaExhausted && state.stamina >= 1.0) {
       state.staminaExhausted = false;
     }
   }
 
-  // Barra visibile solo se la stamina non è piena (sprint in corso o in regen)
+  // Bar visible only if stamina is not full (sprint in progress or regen)
   const showBar = state.stamina < 1.0;
   updateStaminaBar(state.stamina, showBar);
 
-  // ── Movimento ──────────────────────────────────────────────────────────────
+  // ── Movement ──────────────────────────────────────────────────────────────
   state.moveDirection.set(0, 0, 0);
 
   if (state.keys.KeyW) state.moveDirection.z += 1;
@@ -59,8 +59,8 @@ export function updatePlayer(state, deltaTime) {
   if (state.keys.KeyD) state.moveDirection.x += 1;
 
  if (state.moveDirection.lengthSq() === 0) {
-  stopLoopingSound('footsteps'); // fermo → stop audio
-  return;                        // ← return originale che mancava
+  stopLoopingSound('footsteps'); // stopped -> stop audio
+  return;                        
 }
 
 state.moveDirection.normalize();
@@ -91,8 +91,8 @@ if (!collidesAt(state, state.tempPosition)) {
   state.player.position.z = state.tempPosition.z;
 }
 
-// ── Footstep audio ──────────────────────────────────────────────────────────
-// Arriva qui solo se il player si sta effettivamente muovendo
+// ── Audio Footstep ───────────────────────────── ─────────────────────────────
+// Only gets here if the player is actually moving
 const rate = state.isSprinting ? 1.55 : 1.0;
 const entry = startLoopingSound('footsteps', { volume: 0.45, playbackRate: rate });
 if (entry) setLoopPlaybackRate('footsteps', rate);

@@ -38,70 +38,20 @@ import { showPlayerHealthBar, updatePlayerHealthBar }               from '../wor
 
 
 
-/**
- * Pre-compila tutti i variant shader WebGL per evitare spike durante il gameplay.
- * 
- * Teoria: WebGL compila un programma GLSL la prima volta che viene usato (onFirstUse).
- * Three.js genera variant diversi in base al numero di luci attive nella scena.
- * Accendendo tutte le luci prima del compile, forziamo la compilazione di tutti
- * i variant necessari durante il loading, non durante il gameplay.
- */
+/** 
+* Pre-compile all WebGL variant shaders to avoid spikes during gameplay. 
+* 
+* Theory: WebGL compiles a GLSL program the first time it is used (onFirstUse). 
+* Three.js generates different variants based on the number of active lights in the scene. 
+* By turning on all lights before compiling, we force everyone to compile 
+* variants needed during loading, not during gameplay. 
+*/
 
-/*async function _prewarmAllShaders(state) {
-  const { scene, renderer, camera } = state;
 
-  // 1. Raccogli tutte le luci spente e le flamePivot con scala zero
-  const hiddenLights = [];
-  const rescaledPivots = [];
-
-  scene.traverse((child) => {
-    // Accendi temporaneamente le luci spente
-    if ((child.isPointLight || child.isSpotLight || child.isDirectionalLight) && !child.visible) {
-      child.visible = true;
-      hiddenLights.push(child);
-    }
-    // Ripristina temporaneamente le flamePivot scalate a zero
-    if (child.name && child.name.toLowerCase().includes('flame') && child.scale.x < 0.001) {
-      child.scale.setScalar(1.0);
-      rescaledPivots.push(child);
-    }
-  });
-
-  // 2. Rendi visibili le mesh degli oggetti con visible=false per il compile
-  const hiddenObjects = [];
-  scene.traverse((child) => {
-    if (child.isMesh && !child.visible) {
-      child.visible = true;
-      hiddenObjects.push(child);
-    }
-  });
-
-  // 3. Compila in modo asincrono — non blocca il main thread
-  // compileAsync è disponibile da Three.js r156+
-  if (typeof renderer.compileAsync === 'function') {
-    await renderer.compileAsync(scene, camera);
-  } else {
-    // Fallback per versioni precedenti
-    renderer.compile(scene, camera);
-  }
-
-  // 4. Ripristina tutto allo stato originale
-  for (const light of hiddenLights) {
-    light.visible = false;
-  }
-  for (const pivot of rescaledPivots) {
-    pivot.scale.setScalar(0.0001); // rimane "invisibile" fino all'accensione
-  }
-  for (const obj of hiddenObjects) {
-    obj.visible = false;
-  }
-}*/
-
-// Vettore riutilizzabile per calcoli di distanza nel loop (evita allocazioni ogni frame)
+// Reusable vector for distance calculations in the loop (avoids allocations every frame)
 const _tempVec = new THREE.Vector3();
 
-
-// ── Schermo nero iniziale (copre il canvas durante il caricamento) ────────────
+// ── Initial black screen (covers canvas while loading) ────────────
 const initBlack = document.createElement('div');
 initBlack.style.cssText = 'position:fixed;inset:0;background:#000;z-index:999;pointer-events:none;';
 document.body.appendChild(initBlack);
@@ -129,25 +79,25 @@ btnStart1.addEventListener('click', async () => {
   menuSound.play();
   // ─────────────────────────────────────────────────────────────────────
 
-  // 1. Feedback visivo immediato: fade-out home
+  // 1. visual Feedback : fade-out home
   homeScreen.classList.add('fade-out');
   homeScreen.addEventListener('animationend', () => homeScreen.remove(), { once: true });
 
   gameState.isLoading = true;
   document.getElementById("loading-screen").style.display = "flex";
 
-  // 2. Sblocca AudioContext
+  // 2. Unlock AudioContext
   const listener = gameState.audioListener;
   if (listener) {
     const ctx = listener.context;
     if (ctx && ctx.state === 'suspended') ctx.resume();
   }
 
-  // 3. Avvia il caricamento del dungeon
+  // 3. start the loading of dungeon
   await init();
   gameState.isLoading = false;
 
-  // Aspetta 1 secondo a "Pronto!" prima di nascondere la loading screen
+  // Wait 1 second to "Ready!" before hiding the loading screen
   await new Promise(resolve => setTimeout(resolve, 1000));
 
   document.getElementById("loading-screen").style.display = "none";
@@ -161,8 +111,8 @@ btnStart2.addEventListener('click', async () => {
 });
 
 btnExit1.addEventListener('click', () => {
-  // window.close() funziona solo se la tab è stata aperta da JS
-  // In caso contrario mostra un messaggio discreto
+  // window.close() works only if the tab was opened by JS 
+// Otherwise show a discrete message
   const closed = window.close();
   if (!closed) {
     btnExit.textContent = 'Chiudi il browser per uscire';
@@ -171,8 +121,8 @@ btnExit1.addEventListener('click', () => {
 });
 
 btnExit2.addEventListener('click', () => {
-  // window.close() funziona solo se la tab è stata aperta da JS
-  // In caso contrario mostra un messaggio discreto
+  // window.close() works only if the tab was opened by JS 
+// Otherwise show a discrete message
   const closed = window.close();
   if (!closed) {
     btnExit.textContent = 'Chiudi il browser per uscire';
@@ -198,7 +148,7 @@ function onPrimaryAction() {
   }
 }
 
-// Chiamata da wakeUpSequence quando l'animazione è completata
+// Called by wakeUpSequence when the animation is complete
 function onWakeUpComplete() {
   createPlayer(gameState);
   setupInput(gameState, () => tryInteract(gameState), onPrimaryAction);
@@ -206,7 +156,7 @@ function onWakeUpComplete() {
 }
 
 
-// ── Progress bar manuale a fasi ───────────────────────────────────────────
+// Manual progress bar in stages
 function setLoadingProgress(pct, label) {
   const fill = document.getElementById('loading-bar-fill');
   const perc = document.getElementById('loading-percent');
@@ -218,7 +168,7 @@ function setLoadingProgress(pct, label) {
 // ─────────────────────────────────────────────────────────────────────────
 
 async function init() {
-  // ── Flag: blocca il render loop finché tutto non è pronto ─────────────────
+  // ── Flag: Block the render loop until everything is ready
   gameState.isInitialized = false;
 
   gameState.scene = new THREE.Scene();
@@ -233,7 +183,7 @@ async function init() {
   createInventoryUI(gameState);
   createCamera(gameState);
 
-  setLoadingProgress(5, 'Starting...'); 
+  setLoadingProgress(5, 'Inizializzazione...'); 
 
   const audioListener = new THREE.AudioListener();
   gameState.camera.add(audioListener);
@@ -249,7 +199,7 @@ async function init() {
   gameState.scene.add(gameState.camera);
   createLights(gameState);
 
-  setLoadingProgress(15, 'Uploading models...');
+  setLoadingProgress(15, 'Caricamento modelli...');
 
   await Promise.all([
     preloadTorchModel('./assets/models/torch/scene.gltf'),
@@ -258,17 +208,17 @@ async function init() {
     preloadShieldModel()
   ]);
 
-  setLoadingProgress(40, 'Building Dungeon...');
+  setLoadingProgress(40, 'Costruzione dungeon...');
 
   await createDungeon(gameState, (object) => registerObstacle(gameState, object));
 
-  setLoadingProgress(60, 'Object Preparation...');
+  setLoadingProgress(60, 'Preparazione oggetti...');
 
   prewarmViewTorch(gameState, './assets/models/manor_torch/manor_torch.glb');
   prewarmViewAxe(gameState, gameState.renderer);   
   prewarmViewShield(gameState, gameState.renderer);
 
-  //ensureViewShield(gameState);
+  
   if (gameState.viewShieldHolder) {
     gameState.viewShieldHolder.visible = false;
   }
@@ -279,7 +229,7 @@ async function init() {
 
   setupDebugPositionLogger(gameState);
 
-  setLoadingProgress(70, 'Loading rooms...'); 
+  setLoadingProgress(70, 'Caricamento stanze...'); 
 
   createRoomOneSystem(gameState, { showErrorOverlay });
   createCorridorOneSystem(gameState, {showErrorOverlay});
@@ -290,35 +240,20 @@ async function init() {
   createCombatHUD();
 
 
-  setLoadingProgress(85, 'Shader Compilation...');
+  setLoadingProgress(85, 'Compilazione shader...');
 
-  // Pre-carica texture in VRAM
-  /*gameState.scene.traverse((child) => {
-    if (!child.isMesh) return;
-    const mats = Array.isArray(child.material) ? child.material : [child.material];
-    for (const mat of mats) {
-      if (!mat) continue;
-      if (mat.map)             gameState.renderer.initTexture(mat.map);
-      if (mat.normalMap)       gameState.renderer.initTexture(mat.normalMap);
-      if (mat.roughnessMap)    gameState.renderer.initTexture(mat.roughnessMap);
-      if (mat.metalnessMap)    gameState.renderer.initTexture(mat.metalnessMap);
-      if (mat.displacementMap) gameState.renderer.initTexture(mat.displacementMap);
-      if (mat.aoMap)           gameState.renderer.initTexture(mat.aoMap);
-      if (mat.emissiveMap)     gameState.renderer.initTexture(mat.emissiveMap);
-    }
-  });*/
 
-  // ── Warm-up unificato: un solo traverse per texture + shader + luci ───────
-// Teoria: WebGL compila shader variant diversi per ogni combinazione di luci
-// attive. initTexture() pre-carica le texture in VRAM. Facendo tutto in un
-// unico traverse evitiamo 3 passate separate sullo scene graph (O(n) invece O(3n)).
+// ── Unified warm-up: one traverse for textures + shaders + lights ───────
+// Theory: WebGL compiles different variant shaders for each light combination
+// active. initTexture() preloads textures into VRAM. Doing everything in one
+// single traverse we avoid 3 separate passes on the scene graph (O(n) instead O(3n)).
 const _warmHiddenLights   = [];
 const _warmRescaledPivots = [];
 const _warmHiddenMeshes   = [];
 
 gameState.scene.traverse((child) => {
 
-  // Accendi temporaneamente le luci spente → compile variant "luce accesa"
+  //Temporarily turn off lights -> compile variant "lights on"
   if (
     (child.isPointLight || child.isSpotLight || child.isDirectionalLight)
     && !child.visible
@@ -327,13 +262,13 @@ gameState.scene.traverse((child) => {
     _warmHiddenLights.push(child);
   }
 
-  // Ripristina flamePivot scalate a zero → incluse nel compile
+  // Reset flamePivot scaled to zero -> included in the compile
   if (child.name?.toLowerCase().includes('flame') && child.scale.x < 0.001) {
     child.scale.setScalar(1.0);
     _warmRescaledPivots.push(child);
   }
 
-  // Mesh: rendile visibili + pre-carica tutte le texture in VRAM
+  // Mesh: make them visible + pre-load all textures into VRAM
   if (child.isMesh) {
     if (!child.visible) {
       child.visible = true;
@@ -354,45 +289,45 @@ gameState.scene.traverse((child) => {
   }
 });
 
-// Compila tutti gli shader variant in modo asincrono (non blocca il main thread
-// se il driver GPU supporta l'estensione KHR_parallel_shader_compile)
+// Compile all variant shaders asynchronously (does not block the main thread
+// if the GPU driver supports the KHR_parallel_shader_compile extension)
 if (typeof gameState.renderer.compileAsync === 'function') {
   await gameState.renderer.compileAsync(gameState.scene, gameState.camera);
 } else {
   gameState.renderer.compile(gameState.scene, gameState.camera);
 }
 
-// Ripristina tutto allo stato originale (luci spente, flame invisibili, mesh nascoste)
+// Restore everything to its original state (lights off, flames invisible, meshes hidden)
 for (const l of _warmHiddenLights)   l.visible = false;
 for (const p of _warmRescaledPivots) p.scale.setScalar(0.0001);
 for (const m of _warmHiddenMeshes)   m.visible = false;
 // ─────────────────────────────────────────────────────────────────────────
 
-setLoadingProgress(100, 'Ready!');
+setLoadingProgress(100, 'Pronto!');
 
-// ── Shader warm-up completo: pre-compila tutti i variant shader ───────────
-// Il problema: Three.js genera shader variant diversi in base al numero di
-// luci attive. Se una luce è spenta (visible=false) al momento del compile,
-// il variant "con quella luce accesa" non viene compilato → spike al primo accesso.
-// Soluzione: accendiamo temporaneamente TUTTE le luci, compiliamo, rispegniamo.
+// ── Shader warm-up complete: pre-compile all variant shaders ───────────
+// The problem: Three.js generates different variant shaders based on the number of
+// active lights. If a light is off (visible=false) at compile time,
+// the variant "with that light on" is not compiled -> spike on first access.
+// Solution: Temporarily turn on ALL lights, compile, turn off again.
 //await _prewarmAllShaders(gameState);
-// ─────────────────────────────────────────────────────────────────────────
+// ──────────────────────────────────── 
 
 
-  // Spawn iniziale del dungeon
+  // Spawn point: set the initial position of the player and camera before wake-up
   gameState.spawnPoint.set(0, PLAYER_HEIGHT * 0.5, 8);
 
-  // ── Imposta lo spawn point PRIMA della camera wake-up ─────────────────────
-  // Sostituisci con le coordinate reali dello spawn del tuo dungeon
+  // ── Set spawn point BEFORE wake-up camera ───────────────────── 
+// Replace with the actual coordinates of your dungeon spawn
   gameState.spawnPosition = new THREE.Vector3(0, PLAYER_HEIGHT * 0.5, 8);
   gameState.yaw   = 0;
   gameState.pitch = Math.PI / 2 + 0.08; // guarda il soffitto
   gameState.wakeUpDone = false;
 
-  // ── Avvia la sequenza wake-up (crea canvas overlay nero) ──────────────────
+  // ── Start wake-up sequence (create black canvas overlay) ──────────────────
   initWakeUpSequence(gameState, onWakeUpComplete);
 
-  // Il canvas overlay di wakeUpSequence è ora attivo → rimuovi il div iniziale
+  // The wakeUpSequence canvas overlay is now active -> remove the initial div
   initBlack.remove();
 
   window.addEventListener('resize', () => onWindowResize(gameState));
@@ -400,8 +335,8 @@ setLoadingProgress(100, 'Ready!');
 
 
   const startAmbientOnce = () => {
-    preloadGameSounds();      // tutti i preloadSound sono ora in audioSetup.js
-    initAmbientAudio();       // audio ambientale
+    preloadGameSounds();      
+    initAmbientAudio();       
     document.removeEventListener('click', startAmbientOnce);
   };
   document.addEventListener('click', startAmbientOnce);
@@ -411,7 +346,7 @@ function updatePendulumAudio(state) {
   if (!state.pendulums || state.pendulums.length === 0) return;
   if (state.isDead) return;
 
-  // Camera = posizione del player in prima persona
+  // Camera = first-person player position
   const playerPos = state.camera.position;
 
   let minDist = Infinity;
@@ -464,7 +399,7 @@ function animate() {
     return;
   }
 
-  // 1. Aggiorna animazione pendoli
+  // 1. Update pendulum animation
   if (gameState.pendulums) {
     for (const pendulum of gameState.pendulums) {
       pendulum.update(deltaTime, gameState.camera.position);
@@ -480,7 +415,7 @@ function animate() {
 
     gameState.roomTwo?.update(deltaTime);
 
-      // ── Aggiorna mob stanza 2 ─────────────────────────────────────────────
+      // ── Update mob room 2 ────────────────────── ───────────────────────
     if (gameState.mob) {
         gameState.mob.update(deltaTime, gameState);
     }
@@ -496,7 +431,7 @@ function animate() {
     });
   }
 
-  // 3. Sistemi che devono continuare sempre
+  // 3. Systems that must always continue
   updatePendulumHazards(gameState, deltaTime);
   updateDeathSystem(gameState, deltaTime);
   updateTorches(gameState, deltaTime, elapsedTime);
