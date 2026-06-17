@@ -76,7 +76,7 @@ The inventory (`I`) consists of **4 slots**:
 - **Rolling boulder** animation (translation + self-axis rotation)
 - **Door opening** animation (gradual pivot rotation using `moveTowards`)
 - **Lever** animation (rotation on pivot node)
-- **Barrel destruction** animation (progressive layer-based deformation over 3 hit stages)
+- **Barrel destruction** animation (progressive layer-based deformation over hit stages)
 - **Mob death and dissolve** animation (opacity fade on `transparent` materials)
 - ⚠️ *Locomotion and attack animations of the ogre (mob) are imported from GLTF/FBX files*
 
