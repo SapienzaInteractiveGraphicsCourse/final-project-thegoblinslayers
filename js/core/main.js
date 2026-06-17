@@ -233,7 +233,7 @@ async function init() {
   createInventoryUI(gameState);
   createCamera(gameState);
 
-  setLoadingProgress(5, 'Inizializzazione...'); 
+  setLoadingProgress(5, 'Starting...'); 
 
   const audioListener = new THREE.AudioListener();
   gameState.camera.add(audioListener);
@@ -249,7 +249,7 @@ async function init() {
   gameState.scene.add(gameState.camera);
   createLights(gameState);
 
-  setLoadingProgress(15, 'Caricamento modelli...');
+  setLoadingProgress(15, 'Uploading models...');
 
   await Promise.all([
     preloadTorchModel('./assets/models/torch/scene.gltf'),
@@ -258,11 +258,11 @@ async function init() {
     preloadShieldModel()
   ]);
 
-  setLoadingProgress(40, 'Costruzione dungeon...');
+  setLoadingProgress(40, 'Building Dungeon...');
 
   await createDungeon(gameState, (object) => registerObstacle(gameState, object));
 
-  setLoadingProgress(60, 'Preparazione oggetti...');
+  setLoadingProgress(60, 'Object Preparation...');
 
   prewarmViewTorch(gameState, './assets/models/manor_torch/manor_torch.glb');
   prewarmViewAxe(gameState, gameState.renderer);   
@@ -279,7 +279,7 @@ async function init() {
 
   setupDebugPositionLogger(gameState);
 
-  setLoadingProgress(70, 'Caricamento stanze...'); 
+  setLoadingProgress(70, 'Loading rooms...'); 
 
   createRoomOneSystem(gameState, { showErrorOverlay });
   createCorridorOneSystem(gameState, {showErrorOverlay});
@@ -290,7 +290,7 @@ async function init() {
   createCombatHUD();
 
 
-  setLoadingProgress(85, 'Compilazione shader...');
+  setLoadingProgress(85, 'Shader Compilation...');
 
   // Pre-carica texture in VRAM
   /*gameState.scene.traverse((child) => {
@@ -368,7 +368,7 @@ for (const p of _warmRescaledPivots) p.scale.setScalar(0.0001);
 for (const m of _warmHiddenMeshes)   m.visible = false;
 // ─────────────────────────────────────────────────────────────────────────
 
-setLoadingProgress(100, 'Pronto!');
+setLoadingProgress(100, 'Ready!');
 
 // ── Shader warm-up completo: pre-compila tutti i variant shader ───────────
 // Il problema: Three.js genera shader variant diversi in base al numero di
