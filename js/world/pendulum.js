@@ -111,7 +111,7 @@ export function createHangingAxe({
 
   const swingOffset = Math.random() * 10;
   let elapsedTime = swingOffset;
-  let _lastSinSign = Math.sign(Math.sin(swingOffset * 1.8)); // ← NUOVO
+  let _lastSinSign = Math.sign(Math.sin(swingOffset * 1.8)); 
 
 
 const pendulum = {

@@ -12,7 +12,7 @@ export const ITEM_TYPES = {
   AXE:    'axe',
   TORCH:  'torch',
   SHIELD: 'shield',
-  SWORD:  'sword',       // ← nuovo
+  SWORD:  'sword',       
 };
 
 // Quali tipi sono armi → vanno in PRIMARY (mano destra)

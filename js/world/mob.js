@@ -551,7 +551,6 @@ _clearAllFinishedListeners() {
   if (!this._mixer) return;
   // Three.js espone _listeners come oggetto interno — non è API pubblica
   // ma è l'unico modo per fare cleanup completo senza tenere reference a ogni callback.
-  // Alternativa sicura: sostituire il mixer con uno nuovo.
   if (this._mixer._listeners && this._mixer._listeners['finished']) {
     this._mixer._listeners['finished'] = [];
   }

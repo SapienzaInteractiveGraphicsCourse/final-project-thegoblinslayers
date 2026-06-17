@@ -64,7 +64,7 @@ close() {
   playSound('doorOpen', { volume: 0.6 });  // suono opzionale richiusura
 },
 
-// ── reset() — nuovo metodo per il respawn ────────────────────────────────
+// ── reset() — metodo per il respawn ────────────────────────────────
 reset() {
   this.isOpen      = false;
   this.isAnimating = false;
