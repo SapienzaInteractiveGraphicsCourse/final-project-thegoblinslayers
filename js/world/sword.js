@@ -128,38 +128,50 @@ export function createSwordPickup({
  * quindi la teniamo più centrata e meno in basso.
  */
 export function ensureViewSword(state) {
-  if (!state.camera)       return null;
+  if (!state.camera)         return null;
   if (state.viewSwordHolder) return state.viewSwordHolder;
 
   const holder = new THREE.Group();
   holder.name = 'view-sword-holder';
-
-  // Posizione in coordinate locali camera — mano destra, lama che si estende verso il centro
   holder.position.set(0.55, -0.32, -0.60);
   holder.rotation.set(0, 0, 0);
-  holder.visible = false;   // nascosto finché non è equipped
+  holder.visible = false;  // nascosto finché non equipaggiata
 
-const pivotGroup = new THREE.Group();
+  const pivotGroup = new THREE.Group();
   pivotGroup.name = 'sword-pivot';
   holder.add(pivotGroup);
 
   const root = new THREE.Group();
-  // Offset: sposta il modello in avanti rispetto al pivot (= l'impugnatura è sull'origin del pivot)
-  // Calibra questo valore in base alla lunghezza visiva della spada nel viewmodel
-  root.position.set(0.3, 0, -0.25);   // -Z = "in avanti" in spazio camera
+  root.position.set(0.3, 0, -0.25);
   pivotGroup.add(root);
 
   loadSwordModel(root, (model) => {
     model.rotation.set(0.01, Math.PI, -Math.PI / 2);
     model.scale.setScalar(0.75);
     setupViewModelRendering(model);
+
+    // ← PRE-WARM: forza la compilazione shader in un frame silenzioso
+    //   posiziona fuori dal frustum così non appare, ma gli shader vengono compilati
+    holder.position.set(99999, 99999, 99999);
+    state.camera.add(holder);
+
+    // Dopo 3 frame riporta alla posizione corretta
+    let frames = 0;
+    const restore = () => {
+      if (++frames >= 3) {
+        holder.position.set(0.55, -0.32, -0.60);
+        return;
+      }
+      requestAnimationFrame(restore);
+    };
+    requestAnimationFrame(restore);
   });
 
   state.camera.add(holder);
 
-  state.viewSwordHolder  = holder;
-  state.viewSwordPivot   = pivotGroup;   // ← salva il pivot in state
-  state.viewSwordRoot    = root;
+  state.viewSwordHolder = holder;
+  state.viewSwordPivot  = pivotGroup;
+  state.viewSwordRoot   = root;
   state.swordIdlePosition.copy(holder.position);
   state.swordIdleRotation.copy(holder.rotation);
 
