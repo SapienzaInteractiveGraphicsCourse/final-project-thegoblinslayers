@@ -55,7 +55,7 @@ export async function createSpikes(state, registerObstacle) {  // ← aggiungi p
         fourthRoot.scale.setScalar(scale);
         applySpikesDefaults(fourthRoot);
         state.scene.add(fourthRoot);
-        state.spike3 = fourthRoot;
+        state.spike4 = fourthRoot;
 
         const colliderGeo = new THREE.BoxGeometry(2.5,1,23-17);
         const colliderMat = new THREE.MeshBasicMaterial({visible: false});
@@ -70,7 +70,7 @@ export async function createSpikes(state, registerObstacle) {  // ← aggiungi p
         state.scene.add(rightCollider);
         registerObstacle(rightCollider);
 
-        console.log('[Spikes] Gargoyle e collider aggiunti.');
+        console.log('[Spikes] Spikes aggiunti.');
         resolve({first: firstRoot, second:secondRoot, third: thirdRoot, fourth:fourthRoot});
       },
 
