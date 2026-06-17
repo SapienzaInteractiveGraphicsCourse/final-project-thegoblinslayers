@@ -1,5 +1,5 @@
-// Modulo singleton per audio condivisi di gioco.
-// Il buffer viene caricato una sola volta e riusato da qualsiasi modulo.
+// Singleton module for shared game audio.
+// The buffer is loaded once and reused by any module.
 
 let _ctx = null;
 const _buffers = {};
@@ -9,12 +9,11 @@ function getCtx() {
   return _ctx;
 }
 
-
 export function warmupAudioContext() {
   const ctx = getCtx();
   if (ctx.state === 'suspended') {
     ctx.resume().then(() => {
-      // Context caldo e pronto — crea e distruggi subito un buffer silenzioso
+      // Context warm and ready — create and immediately destroy a silent buffer
       const silentBuffer = ctx.createBuffer(1, 1, ctx.sampleRate);
       const source = ctx.createBufferSource();
       source.buffer = silentBuffer;
@@ -26,38 +25,38 @@ export function warmupAudioContext() {
 }
 
 /**
- * Precarica un file audio e lo salva con una chiave.
- * @param {string} key   - Identificatore (es. 'woodDestroy')
- * @param {string} url   - Path relativo al file mp3
+ * Preloads an audio file and saves it with a key.
+ * @param {string} key - Identifier (e.g. 'woodDestroy')
+ * @param {string} url - Relative path to the mp3 file
  */
 export async function preloadSound(key, url) {
   if (_buffers[key]) return;
   try {
-    const ctx      = getCtx();
+    const ctx = getCtx();
     const response = await fetch(url);
-    const array    = await response.arrayBuffer();
-    _buffers[key]  = await ctx.decodeAudioData(array);
+    const array = await response.arrayBuffer();
+    _buffers[key] = await ctx.decodeAudioData(array);
   } catch (err) {
-    console.warn(`[audioManager] Errore caricamento "${key}":`, err);
+    console.warn(`[audioManager] Error loading "${key}":`, err);
   }
 }
 
 /**
- * Riproduce un suono già caricato.
- * @param {string} key          - Chiave del buffer
- * @param {number} volume       - Gain (0.0 → 1.0)
- * @param {number} playbackRate - Velocità (1.0 = normale, 1.5 = accelerato)
- * @param {number} offset       - Secondo di inizio nel buffer (default 0)
- * @param {number|undefined} duration - Durata in secondi (undefined = tutto)
+ * Plays an already loaded sound.
+ * @param {string} key - Buffer key
+ * @param {number} volume - Gain (0.0 → 1.0)
+ * @param {number} playbackRate - Speed (1.0 = normal, 1.5 = faster)
+ * @param {number} offset - Start second in the buffer (default 0)
+ * @param {number|undefined} duration - Duration in seconds (undefined = full buffer)
  */
 export function playSound(key, { volume = 1.0, playbackRate = 1.0, offset = 0, duration } = {}) {
-  const ctx    = getCtx();
+  const ctx = getCtx();
   const buffer = _buffers[key];
   if (!buffer) return;
   if (ctx.state === 'suspended') ctx.resume();
 
   const source = ctx.createBufferSource();
-  source.buffer       = buffer;
+  source.buffer = buffer;
   source.playbackRate.value = playbackRate;
 
   const gainNode = ctx.createGain();
@@ -66,7 +65,7 @@ export function playSound(key, { volume = 1.0, playbackRate = 1.0, offset = 0, d
   source.connect(gainNode);
   gainNode.connect(ctx.destination);
 
-  // duration undefined → riproduci tutto il buffer dal offset
+  // duration undefined → play the entire buffer from offset
   if (duration !== undefined) {
     source.start(0, offset, duration);
   } else {
@@ -74,18 +73,18 @@ export function playSound(key, { volume = 1.0, playbackRate = 1.0, offset = 0, d
   }
 }
 
-// Aggiunta in fondo al file audioManager.js esistente
+// ── Looping sound system ───────────────────────────────────────────────────────
 
-const _loopingSources = {}; // chiave → { source, gainNode }
+const _loopingSources = {}; // key → { source, gainNode }
 
 /**
- * Avvia un suono in loop continuo. Se già in corso, non fa nulla.
- * Restituisce la coppia { source, gainNode } per aggiornare playbackRate.
+ * Starts a continuously looping sound. If already playing, does nothing.
+ * Returns the { source, gainNode } pair for updating playbackRate.
  */
 export function startLoopingSound(key, { volume = 1.0, playbackRate = 1.0 } = {}) {
-  if (_loopingSources[key]) return _loopingSources[key]; // già attivo
+  if (_loopingSources[key]) return _loopingSources[key]; // already active
 
-  const ctx    = getCtx();
+  const ctx = getCtx();
   const buffer = _buffers[key];
   if (!buffer) return null;
   if (ctx.state === 'suspended') ctx.resume();
@@ -96,7 +95,7 @@ export function startLoopingSound(key, { volume = 1.0, playbackRate = 1.0 } = {}
 
   const source = ctx.createBufferSource();
   source.buffer = buffer;
-  source.loop   = true;
+  source.loop = true;
   source.playbackRate.value = playbackRate;
   source.connect(gainNode);
   source.start(0);
@@ -106,7 +105,7 @@ export function startLoopingSound(key, { volume = 1.0, playbackRate = 1.0 } = {}
 }
 
 /**
- * Ferma il loop e lo rimuove dal registro.
+ * Stops the loop and removes it from the registry.
  */
 export function stopLoopingSound(key) {
   const entry = _loopingSources[key];
@@ -129,7 +128,7 @@ export function stopLoopingSound(key) {
 }
 
 /**
- * Aggiorna il playbackRate di un loop in corso.
+ * Updates the playbackRate of a running loop.
  */
 export function setLoopPlaybackRate(key, rate) {
   const entry = _loopingSources[key];
@@ -138,20 +137,20 @@ export function setLoopPlaybackRate(key, rate) {
 }
 
 /**
- * Riproduce un suono one-shot e, al termine, avvia un loop continuo.
- * @param {string} oneshotKey  - Chiave del suono introduttivo
- * @param {string} loopKey     - Chiave del suono da loopare dopo
- * @param {object} oneshotOpts - Opzioni per il one-shot { volume, playbackRate }
- * @param {object} loopOpts    - Opzioni per il loop    { volume, playbackRate }
+ * Plays a one-shot sound and, when it ends, starts a continuous loop.
+ * @param {string} oneshotKey - Key of the introductory sound
+ * @param {string} loopKey - Key of the sound to loop afterwards
+ * @param {object} oneshotOpts - Options for the one-shot { volume, playbackRate }
+ * @param {object} loopOpts - Options for the loop { volume, playbackRate }
  */
 export function startLoopAfterSound(oneshotKey, loopKey, oneshotOpts = {}, loopOpts = {}) {
-  const ctx          = getCtx();
-  const bufferShot   = _buffers[oneshotKey];
-  const bufferLoop   = _buffers[loopKey];
+  const ctx = getCtx();
+  const bufferShot = _buffers[oneshotKey];
+  const bufferLoop = _buffers[loopKey];
   if (!bufferShot || !bufferLoop) return;
   if (ctx.state === 'suspended') ctx.resume();
 
-  // Ferma eventuale loop già attivo (es. torcia riaccesa)
+  // Stop any existing loop (e.g. torch re-ignited)
   stopLoopingSound(loopKey);
 
   const gainShot = ctx.createGain();
@@ -164,7 +163,7 @@ export function startLoopAfterSound(oneshotKey, loopKey, oneshotOpts = {}, loopO
   source.connect(gainShot);
   source.start(0);
 
-  // Quando il one-shot finisce, avvia il loop
+  // When the one-shot ends, start the loop
   source.onended = () => {
     gainShot.disconnect();
     startLoopingSound(loopKey, loopOpts);
@@ -176,10 +175,10 @@ export function stopFootsteps() {
 }
 
 /**
- * Aggiorna il volume (gain) di un loop in corso.
- * Usato per l'audio di prossimità (es. whoosh pendolo).
- * @param {string} key    - Chiave del loop
- * @param {number} volume - Gain target (0.0 → 1.0)
+ * Updates the volume (gain) of a running loop.
+ * Used for proximity audio (e.g. pendulum whoosh).
+ * @param {string} key - Loop key
+ * @param {number} volume - Target gain (0.0 → 1.0)
  */
 export function setLoopVolume(key, volume) {
   const entry = _loopingSources[key];
@@ -187,9 +186,8 @@ export function setLoopVolume(key, volume) {
   entry.gainNode.gain.value = Math.max(0, Math.min(1, volume));
 }
 
-
 export function setAudioContext(externalCtx) {
-  if (_ctx) return; // già impostato, non sovrascrivere
+  if (_ctx) return; // already set, do not overwrite
   _ctx = externalCtx;
 }
 
@@ -197,22 +195,18 @@ export function getAudioContext() {
   return _ctx;
 }
 
+// ── Player damage audio system ────────────────────────────────────────────────
+// Behaviour:
+// - Hit received → audio resumes from the saved bookmark (or from 0 on first hit)
+// - No hit for 1 second → audio stops, saves position
+// - New hit → resumes exactly from where it was stopped
+// - When the buffer ends naturally → bookmark resets to 0
 
-// ── Sistema audio danno player ────────────────────────────────────────────────
-// Comportamento:
-// - Colpo ricevuto → audio parte dal punto in cui si era fermato (o da 0 la prima volta)
-// - Nessun colpo per 1 secondo → audio si ferma, salva il punto
-// - Nuovo colpo → riprende esattamente da dove si era fermato
-// - Quando il buffer finisce naturalmente → il bookmark torna a 0
+let _dmgSource = null;
+let _dmgGain = null;
+let _dmgStartCtxTime = 0;  // ctx.currentTime when the source started
+let _dmgStartOffset = 0;   // buffer offset from which it started
+let _dmgBookmark = 0;      // ← position saved on last stop
+let _dmgStopTimeout = null;
 
-let _dmgSource       = null;
-let _dmgGain         = null;
-let _dmgStartCtxTime = 0;   // ctx.currentTime quando la source è partita
-let _dmgStartOffset  = 0;   // offset nel buffer da cui è partita
-let _dmgBookmark     = 0;   // ← punto salvato all'ultimo stop
-let _dmgStopTimeout  = null;
-
-const DAMAGE_SOUND_SUSTAIN = 1.0; // secondi di audio dopo l'ultimo colpo
-
-
-
+const DAMAGE_SOUND_SUSTAIN = 1.0; // seconds of audio after the last hit

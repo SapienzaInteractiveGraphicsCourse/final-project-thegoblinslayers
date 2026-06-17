@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { setDeathFlash, showDeathOverlay, hideDeathOverlay} from '../ui/deathOverlay.js';
+import { setDeathFlash, showDeathOverlay, hideDeathOverlay } from '../ui/deathOverlay.js';
 import { playSound, stopLoopingSound } from '../systems/audioManager.js';
 import { resetMovementInput } from '../player/input.js';
 import { stopFootsteps } from './audioManager.js';
@@ -14,7 +14,7 @@ export function initDeathSystem(state) {
   state.respawnInvulnerability = 0;
 
   state.playerHPMax = 100;
-  state.playerHP    = 100;
+  state.playerHP = 100;
 
   state.playerHitRadius = 0.38;
 
@@ -31,7 +31,7 @@ export function initDeathSystem(state) {
     stopFootsteps();
     state.isBlocking = false;
 
-    // Reset HP player + nascondi lifebar
+    // Reset player HP + hide lifebar
     state.playerHP = state.playerHPMax ?? 100;
     import('../world/mob.js').then(({
       updatePlayerHealthBar,
@@ -42,48 +42,46 @@ export function initDeathSystem(state) {
       updatePlayerHealthBar(state.playerHP, state.playerHPMax);
     });
 
-    // Nascondi entrambe le lifebar
+    // Hide both lifebars
     const playerBar = document.getElementById('player-hp-bar');
-    const mobBar    = document.getElementById('mob-hp-bar');
+    const mobBar = document.getElementById('mob-hp-bar');
     if (playerBar) playerBar.style.opacity = '0';
-    if (mobBar)    mobBar.style.opacity    = '0';
+    if (mobBar) mobBar.style.opacity = '0';
 
-    // Reset scudo
-    state.shieldHP     = 3;
+    // Reset shield
+    state.shieldHP = 3;
     state.shieldBroken = false;
 
-    // Reset mob: ritorna alla spawn e aspetta la pedana
+    // Reset mob: return to spawn and wait for pressure plate
     if (state.mob) {
       state.mob.reset(new THREE.Vector3(28.762, 0, -24.986));
     }
 
-    // Flag pedana: NON resettare roomTwoTorchesLitByPlate →
-    // le torce rimangono accese tra un respawn e l'altro.
-    // Resettiamo solo il flag mob per permettere la riattivazione.
+    // Pressure plate flag: do NOT reset roomTwoTorchesLitByPlate →
+    // torches remain lit between respawns.
+    // Only reset the mob flag to allow reactivation.
     state.roomTwoMobSpawned = false;
-    // NON toccare: state.roomTwoTorchesLitByPlate  ← rimane true dopo il primo giro
+    // DO NOT touch: state.roomTwoTorchesLitByPlate ← stays true after the first run
 
-
-
-
-    // ── Ripristina visibilità del testo di interazione ──────────────────────
+    // ── Restore interaction text visibility ──────────────────────────────
     if (state.interactionTextElement) {
-      state.interactionTextElement.style.opacity = '1';  
+      state.interactionTextElement.style.opacity = '1';
     }
 
-      // ── Riattiva tutti i pendoli ─────────────────────────────────────────────
+    // ── Reactivate all pendulums ─────────────────────────────────────────
     if (state.pendulums) {
       for (const p of state.pendulums) p.unfreeze();
     }
 
-    // ── Reset palla e leva del corridoio 1 ───────────────────────────────────
+    // ── Reset ball and corridor 1 lever ───────────────────────────────────
     if (state.ball) {
       state.ball.reset();
     }
+
     if (state.corridorOne) {
       state.corridorOne.lever?.reset();
       state.corridorOne._ballTriggered = false;
-      // Richiudi la porta del corridoio 1
+      // Close corridor 1 door
       //state.corridorOne.door?.close?.();
     }
 
@@ -129,12 +127,12 @@ export function killPlayer(state) {
     state.interactionTextElement.textContent = '';
   }
 
-  // ── Freeze tutti i pendoli nel punto in cui si trovano ──────────────────
+  // ── Freeze all pendulums at their current position ───────────────────
   if (state.pendulums) {
     for (const p of state.pendulums) p.freeze();
   }
 
-  // ── Ferma whoosh e suona impatto ─────────────────────────────────────────
+  // ── Stop whoosh and play impact sound ─────────────────────────────────
   stopLoopingSound('whoosh');
   playSound('axeTrapHit', { volume: 0.65 });
 
