@@ -136,12 +136,16 @@ All game sounds are preloaded in parallel during the loading phase via `AudioLoa
 - [GLTFLoader](https://threejs.org/docs/#examples/en/loaders/GLTFLoader) — 3D model loading (ogre, door, torches, ecc...)
 - Web Audio API — ambient and gameplay audio system
 
+---
+
 ### 👥 Authors
 
 | Name | Student ID | Email |
 |------|-----------|-------|
 | Agostini Antonio | 1995653 | agostini.1995653@studenti.uniroma1.it |
 | Istoc Julia Claudia | 2058878 | istoc.2058878@studenti.uniroma1.it |
+
+---
 
 ### 📃 Asset Licenses
 
