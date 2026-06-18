@@ -20,7 +20,7 @@ solve environmental puzzles by interacting with the surrounding world (pulling l
 
 
 
-### 🗂️ Project Structure
+### Project Structure
 
 The codebase is organized into **5 modules**, each with a clear and distinct responsibility.
 
@@ -103,7 +103,7 @@ Each room requires completing a specific interaction to unlock the passage to th
 - [GLTFLoader](https://threejs.org/docs/#examples/en/loaders/GLTFLoader) — 3D model loading (ogre, door, torches, ecc...)
 - Web Audio API — ambient and gameplay audio system
 
-### ⚡ Performance Optimizations
+### Performance Optimizations
 
 To ensure fast loading times and smooth performance in the browser, several optimization passes were applied to the project's assets.
 
@@ -130,14 +130,14 @@ All game sounds are preloaded in parallel during the loading phase via `AudioLoa
 
 ---
 
-### 👥 Authors
+### Authors
 
 | Name | Student ID | Email |
 |------|-----------|-------|
 | Agostini Antonio | 1995653 | agostini.1995653@studenti.uniroma1.it |
 | Istoc Julia Claudia | 2058878 | istoc.2058878@studenti.uniroma1.it |
 
-### 📄 Asset Licenses
+### Asset Licenses
 
 The source code is released under the [MIT License](LICENSE).  
 Third-party assets (3D models, textures, audio) and their respective licenses are listed in [CREDITS.md](CREDITS.md).
