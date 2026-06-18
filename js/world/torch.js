@@ -23,10 +23,10 @@ function cloneTorchModel(url = DEFAULT_WALL_TORCH_URL) {
 }
 
 const EMBER_COLORS = [0xff4d1f, 0xff8a1a, 0xffd24a];
-const EMBERS_PER_TORCH = 8;
-const EMBER_SPAWN_RATE = 5.0;
-const EMBER_MIN_LIFE = 0.9;
-const EMBER_MAX_LIFE = 1.6;
+const EMBERS_PER_TORCH = 4;    // da 8 → 4: dimezza gli sprite in scena
+const EMBER_SPAWN_RATE = 2.5;  // da 5 → 2.5: dimezza gli spawn/secondo
+const EMBER_MIN_LIFE   = 0.7;  // leggermente più breve per compensare il pool ridotto
+const EMBER_MAX_LIFE   = 1.2;
 const EMBER_MIN_SIZE = 0.015;
 const EMBER_MAX_SIZE = 0.035;
 const EMBER_FLOOR_Y = 0.05;

@@ -206,7 +206,8 @@ export function createCeilingSection(state, width, depth, x, z, repeatX, repeatY
   const ceiling = new THREE.Mesh(geometry, material);
   ceiling.rotation.x = Math.PI / 2;
   ceiling.position.set(x, ROOM_HEIGHT - 0.02, z);
-  ceiling.receiveShadow = true;
+  ceiling.receiveShadow = false;
+  ceiling.castShadow    = false;
 
   state.scene.add(ceiling);
 }
@@ -223,7 +224,7 @@ export function createWall(state, registerObstacle, material, width, height, dep
   );
 
   wall.position.set(x, y, z);
-  wall.castShadow    = true;
+  wall.castShadow    = false;
   wall.receiveShadow = true;
 
   state.scene.add(wall);
