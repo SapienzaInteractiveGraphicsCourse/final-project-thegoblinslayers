@@ -98,11 +98,6 @@ Each room requires completing a specific interaction to unlock the passage to th
 - **Pendulums** — ceiling anchor + chain links + blade using `THREE.ExtrudeGeometry`
 - **Boulder** — `THREE.SphereGeometry`
 
-### Libraries Used
-- [Three.js](https://threejs.org/) — WebGL rendering, scene management, materials, lights, animations
-- [GLTFLoader](https://threejs.org/docs/#examples/en/loaders/GLTFLoader) — 3D model loading (ogre, door, torches, ecc...)
-- Web Audio API — ambient and gameplay audio system
-
 ### Performance Optimizations
 
 To ensure fast loading times and smooth performance in the browser, several optimization passes were applied to the project's assets.
@@ -129,6 +124,11 @@ All WebGL shader variants are pre-compiled during the loading screen using `rend
 All game sounds are preloaded in parallel during the loading phase via `AudioLoader`, preventing any audio latency or stuttering on first interaction.
 
 ---
+
+### Libraries Used
+- [Three.js](https://threejs.org/) — WebGL rendering, scene management, materials, lights, animations
+- [GLTFLoader](https://threejs.org/docs/#examples/en/loaders/GLTFLoader) — 3D model loading (ogre, door, torches, ecc...)
+- Web Audio API — ambient and gameplay audio system
 
 ### Authors
 
