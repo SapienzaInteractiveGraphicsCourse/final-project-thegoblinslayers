@@ -287,18 +287,28 @@ gameState.scene.traverse((child) => {
   }
 });
 
-// Compile all variant shaders asynchronously (does not block the main thread
-// if the GPU driver supports the KHR_parallel_shader_compile extension)
+// ── DOPO — orienta la camera in avanti prima di compilare ───────────────
+// Il frustum con pitch=0 include muri, pavimento e torce da muro.
+// Con pitch=PI/2 (soffitto) la maggior parte della scena è fuori frustum
+// e i suoi shader verrebbero compilati on-the-fly al primo movimento.
+const _origPitch = gameState.pitch ?? 0;
+gameState.pitch = 0;
+updateCameraTransform(gameState);
+
 if (typeof gameState.renderer.compileAsync === 'function') {
   await gameState.renderer.compileAsync(gameState.scene, gameState.camera);
 } else {
   gameState.renderer.compile(gameState.scene, gameState.camera);
 }
 
-// Restore everything to its original state (lights off, flames invisible, meshes hidden)
-for (const l of _warmHiddenLights)   l.visible = false;
+gameState.pitch = _origPitch;
+updateCameraTransform(gameState);
+// ───────────────────────────────────────────────────────────────────────
+
+// Restore everything to its original state
+for (const l of _warmHiddenLights) l.visible = false;
 for (const p of _warmRescaledPivots) p.scale.setScalar(0.0001);
-for (const m of _warmHiddenMeshes)   m.visible = false;
+for (const m of _warmHiddenMeshes) m.visible = false;
 // ─────────────────────────────────────────────────────────────────────────
 
 setLoadingProgress(100, 'Ready!');

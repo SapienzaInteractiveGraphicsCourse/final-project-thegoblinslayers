@@ -5,15 +5,17 @@ import * as THREE from 'three';
 const WAKEUP_PHASES = {
   SLEEP:        'sleep',
   EYES_OPENING: 'eyes_opening',
-  CAM_ROTATE:   'cam_rotate',
+  //CAM_ROTATE:   'cam_rotate',
+  //CAM_PAUSE:    'cam_pause',
   DONE:         'done'
 };
 
 const EYES_OPEN_DURATION  = 1.6;
-const CAM_ROTATE_DURATION = 1.8;
+// const CAM_PAUSE_DURATION   = 1.5;
+//const CAM_ROTATE_DURATION = 1.8;
 
-const PITCH_START = (Math.PI / 2) - 0.08;
-const PITCH_END   = 0;
+const PITCH_START = 0;
+//const PITCH_END   = 0;
 
 // ── Audio ─────────────────────────────────────────────────────────────────────
 let _audioLoader   = null;
@@ -148,14 +150,15 @@ function removeSleepScreen() {
 function easeOutCubic(t) {
   return 1 - Math.pow(1 - t, 3);
 }
-function easeInOutQuad(t) {
+/*function easeInOutQuad(t) {
   return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-}
+}*/
 
 // ── Stato interno ─────────────────────────────────────────────────────────────
 let _phase      = WAKEUP_PHASES.SLEEP;
 let _eyesTimer  = 0;
-let _camTimer   = 0;
+let _pauseTimer = 0;
+//let _camTimer   = 0;
 let _onComplete = null;
 let _state      = null;
 
@@ -315,39 +318,23 @@ export function updateWakeUpSequence(deltaTime) {
 
   if (_phase === WAKEUP_PHASES.EYES_OPENING) {
     _eyesTimer = Math.min(_eyesTimer + deltaTime, EYES_OPEN_DURATION);
-    const progress = _eyesTimer / EYES_OPEN_DURATION;
-
-    drawEyeVignette(progress);
+    drawEyeVignette(_eyesTimer / EYES_OPEN_DURATION);
     _state.pitch = PITCH_START;
 
     if (_eyesTimer >= EYES_OPEN_DURATION) {
       clearOverlay();
-      _phase    = WAKEUP_PHASES.CAM_ROTATE;
-      _camTimer = 0;
-    }
-    return;
-  }
-
-  if (_phase === WAKEUP_PHASES.CAM_ROTATE) {
-    _camTimer = Math.min(_camTimer + deltaTime, CAM_ROTATE_DURATION);
-    const t     = _camTimer / CAM_ROTATE_DURATION;
-    const eased = easeInOutQuad(t);
-
-    _state.pitch = PITCH_START + (PITCH_END - PITCH_START) * eased;
-
-    if (_camTimer >= CAM_ROTATE_DURATION) {
-      _state.pitch      = PITCH_END;
       _phase            = WAKEUP_PHASES.DONE;
+      _state.pitch      = PITCH_START;
       _state.wakeUpDone = true;
 
       overlayCanvas?.remove();
       overlayCanvas = null;
       overlayCtx    = null;
 
-      disposeWakeUpAudio();   // cleanup sleep/wake sounds
-      playWhereAmI();         // ← "Where am I?" una volta sola
-
+      disposeWakeUpAudio();
+      playWhereAmI();
       _onComplete?.();
     }
+    return;
   }
 }
