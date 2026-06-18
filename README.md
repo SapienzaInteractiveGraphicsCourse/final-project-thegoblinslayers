@@ -103,6 +103,33 @@ Each room requires completing a specific interaction to unlock the passage to th
 - [GLTFLoader](https://threejs.org/docs/#examples/en/loaders/GLTFLoader) — 3D model loading (ogre, door, torches, ecc...)
 - Web Audio API — ambient and gameplay audio system
 
+### ⚡ Performance Optimizations
+
+To ensure fast loading times and smooth performance in the browser, several optimization passes were applied to the project's assets.
+
+#### 3D Models — gltf-transform
+All 3D models (`.glb` / `.gltf`) were optimized using [gltf-transform](https://gltf-transform.dev/), an industry-standard CLI tool for GLTF asset processing. The following pipeline was applied to every model:
+
+- **Deduplication** — identical meshes, materials, and accessors merged into single instances
+- **Welding** — duplicate vertices removed and geometry cleaned up
+- **Pruning** — unused nodes, accessors, and metadata stripped from the scene graph
+- **WebP texture compression** — all embedded textures converted from PNG/JPG to WebP format, preserving visual quality at a fraction of the size
+
+#### PBR Textures — Squoosh
+All PBR texture maps (albedo, normal, roughness, displacement) were downscaled from **4K (4096×4096) to 1K (1024×1024)** using [Squoosh](https://squoosh.app), reducing texture memory footprint by approximately **93%** with no perceptible visual difference at typical in-game viewing distances.
+
+Textures optimized:
+- `stone_floor` — diffuse, displacement, normal (GL), roughness
+- `rock_wall_08` — diffuse, normal (GL), roughness
+
+#### WebGL Shader Warm-up
+All WebGL shader variants are pre-compiled during the loading screen using `renderer.compileAsync()`. This eliminates GPU compilation spikes on first use, ensuring smooth and consistent frame rates from the very first frame of gameplay.
+
+#### Audio Preloading
+All game sounds are preloaded in parallel during the loading phase via `AudioLoader`, preventing any audio latency or stuttering on first interaction.
+
+---
+
 ### 👥 Authors
 
 | Name | Student ID | Email |
