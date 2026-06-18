@@ -1,7 +1,31 @@
 {
+  "asset": {
+    "generator": "glTF-Transform v4.4.0",
+    "version": "2.0",
+    "extras": {
+      "author": "Nichgon (https://sketchfab.com/nichgon)",
+      "license": "SKETCHFAB Standard (https://sketchfab.com/licenses)",
+      "source": "https://sketchfab.com/3d-models/spike-trap-01-4022678cac214fd2963894aa152fc6f2",
+      "title": "Spike Trap 01"
+    }
+  },
   "accessors": [
     {
-      "bufferView": 2,
+      "type": "SCALAR",
+      "componentType": 5123,
+      "count": 1230,
+      "bufferView": 0,
+      "byteOffset": 0
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 470,
+      "bufferView": 1,
+      "byteOffset": 0
+    },
+    {
+      "type": "VEC3",
       "componentType": 5126,
       "count": 470,
       "max": [
@@ -12,275 +36,39 @@
       "min": [
         -0.30000001192092896,
         -0.30000001192092896,
-        0.0
+        0
       ],
-      "type": "VEC3"
-    },
-    {
-      "bufferView": 2,
-      "byteOffset": 5640,
-      "componentType": 5126,
-      "count": 470,
-      "max": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "min": [
-        -1.0,
-        -1.0,
-        0.0
-      ],
-      "type": "VEC3"
-    },
-    {
-      "bufferView": 3,
-      "componentType": 5126,
-      "count": 470,
-      "max": [
-        0.9950961470603943,
-        1.0,
-        1.0,
-        1.0
-      ],
-      "min": [
-        -0.9990828037261963,
-        -0.9999945759773254,
-        -1.0,
-        1.0
-      ],
-      "type": "VEC4"
-    },
-    {
       "bufferView": 1,
-      "componentType": 5126,
-      "count": 470,
-      "max": [
-        0.916262686252594,
-        0.9974989891052246
-      ],
-      "min": [
-        0.002499932423233986,
-        0.002495519118383527
-      ],
-      "type": "VEC2"
+      "byteOffset": 12
     },
     {
+      "type": "VEC4",
+      "componentType": 5126,
+      "count": 470,
       "bufferView": 1,
-      "byteOffset": 3760,
-      "componentType": 5126,
-      "count": 470,
-      "max": [
-        0.916262686252594,
-        0.9974989891052246
-      ],
-      "min": [
-        0.002499932423233986,
-        0.002495519118383527
-      ],
-      "type": "VEC2"
+      "byteOffset": 24
     },
     {
-      "bufferView": 0,
-      "componentType": 5125,
-      "count": 1230,
-      "type": "SCALAR"
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 470,
+      "bufferView": 1,
+      "byteOffset": 40
     }
   ],
-  "asset": {
-    "extras": {
-      "author": "Nichgon (https://sketchfab.com/nichgon)",
-      "license": "SKETCHFAB Standard (https://sketchfab.com/licenses)",
-      "source": "https://sketchfab.com/3d-models/spike-trap-01-4022678cac214fd2963894aa152fc6f2",
-      "title": "Spike Trap 01"
-    },
-    "generator": "Sketchfab-16.21.0",
-    "version": "2.0"
-  },
   "bufferViews": [
     {
       "buffer": 0,
-      "byteLength": 4920,
-      "name": "floatBufferViews",
+      "byteOffset": 0,
+      "byteLength": 2460,
       "target": 34963
     },
     {
       "buffer": 0,
-      "byteLength": 7520,
-      "byteOffset": 4920,
-      "byteStride": 8,
-      "name": "floatBufferViews",
+      "byteOffset": 2460,
+      "byteLength": 22560,
+      "byteStride": 48,
       "target": 34962
-    },
-    {
-      "buffer": 0,
-      "byteLength": 11280,
-      "byteOffset": 12440,
-      "byteStride": 12,
-      "name": "floatBufferViews",
-      "target": 34962
-    },
-    {
-      "buffer": 0,
-      "byteLength": 7520,
-      "byteOffset": 23720,
-      "byteStride": 16,
-      "name": "floatBufferViews",
-      "target": 34962
-    }
-  ],
-  "buffers": [
-    {
-      "byteLength": 31240,
-      "uri": "scene.bin"
-    }
-  ],
-  "extensionsUsed": [
-    "KHR_materials_specular"
-  ],
-  "images": [
-    {
-      "uri": "textures/OPM0041_baseColor.png"
-    },
-    {
-      "uri": "textures/OPM0041_metallicRoughness.png"
-    },
-    {
-      "uri": "textures/OPM0041_normal.png"
-    }
-  ],
-  "materials": [
-    {
-      "doubleSided": true,
-      "extensions": {
-        "KHR_materials_specular": {
-          "specularColorFactor": [
-            1.0,
-            1.0,
-            1.0
-          ],
-          "specularFactor": 0.3
-        }
-      },
-      "name": "OPM0041",
-      "normalTexture": {
-        "index": 2
-      },
-      "occlusionTexture": {
-        "index": 1
-      },
-      "pbrMetallicRoughness": {
-        "baseColorTexture": {
-          "index": 0
-        },
-        "metallicRoughnessTexture": {
-          "index": 1
-        },
-        "roughnessFactor": 0.85
-      }
-    }
-  ],
-  "meshes": [
-    {
-      "name": "OPM0041_OPM0041_0",
-      "primitives": [
-        {
-          "attributes": {
-            "NORMAL": 1,
-            "POSITION": 0,
-            "TANGENT": 2,
-            "TEXCOORD_0": 3,
-            "TEXCOORD_1": 4
-          },
-          "indices": 5,
-          "material": 0,
-          "mode": 4
-        }
-      ]
-    }
-  ],
-  "nodes": [
-    {
-      "children": [
-        1
-      ],
-      "matrix": [
-        1.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        2.220446049250313e-16,
-        -1.0,
-        0.0,
-        0.0,
-        1.0,
-        2.220446049250313e-16,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        1.0
-      ],
-      "name": "Sketchfab_model"
-    },
-    {
-      "children": [
-        2
-      ],
-      "matrix": [
-        0.009999999776482582,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.009999999776482582,
-        0.0,
-        0.0,
-        -0.009999999776482582,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        1.0
-      ],
-      "name": "4424719673b84aae8256f19889769264.fbx"
-    },
-    {
-      "children": [
-        3
-      ],
-      "name": "RootNode"
-    },
-    {
-      "children": [
-        4
-      ],
-      "matrix": [
-        100.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        -1.629206793918314e-05,
-        -99.99999999999868,
-        0.0,
-        0.0,
-        99.99999999999868,
-        -1.629206793918314e-05,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        1.0
-      ],
-      "name": "OPM0041"
-    },
-    {
-      "mesh": 0,
-      "name": "OPM0041_OPM0041_0"
     }
   ],
   "samplers": [
@@ -291,7 +79,154 @@
       "wrapT": 10497
     }
   ],
-  "scene": 0,
+  "textures": [
+    {
+      "sampler": 0,
+      "extensions": {
+        "EXT_texture_webp": {
+          "source": 0
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "EXT_texture_webp": {
+          "source": 2
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "EXT_texture_webp": {
+          "source": 1
+        }
+      }
+    }
+  ],
+  "images": [
+    {
+      "mimeType": "image/webp",
+      "uri": "textures/OPM0041_baseColor.webp"
+    },
+    {
+      "mimeType": "image/webp",
+      "uri": "textures/OPM0041_metallicRoughness.webp"
+    },
+    {
+      "mimeType": "image/webp",
+      "uri": "textures/OPM0041_normal.webp"
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "scene.bin",
+      "byteLength": 25020
+    }
+  ],
+  "materials": [
+    {
+      "name": "OPM0041",
+      "doubleSided": true,
+      "pbrMetallicRoughness": {
+        "roughnessFactor": 0.85,
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicRoughnessTexture": {
+          "index": 2
+        }
+      },
+      "normalTexture": {
+        "index": 1
+      },
+      "occlusionTexture": {
+        "index": 2
+      },
+      "extensions": {
+        "KHR_materials_specular": {
+          "specularFactor": 0.3
+        }
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "OPM0041_OPM0041_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 2,
+            "TANGENT": 3,
+            "TEXCOORD_0": 4
+          },
+          "mode": 4,
+          "material": 0,
+          "indices": 0
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "name": "Sketchfab_model",
+      "rotation": [
+        -0.7071067811865475,
+        0,
+        0,
+        0.7071067811865476
+      ],
+      "children": [
+        1
+      ]
+    },
+    {
+      "name": "4424719673b84aae8256f19889769264.fbx",
+      "rotation": [
+        0.7071067811865475,
+        0,
+        0,
+        0.7071067811865476
+      ],
+      "scale": [
+        0.009999999776482582,
+        0.009999999776482582,
+        0.009999999776482582
+      ],
+      "children": [
+        2
+      ]
+    },
+    {
+      "name": "RootNode",
+      "children": [
+        3
+      ]
+    },
+    {
+      "name": "OPM0041",
+      "rotation": [
+        -0.7071068387877038,
+        0,
+        0,
+        0.7071067235853866
+      ],
+      "scale": [
+        100,
+        100.00000000000001,
+        100.00000000000001
+      ],
+      "children": [
+        4
+      ]
+    },
+    {
+      "name": "OPM0041_OPM0041_0",
+      "mesh": 0
+    }
+  ],
   "scenes": [
     {
       "name": "Sketchfab_Scene",
@@ -300,18 +235,12 @@
       ]
     }
   ],
-  "textures": [
-    {
-      "sampler": 0,
-      "source": 0
-    },
-    {
-      "sampler": 0,
-      "source": 1
-    },
-    {
-      "sampler": 0,
-      "source": 2
-    }
+  "scene": 0,
+  "extensionsUsed": [
+    "EXT_texture_webp",
+    "KHR_materials_specular"
+  ],
+  "extensionsRequired": [
+    "EXT_texture_webp"
   ]
 }

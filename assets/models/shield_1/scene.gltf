@@ -1,7 +1,31 @@
 {
+  "asset": {
+    "generator": "glTF-Transform v4.4.0",
+    "version": "2.0",
+    "extras": {
+      "author": "Sergey Egelsky (https://sketchfab.com/egelsky)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/shield-9626b82200e44a5ea4a0ac5cd8020e3f",
+      "title": "Shield"
+    }
+  },
   "accessors": [
     {
-      "bufferView": 2,
+      "type": "SCALAR",
+      "componentType": 5123,
+      "count": 5112,
+      "bufferView": 0,
+      "byteOffset": 0
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 1556,
+      "bufferView": 1,
+      "byteOffset": 0
+    },
+    {
+      "type": "VEC3",
       "componentType": 5126,
       "count": 1556,
       "max": [
@@ -14,243 +38,37 @@
         -32.5,
         -3.014763355255127
       ],
-      "type": "VEC3"
-    },
-    {
-      "bufferView": 2,
-      "byteOffset": 18672,
-      "componentType": 5126,
-      "count": 1556,
-      "max": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "min": [
-        -1.0,
-        -1.0,
-        -1.0
-      ],
-      "type": "VEC3"
-    },
-    {
-      "bufferView": 3,
-      "componentType": 5126,
-      "count": 1556,
-      "max": [
-        1.0,
-        1.0,
-        0.9972643256187439,
-        1.0
-      ],
-      "min": [
-        -1.0,
-        -1.0,
-        -0.9972639083862305,
-        1.0
-      ],
-      "type": "VEC4"
-    },
-    {
       "bufferView": 1,
-      "componentType": 5126,
-      "count": 1556,
-      "max": [
-        0.9888079166412354,
-        0.992713451385498
-      ],
-      "min": [
-        0.0029161577112972736,
-        0.006848042830824852
-      ],
-      "type": "VEC2"
+      "byteOffset": 12
     },
     {
-      "bufferView": 0,
-      "componentType": 5125,
-      "count": 5112,
-      "type": "SCALAR"
+      "type": "VEC4",
+      "componentType": 5126,
+      "count": 1556,
+      "bufferView": 1,
+      "byteOffset": 24
+    },
+    {
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 1556,
+      "bufferView": 1,
+      "byteOffset": 40
     }
   ],
-  "asset": {
-    "extras": {
-      "author": "Sergey Egelsky (https://sketchfab.com/egelsky)",
-      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
-      "source": "https://sketchfab.com/3d-models/shield-9626b82200e44a5ea4a0ac5cd8020e3f",
-      "title": "Shield"
-    },
-    "generator": "Sketchfab-12.67.0",
-    "version": "2.0"
-  },
   "bufferViews": [
     {
       "buffer": 0,
-      "byteLength": 20448,
-      "name": "floatBufferViews",
+      "byteOffset": 0,
+      "byteLength": 10224,
       "target": 34963
     },
     {
       "buffer": 0,
-      "byteLength": 12448,
-      "byteOffset": 20448,
-      "byteStride": 8,
-      "name": "floatBufferViews",
+      "byteOffset": 10224,
+      "byteLength": 74688,
+      "byteStride": 48,
       "target": 34962
-    },
-    {
-      "buffer": 0,
-      "byteLength": 37344,
-      "byteOffset": 32896,
-      "byteStride": 12,
-      "name": "floatBufferViews",
-      "target": 34962
-    },
-    {
-      "buffer": 0,
-      "byteLength": 24896,
-      "byteOffset": 70240,
-      "byteStride": 16,
-      "name": "floatBufferViews",
-      "target": 34962
-    }
-  ],
-  "buffers": [
-    {
-      "byteLength": 95136,
-      "uri": "scene.bin"
-    }
-  ],
-  "images": [
-    {
-      "uri": "textures/shield_01_baseColor.jpeg"
-    },
-    {
-      "uri": "textures/shield_01_metallicRoughness.png"
-    },
-    {
-      "uri": "textures/shield_01_normal.jpeg"
-    }
-  ],
-  "materials": [
-    {
-      "name": "shield_01",
-      "normalTexture": {
-        "index": 2
-      },
-      "occlusionTexture": {
-        "index": 1
-      },
-      "pbrMetallicRoughness": {
-        "baseColorTexture": {
-          "index": 0
-        },
-        "metallicRoughnessTexture": {
-          "index": 1
-        },
-        "roughnessFactor": 0.8300000000000001
-      }
-    }
-  ],
-  "meshes": [
-    {
-      "name": "shield_shield_01_0",
-      "primitives": [
-        {
-          "attributes": {
-            "NORMAL": 1,
-            "POSITION": 0,
-            "TANGENT": 2,
-            "TEXCOORD_0": 3
-          },
-          "indices": 4,
-          "material": 0,
-          "mode": 4
-        }
-      ]
-    }
-  ],
-  "nodes": [
-    {
-      "children": [
-        1
-      ],
-      "matrix": [
-        21.4777774810791,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        4.769024615453943e-15,
-        -21.4777774810791,
-        0.0,
-        0.0,
-        21.4777774810791,
-        4.769024615453943e-15,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        1.0
-      ],
-      "name": "Sketchfab_model"
-    },
-    {
-      "children": [
-        2
-      ],
-      "matrix": [
-        1.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        1.0,
-        0.0,
-        0.0,
-        -1.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        1.0
-      ],
-      "name": "90a4ea5d6e3a44789ef4df1bff1f35a7.fbx"
-    },
-    {
-      "children": [
-        3
-      ],
-      "name": "RootNode"
-    },
-    {
-      "children": [
-        4
-      ],
-      "matrix": [
-        1.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        0.999999999999999,
-        4.3711388508782534e-08,
-        0.0,
-        0.0,
-        -4.3711388508782534e-08,
-        0.999999999999999,
-        0.0,
-        0.0,
-        0.0,
-        -2.0468652905947238e-07,
-        1.0
-      ],
-      "name": "shield"
-    },
-    {
-      "mesh": 0,
-      "name": "shield_shield_01_0"
     }
   ],
   "samplers": [
@@ -261,7 +79,137 @@
       "wrapT": 10497
     }
   ],
-  "scene": 0,
+  "textures": [
+    {
+      "sampler": 0,
+      "extensions": {
+        "EXT_texture_webp": {
+          "source": 0
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "EXT_texture_webp": {
+          "source": 2
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "EXT_texture_webp": {
+          "source": 1
+        }
+      }
+    }
+  ],
+  "images": [
+    {
+      "mimeType": "image/webp",
+      "uri": "textures/shield_01_baseColor.webp"
+    },
+    {
+      "mimeType": "image/webp",
+      "uri": "textures/shield_01_metallicRoughness.webp"
+    },
+    {
+      "mimeType": "image/webp",
+      "uri": "textures/shield_01_normal.webp"
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "scene.bin",
+      "byteLength": 84912
+    }
+  ],
+  "materials": [
+    {
+      "name": "shield_01",
+      "pbrMetallicRoughness": {
+        "roughnessFactor": 0.8300000000000001,
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicRoughnessTexture": {
+          "index": 2
+        }
+      },
+      "normalTexture": {
+        "index": 1
+      },
+      "occlusionTexture": {
+        "index": 2
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "shield_shield_01_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 2,
+            "TANGENT": 3,
+            "TEXCOORD_0": 4
+          },
+          "mode": 4,
+          "material": 0,
+          "indices": 0
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "name": "Sketchfab_model",
+      "rotation": [
+        -0.7071067811865475,
+        0,
+        0,
+        0.7071067811865476
+      ],
+      "scale": [
+        21.4777774810791,
+        21.4777774810791,
+        21.4777774810791
+      ],
+      "children": [
+        1
+      ]
+    },
+    {
+      "name": "90a4ea5d6e3a44789ef4df1bff1f35a7.fbx",
+      "rotation": [
+        0.7071067811865475,
+        0,
+        0,
+        0.7071067811865476
+      ],
+      "children": [
+        2
+      ]
+    },
+    {
+      "name": "RootNode",
+      "children": [
+        3
+      ]
+    },
+    {
+      "name": "shield",
+      "children": [
+        4
+      ]
+    },
+    {
+      "name": "shield_shield_01_0",
+      "mesh": 0
+    }
+  ],
   "scenes": [
     {
       "name": "Sketchfab_Scene",
@@ -270,18 +218,11 @@
       ]
     }
   ],
-  "textures": [
-    {
-      "sampler": 0,
-      "source": 0
-    },
-    {
-      "sampler": 0,
-      "source": 1
-    },
-    {
-      "sampler": 0,
-      "source": 2
-    }
+  "scene": 0,
+  "extensionsUsed": [
+    "EXT_texture_webp"
+  ],
+  "extensionsRequired": [
+    "EXT_texture_webp"
   ]
 }

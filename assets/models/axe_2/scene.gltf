@@ -1,7 +1,31 @@
 {
+  "asset": {
+    "generator": "glTF-Transform v4.4.0",
+    "version": "2.0",
+    "extras": {
+      "author": "anyaachan (https://sketchfab.com/anyaachan)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/medieval-axe-02-bd02252506634ba0ade72c258628a681",
+      "title": "medieval axe 02"
+    }
+  },
   "accessors": [
     {
-      "bufferView": 2,
+      "type": "SCALAR",
+      "componentType": 5123,
+      "count": 7950,
+      "bufferView": 0,
+      "byteOffset": 0
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 2430,
+      "bufferView": 1,
+      "byteOffset": 0
+    },
+    {
+      "type": "VEC3",
       "componentType": 5126,
       "count": 2430,
       "max": [
@@ -14,195 +38,37 @@
         -0.9215070009231567,
         -4.251989841461182
       ],
-      "type": "VEC3"
-    },
-    {
-      "bufferView": 2,
-      "byteOffset": 29160,
-      "componentType": 5126,
-      "count": 2430,
-      "max": [
-        0.9964063763618469,
-        0.9995448589324951,
-        1.0
-      ],
-      "min": [
-        -0.9955074787139893,
-        -0.9995448589324951,
-        -1.0
-      ],
-      "type": "VEC3"
-    },
-    {
-      "bufferView": 3,
-      "componentType": 5126,
-      "count": 2430,
-      "max": [
-        1.0,
-        1.0,
-        0.9999955296516418,
-        1.0
-      ],
-      "min": [
-        -0.996261715888977,
-        -1.0,
-        -1.0,
-        -1.0
-      ],
-      "type": "VEC4"
-    },
-    {
       "bufferView": 1,
-      "componentType": 5126,
-      "count": 2430,
-      "max": [
-        0.9874500036239624,
-        0.9502589702606201
-      ],
-      "min": [
-        0.012550000101327896,
-        0.012076999992132187
-      ],
-      "type": "VEC2"
+      "byteOffset": 12
     },
     {
-      "bufferView": 0,
-      "componentType": 5125,
-      "count": 7950,
-      "type": "SCALAR"
+      "type": "VEC4",
+      "componentType": 5126,
+      "count": 2430,
+      "bufferView": 1,
+      "byteOffset": 24
+    },
+    {
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 2430,
+      "bufferView": 1,
+      "byteOffset": 40
     }
   ],
-  "asset": {
-    "extras": {
-      "author": "anyaachan (https://sketchfab.com/anyaachan)",
-      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
-      "source": "https://sketchfab.com/3d-models/medieval-axe-02-bd02252506634ba0ade72c258628a681",
-      "title": "medieval axe 02"
-    },
-    "generator": "Sketchfab-12.68.0",
-    "version": "2.0"
-  },
   "bufferViews": [
     {
       "buffer": 0,
-      "byteLength": 31800,
-      "name": "floatBufferViews",
+      "byteOffset": 0,
+      "byteLength": 15900,
       "target": 34963
     },
     {
       "buffer": 0,
-      "byteLength": 19440,
-      "byteOffset": 31800,
-      "byteStride": 8,
-      "name": "floatBufferViews",
+      "byteOffset": 15900,
+      "byteLength": 116640,
+      "byteStride": 48,
       "target": 34962
-    },
-    {
-      "buffer": 0,
-      "byteLength": 58320,
-      "byteOffset": 51240,
-      "byteStride": 12,
-      "name": "floatBufferViews",
-      "target": 34962
-    },
-    {
-      "buffer": 0,
-      "byteLength": 38880,
-      "byteOffset": 109560,
-      "byteStride": 16,
-      "name": "floatBufferViews",
-      "target": 34962
-    }
-  ],
-  "buffers": [
-    {
-      "byteLength": 148440,
-      "uri": "scene.bin"
-    }
-  ],
-  "images": [
-    {
-      "uri": "textures/untitled2Material_003_baseColor.png"
-    },
-    {
-      "uri": "textures/untitled2Material_003_metallicRoughness.png"
-    },
-    {
-      "uri": "textures/untitled2Material_003_normal.png"
-    }
-  ],
-  "materials": [
-    {
-      "doubleSided": true,
-      "name": "untitled2Material_003",
-      "normalTexture": {
-        "index": 2
-      },
-      "occlusionTexture": {
-        "index": 1
-      },
-      "pbrMetallicRoughness": {
-        "baseColorTexture": {
-          "index": 0
-        },
-        "metallicRoughnessTexture": {
-          "index": 1
-        }
-      }
-    }
-  ],
-  "meshes": [
-    {
-      "name": "Object_0",
-      "primitives": [
-        {
-          "attributes": {
-            "NORMAL": 1,
-            "POSITION": 0,
-            "TANGENT": 2,
-            "TEXCOORD_0": 3
-          },
-          "indices": 4,
-          "material": 0,
-          "mode": 4
-        }
-      ]
-    }
-  ],
-  "nodes": [
-    {
-      "children": [
-        1
-      ],
-      "matrix": [
-        1.0,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        2.220446049250313e-16,
-        -1.0,
-        0.0,
-        0.0,
-        1.0,
-        2.220446049250313e-16,
-        0.0,
-        0.0,
-        0.0,
-        0.0,
-        1.0
-      ],
-      "name": "Sketchfab_model"
-    },
-    {
-      "children": [
-        2
-      ],
-      "name": "0a40eac75f7249bfb3c5cca3e9091c8d.obj.cleaner.materialmerger.gles"
-    },
-    {
-      "mesh": 0,
-      "name": "Object_2"
     }
   ],
   "samplers": [
@@ -213,7 +79,114 @@
       "wrapT": 10497
     }
   ],
-  "scene": 0,
+  "textures": [
+    {
+      "sampler": 0,
+      "extensions": {
+        "EXT_texture_webp": {
+          "source": 0
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "EXT_texture_webp": {
+          "source": 2
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "EXT_texture_webp": {
+          "source": 1
+        }
+      }
+    }
+  ],
+  "images": [
+    {
+      "mimeType": "image/webp",
+      "uri": "textures/untitled2Material_003_baseColor.webp"
+    },
+    {
+      "mimeType": "image/webp",
+      "uri": "textures/untitled2Material_003_metallicRoughness.webp"
+    },
+    {
+      "mimeType": "image/webp",
+      "uri": "textures/untitled2Material_003_normal.webp"
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "scene.bin",
+      "byteLength": 132540
+    }
+  ],
+  "materials": [
+    {
+      "name": "untitled2Material_003",
+      "doubleSided": true,
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicRoughnessTexture": {
+          "index": 2
+        }
+      },
+      "normalTexture": {
+        "index": 1
+      },
+      "occlusionTexture": {
+        "index": 2
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Object_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 2,
+            "TANGENT": 3,
+            "TEXCOORD_0": 4
+          },
+          "mode": 4,
+          "material": 0,
+          "indices": 0
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "name": "Sketchfab_model",
+      "rotation": [
+        -0.7071067811865475,
+        0,
+        0,
+        0.7071067811865476
+      ],
+      "children": [
+        1
+      ]
+    },
+    {
+      "name": "0a40eac75f7249bfb3c5cca3e9091c8d.obj.cleaner.materialmerger.gles",
+      "children": [
+        2
+      ]
+    },
+    {
+      "name": "Object_2",
+      "mesh": 0
+    }
+  ],
   "scenes": [
     {
       "name": "Sketchfab_Scene",
@@ -222,18 +195,11 @@
       ]
     }
   ],
-  "textures": [
-    {
-      "sampler": 0,
-      "source": 0
-    },
-    {
-      "sampler": 0,
-      "source": 1
-    },
-    {
-      "sampler": 0,
-      "source": 2
-    }
+  "scene": 0,
+  "extensionsUsed": [
+    "EXT_texture_webp"
+  ],
+  "extensionsRequired": [
+    "EXT_texture_webp"
   ]
 }
