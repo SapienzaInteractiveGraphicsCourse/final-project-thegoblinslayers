@@ -239,6 +239,56 @@ async function init() {
   setLoadingProgress(85, 'Compiling shader...');
 
 
+  // ── NUOVO BLOCCO: pre-warm variante "torcia nello zaino" ─────────────────
+  // Compila la variante shader con SpotLight + fillLight della torcia SPENTI.
+  // Senza questo, il primo unequip della torcia causa uno shader recompile on-the-fly.
+  if (gameState.heldTorch?.spotLight)  gameState.heldTorch.spotLight.visible = false;
+  if (gameState.heldTorch?.fillLight)  gameState.heldTorch.fillLight.visible = false;
+  if (gameState.heldTorch?.group)      gameState.heldTorch.group.visible     = true;
+
+  if (typeof gameState.renderer.compileAsync === 'function') {
+    await gameState.renderer.compileAsync(gameState.scene, gameState.camera);
+  } else {
+    gameState.renderer.compile(gameState.scene, gameState.camera);
+  }
+
+  if (gameState.heldTorch?.group) gameState.heldTorch.group.visible = false;
+  // ─────────────────────────────────────────────────────────────────────────
+
+  // ── NUOVO BLOCCO 3: pre-warm variante "torce puzzle accese" ──────────────
+  // Le torce puzzle partono spente. La prima accensione aggiunge una PointLight
+  // alla scena → nuova variante shader. Pre-compiliamo con 1 e poi 2 torce puzzle
+  // temporaneamente accese per coprire entrambe le transizioni.
+  const _puzzleTorches = [
+    ...(gameState.roomOnePuzzleTorches  ?? []),
+    ...(gameState.roomTwoPuzzleTorches  ?? [])
+  ];
+
+  // Pass A: accendi solo la prima torcia puzzle → variante N+1 luci
+  if (_puzzleTorches[0]?.light) {
+    _puzzleTorches[0].light.visible = true;
+    if (typeof gameState.renderer.compileAsync === 'function') {
+      await gameState.renderer.compileAsync(gameState.scene, gameState.camera);
+    } else {
+      gameState.renderer.compile(gameState.scene, gameState.camera);
+    }
+    _puzzleTorches[0].light.visible = false;
+  }
+
+  // Pass B: accendi le prime due torce puzzle → variante N+2 luci
+  if (_puzzleTorches[0]?.light && _puzzleTorches[1]?.light) {
+    _puzzleTorches[0].light.visible = true;
+    _puzzleTorches[1].light.visible = true;
+    if (typeof gameState.renderer.compileAsync === 'function') {
+      await gameState.renderer.compileAsync(gameState.scene, gameState.camera);
+    } else {
+      gameState.renderer.compile(gameState.scene, gameState.camera);
+    }
+    _puzzleTorches[0].light.visible = false;
+    _puzzleTorches[1].light.visible = false;
+  }
+  // ─────────────────────────────────────────────────────────────────────────
+
 // ── Unified warm-up: one traverse for textures + shaders + lights ───────
 // Theory: WebGL compiles different variant shaders for each light combination
 // active. initTexture() preloads textures into VRAM. Doing everything in one
