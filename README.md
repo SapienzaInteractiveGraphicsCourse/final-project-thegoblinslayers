@@ -152,5 +152,4 @@ All game sounds are preloaded in parallel during the loading phase via `AudioLoa
 The source code is released under the [MIT License](LICENSE).  
 Third-party assets (3D models, textures, audio) and their respective licenses are listed in [CREDITS.md](CREDITS.md).
 
-***
 
