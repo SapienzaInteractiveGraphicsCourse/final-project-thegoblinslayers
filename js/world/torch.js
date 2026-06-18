@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { prepareHighlightMaterials, applyHighlight } from '../systems/highlight.js';
 import { playSound, startLoopAfterSound, stopLoopingSound } from '../systems/audioManager.js';
+import { addToInventory, ITEM_TYPES } from '../ui/inventory.js';
 
 const DEFAULT_WALL_TORCH_URL = './assets/models/torch/scene.gltf';
 const DEFAULT_PICKUP_TORCH_URL = './assets/models/manor_torch/manor_torch.glb';
@@ -534,9 +535,7 @@ export function makeTorchPickupable(torch, state) {
       removeTorchFromStateList(state, torch);
       torch.group.parent?.remove(torch.group);
       if (state.heldTorch?.group) state.heldTorch.group.visible = false;
-      import('../ui/inventory.js').then(({ addToInventory, ITEM_TYPES }) => {
-        addToInventory(state, ITEM_TYPES.TORCH);
-      });
+      addToInventory(state, ITEM_TYPES.TORCH);
     },
     setHighlightT: (t) => applyHighlight(highlightMats, t)
   };

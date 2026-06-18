@@ -193,10 +193,31 @@ async function init() {
   prewarmViewAxe(gameState, gameState.renderer);   
   prewarmViewShield(gameState, gameState.renderer);
 
-  
+  // ── Pre-warm shader variant: scudo visibile + torcia spenta ──────────────
+  // Problema: quando il giocatore switcha torcia→scudo, il numero di luci attive
+  // cambia (SpotLight + fillLight della torcia si spengono). Questo forza WebGL
+  // a compilare un nuovo variant shader ON THE FLY → spike di lag.
+  // Soluzione: precompiliamo questa combinazione durante il loading.
   if (gameState.viewShieldHolder) {
-    gameState.viewShieldHolder.visible = false;
+      gameState.viewShieldHolder.visible = true; // scudo visibile
   }
+  if (gameState.heldTorch?.group) {
+      gameState.heldTorch.group.visible = false;
+      if (gameState.heldTorch.spotLight) gameState.heldTorch.spotLight.visible = false;
+      if (gameState.heldTorch.fillLight) gameState.heldTorch.fillLight.visible = false;
+  }
+  // Compila il variant shader con questa combinazione
+  if (typeof gameState.renderer.compileAsync === 'function') {
+      await gameState.renderer.compileAsync(gameState.scene, gameState.camera);
+  } else {
+      gameState.renderer.compile(gameState.scene, gameState.camera);
+  }
+  // Ripristina tutto nascosto
+  if (gameState.viewShieldHolder) {
+      gameState.viewShieldHolder.visible = false;
+  }
+  // ────────────────────────────────────────────────────────────────────────
+
   gameState.hasShield        = false;
   gameState.isShieldEquipped = false;
 
