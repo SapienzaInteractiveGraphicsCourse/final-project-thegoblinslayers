@@ -11,7 +11,7 @@
 
 ***
 
-### Game Description
+### 📝 Game Description
 
 **[▶ Click here to read the Technical Report and User Manual](https://github.com/SapienzaInteractiveGraphicsCourse/final-project-thegoblinslayers/blob/main/project_presentation.pdf)**
 
@@ -20,7 +20,7 @@ solve environmental puzzles by interacting with the surrounding world (pulling l
 
 
 
-### Project Structure
+### 📁 Project Structure
 
 The codebase is organized into **5 modules**, each with a clear and distinct responsibility.
 
@@ -35,7 +35,7 @@ js/
 
 ***
 
-### Gameplay
+### 🕹️ Gameplay
 
 Each room requires completing a specific interaction to unlock the passage to the next:
 
@@ -43,7 +43,7 @@ Each room requires completing a specific interaction to unlock the passage to th
 - **Corridor** — Dodge the swinging pendulum traps in the first section; avoid the rolling boulder in the second
 - **Room 2** — Step on the pressure plate (which locks the entrance door), defeat the ogre to open the exit
 
-### Controls
+### 🚦 Controls
 
 | Key / Input | Action |
 |------------|--------|
@@ -56,7 +56,7 @@ Each room requires completing a specific interaction to unlock the passage to th
 | `F` | Open / Close inventory |
 | Mouse (in inventory) | Drag items between slots |
 
-### Technical Features
+### 🛠️ Technical Features
 
 #### Hierarchical Models
 - **Corridor pendulums** — `root` (ceiling anchor) → `pendulumGroup` (chain + blade) hierarchy; sinusoidal animation implemented in JavaScript rotates only the parent node, propagating to all children
@@ -98,7 +98,7 @@ Each room requires completing a specific interaction to unlock the passage to th
 - **Pendulums** — ceiling anchor + chain links + blade using `THREE.ExtrudeGeometry`
 - **Boulder** — `THREE.SphereGeometry`
 
-### Performance Optimizations
+### ⚡ Performance Optimizations
 
 To ensure fast loading times and smooth performance in the browser, several optimization passes were applied to the project's assets.
 
@@ -125,19 +125,19 @@ All game sounds are preloaded in parallel during the loading phase via `AudioLoa
 
 ---
 
-### Libraries Used
+### 📚 Libraries Used
 - [Three.js](https://threejs.org/) — WebGL rendering, scene management, materials, lights, animations
 - [GLTFLoader](https://threejs.org/docs/#examples/en/loaders/GLTFLoader) — 3D model loading (ogre, door, torches, ecc...)
 - Web Audio API — ambient and gameplay audio system
 
-### Authors
+### 👥 Authors
 
 | Name | Student ID | Email |
 |------|-----------|-------|
 | Agostini Antonio | 1995653 | agostini.1995653@studenti.uniroma1.it |
 | Istoc Julia Claudia | 2058878 | istoc.2058878@studenti.uniroma1.it |
 
-### Asset Licenses
+### 📃 Asset Licenses
 
 The source code is released under the [MIT License](LICENSE).  
 Third-party assets (3D models, textures, audio) and their respective licenses are listed in [CREDITS.md](CREDITS.md).
