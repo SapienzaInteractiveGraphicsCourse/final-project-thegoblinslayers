@@ -56,6 +56,8 @@ Each room requires completing a specific interaction to unlock the passage to th
 | `F` | Open / Close inventory |
 | Mouse (in inventory) | Drag items between slots |
 
+---
+
 ### 🛠️ Technical Features
 
 #### Hierarchical Models
@@ -97,6 +99,8 @@ Each room requires completing a specific interaction to unlock the passage to th
 - **Barrel** — cylinder + staves + rings + rivets, entirely built with `THREE.CylinderGeometry` / `BoxGeometry` / `TorusGeometry`
 - **Pendulums** — ceiling anchor + chain links + blade using `THREE.ExtrudeGeometry`
 - **Boulder** — `THREE.SphereGeometry`
+
+---
 
 ### ⚡ Performance Optimizations
 
