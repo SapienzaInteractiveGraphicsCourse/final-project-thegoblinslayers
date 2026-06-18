@@ -18,7 +18,7 @@
 **Dungeon Explorer** is a first-person action-adventure game set in a medieval dungeon. The player must explore interconnected rooms,
 solve environmental puzzles by interacting with the surrounding world (pulling levers, lighting torches, and destroying obstacles) and defeat a guardian enemy to reach the exit
 
-
+---
 
 ### 📁 Project Structure
 
