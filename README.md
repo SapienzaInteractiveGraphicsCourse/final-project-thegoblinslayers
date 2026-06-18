@@ -43,6 +43,8 @@ Each room requires completing a specific interaction to unlock the passage to th
 - **Corridor** — Dodge the swinging pendulum traps in the first section; avoid the rolling boulder in the second
 - **Room 2** — Step on the pressure plate (which locks the entrance door), defeat the ogre to open the exit
 
+---
+
 ### 🚦 Controls
 
 | Key / Input | Action |
