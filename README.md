@@ -55,8 +55,12 @@ Each room requires completing a specific interaction to unlock the passage to th
 | `E` | Interact / Pick up item |
 | `Left click` | Attack (only with axe or sword equipped) |
 | `Right click` (hold) | Block with shield (only with shield equipped) |
+| `C` | Open controls |
 | `F` | Open / Close inventory |
 | Mouse (in inventory) | Drag items between slots |
+| `mouse scroll` | Switch weapons |
+| `Q` | Switch item for utiliy slot |
+
 
 ---
 
