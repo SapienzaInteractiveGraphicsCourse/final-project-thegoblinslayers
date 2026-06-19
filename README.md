@@ -60,6 +60,7 @@ Each room requires completing a specific interaction to unlock the passage to th
 | Mouse (in inventory) | Drag items between slots |
 | `mouse scroll` | Switch weapons |
 | `Q` | Switch item for utiliy slot |
+| `X` | Open Achievements |
 
 
 ---
