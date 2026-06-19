@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { prepareHighlightMaterials, applyHighlight } from '../systems/highlight.js';
+import { unlockAchievement } from '../systems/achievementManager.js';
 
 const PAPER_POSITION = new THREE.Vector3(0.2, 0.05, 0.9);
 const PAPER_SCALE    = 0.005;
@@ -131,6 +132,7 @@ function makePaperInteractable(meshes, state) {
         showPaperOverlay();
         state.isReading = true;
         playPaperSound();
+        unlockAchievement('READ_NOTE');
       }
     }
   };

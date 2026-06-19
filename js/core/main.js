@@ -25,6 +25,8 @@ import { createCorridorTwoSystem }                                  from '../sys
 import { createDeathOverlay }                                       from '../ui/deathOverlay.js';
 import { initDeathSystem,updateDeathSystem,updatePendulumHazards }  from '../systems/deathSystem.js';
 
+import { unlockAchievement } from '../systems/achievementManager.js';
+
 import { initAmbientAudio, preloadGameSounds }                      from '../systems/audioSetup.js';
 import { preloadSound, startLoopingSound, 
         stopLoopingSound, setLoopVolume, warmupAudioContext,
@@ -33,6 +35,9 @@ import { preloadSound, startLoopingSound,
 import { setupDebugPositionLogger }                                 from '../systems/debugPosition.js';
 import { createCombatHUD }                                          from '../ui/hud.js';
 import { showPlayerHealthBar, updatePlayerHealthBar }               from '../world/mob.js';
+
+import { initAchievementPanel, isPanelOpen, openPanel } from '../ui/achievementPanel.js';
+
 
 
 
@@ -234,6 +239,7 @@ async function init() {
   createDeathOverlay(gameState);
   initDeathSystem(gameState);
   createCombatHUD();
+  initAchievementPanel();
 
 
   setLoadingProgress(85, 'Compiling shaders...');
@@ -398,6 +404,11 @@ setLoadingProgress(100, 'Ready!');
 //await _prewarmAllShaders(gameState);
 // ──────────────────────────────────── 
 
+// ── Achievement tracking ──────────────────────────────────────────────
+gameState.gameStartTime          = Date.now();
+gameState.playerDiedAtLeastOnce  = false;
+gameState.barrelsDestroyed       = 0;
+
 
   // Spawn point: set the initial position of the player and camera before wake-up
   gameState.spawnPoint.set(0, PLAYER_HEIGHT * 0.5, 8);
@@ -453,18 +464,30 @@ function updatePendulumAudio(state) {
 }
 
 // function for showing the win screen and freezing the gameplay when the player wins
-function triggerWin(){
+function triggerWin() {
   if (gameState.hasWon) return;
   gameState.hasWon = true;
 
-  gameState.isDead = true; // reused for freezeng the gameplay
+  gameState.isDead = true;
   gameState.isInitialized = false;
   stopLoopingSound('footsteps');
-  playSound('win', {volume: 0.8}); // play the win sound
+  playSound('win', { volume: 0.8 });
 
-  const winScreen = document.getElementById("win-screen");
-  winScreen.classList.add("active"); // changes css  for the winning screen
+  const winScreen = document.getElementById('win-screen');
+  winScreen.classList.add('active');
+
+  // Sblocca il cursore dopo 0.5s
+  setTimeout(() => {
+    if (document.pointerLockElement) document.exitPointerLock();
+  }, 500);
 }
+
+document.getElementById('btn-win-achievements')
+  .addEventListener('click', () => {
+    import('../ui/achievementPanel.js').then(({ openPanel }) => {
+      openPanel();
+    });
+  });
 
 function animate() {
   requestAnimationFrame(animate);
@@ -534,6 +557,18 @@ function animate() {
     );
     if(winZone){
       triggerWin();
+
+      // Highlander
+    if (!gameState.playerDiedAtLeastOnce) {
+      unlockAchievement('WIN_NO_DEATH');
+    }
+
+    // SpeedRunner — salva il tempo di inizio in state.gameStartTime = Date.now()
+    const elapsed = (Date.now() - gameState.gameStartTime) / 1000;
+    if (elapsed < 120) {
+      unlockAchievement('SUPER_SPEEDRUN');
+    }
+
     }
   }
 

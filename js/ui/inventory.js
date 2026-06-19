@@ -321,11 +321,13 @@ function applyEquip(state, slot, itemType) {
       state.hasAxe        = true;
       state.isAxeEquipped = true;
       if (state.viewAxeHolder) state.viewAxeHolder.visible = true;
+      
     }
     if (itemType === ITEM_TYPES.SWORD) {
       state.hasSword        = true;
       state.isSwordEquipped = true;
       if (state.viewSwordHolder) state.viewSwordHolder.visible = true;
+      //unlockAchievement('PICK_SWORD');
     }
   }
 
@@ -334,6 +336,7 @@ function applyEquip(state, slot, itemType) {
       state.hasTorch        = true;
       state.isTorchEquipped = true;
       if (state.viewTorchHolder) state.viewTorchHolder.visible = true;
+      //unlockAchievement('PICK_TORCH');
       if (state.heldTorch?.isLit) {
         
           startLoopingSound('torchOnView', { volume: 0.35 });
@@ -343,6 +346,7 @@ function applyEquip(state, slot, itemType) {
     if (itemType === ITEM_TYPES.SHIELD) {
       state.hasShield        = true;
       state.isShieldEquipped = true;
+      //unlockAchievement('PICK_SHIELD');
       
         ensureViewShield(state);
       }

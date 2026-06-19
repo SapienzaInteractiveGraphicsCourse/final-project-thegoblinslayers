@@ -7,6 +7,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { registerObstacle } from '../player/collision.js';
 import { playSound, startLoopingSound, stopLoopingSound, fadeOutLoopingSound  } from '../systems/audioManager.js';
 import { triggerDamageVignette,   } from '../ui/screenEffects.js';
+import { unlockAchievement } from '../systems/achievementManager.js';
 
 import { MOB_HP_MAX, MOB_SPEED, MOB_ATTACK_RANGE,MOB_CHAIN_HIT_RANGE,MOB_POWER_HIT_RANGE,MOB_SHIELD_BASH_HIT_RANGE,MOB_STOP_RADIUS,
          ACTIVATE_DELAY,MOB_HALF_W,MOB_CHAIN_DAMAGE,MOB_POWER_DAMAGE,MOB_SHIELD_BASH_DAMAGE,ATK_TIME_SCALE,POWER_ATTACK_TIME_SCALE,SHIELD_BASH_TIME_SCALE,
@@ -1253,6 +1254,10 @@ this._onBlockHit            = null;
     this._clearAllFinishedListeners();
   }
 
+  if (!state.playerTookDamageInFight) {
+  unlockAchievement('KILL_NO_DAMAGE');
+}
+
   this._currentAction = null;
   this._currentAnimName = null;
 
@@ -1502,6 +1507,8 @@ function damagePlayer(state, amount) {
   triggerDamageVignette();
 
   updatePlayerHealthBar(state.playerHP, state.playerHPMax ?? 100);
+  
+  state.playerTookDamageInFight = true;
 
   if (state.playerHP <= 0) {
     playSound('deathByMob', { volume: 0.8 });

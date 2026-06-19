@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { prepareHighlightMaterials, applyHighlight } from '../systems/highlight.js';
 import { playSound } from '../systems/audioManager.js';
+import { unlockAchievement } from '../systems/achievementManager.js'; 
 
 const _rayOrigin = new THREE.Vector3();
 const _rayDirection = new THREE.Vector3();
@@ -78,6 +79,7 @@ export function createAxePickup({
       ensureViewAxe(state);
       import('../ui/inventory.js').then(({ addToInventory, ITEM_TYPES }) => {
         addToInventory(state, ITEM_TYPES.AXE);
+        unlockAchievement('PICK_AXE');
       });
     },
     setHighlightT: (t) => applyHighlight(highlightMats, t)

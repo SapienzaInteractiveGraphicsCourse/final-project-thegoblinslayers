@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { prepareHighlightMaterials, applyHighlight } from '../systems/highlight.js';
 import { playSound } from '../systems/audioManager.js';
+import { unlockAchievement } from '../systems/achievementManager.js';
 
 const gltfLoader = new GLTFLoader();
 
@@ -26,9 +27,11 @@ export function createLever({
     isBlocked: null,
 
     activate() {
-      if (this.isActivated) return;
+      if (this.isActivated) return;                          
       if (typeof this.isBlocked === 'function' && this.isBlocked()) return;
+
       this.isActivated = true;
+      unlockAchievement('PULL_LEVER');                       
       playSound('leverPush', { volume: 0.8, offset: 0, duration: 1.8 });
     },
 

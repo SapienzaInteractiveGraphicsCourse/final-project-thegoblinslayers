@@ -350,3 +350,28 @@ canvas {
   margin: 0;
   letter-spacing: 0.05em;
 }
+
+/* ── BOTTONE ACHIEVEMENTS WIN SCREEN ───────────────────────────────────────── */
+#btn-win-achievements {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(200, 169, 110, 0.7);
+  background: transparent;
+  border: 1px solid rgba(200, 169, 110, 0.3);
+  padding: 0.6rem 2.4rem;
+  cursor: pointer;
+  transition: color 200ms ease, border-color 200ms ease, background 200ms ease;
+  min-width: 220px;
+}
+
+#btn-win-achievements:hover {
+  color: #f0d090;
+  border-color: rgba(200, 169, 110, 0.9);
+  background: rgba(200, 169, 110, 0.08);
+}
+
+#btn-win-achievements:active {
+  background: rgba(200, 169, 110, 0.15);
+}

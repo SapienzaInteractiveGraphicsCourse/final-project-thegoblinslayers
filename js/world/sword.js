@@ -6,6 +6,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { prepareHighlightMaterials, applyHighlight } from '../systems/highlight.js';
 import { playSound } from '../systems/audioManager.js';
+import { unlockAchievement } from '../systems/achievementManager.js'; 
 
 // Vettori temporanei riutilizzati ogni frame — evitano allocazioni nell'animation loop
 const _rayOrigin    = new THREE.Vector3();
@@ -84,6 +85,7 @@ export function createSwordPickup({
       ensureViewSword(state);
       import('../ui/inventory.js').then(({ addToInventory, ITEM_TYPES }) => {
         addToInventory(state, ITEM_TYPES.SWORD);
+        unlockAchievement('PICK_SWORD');
       });
     },
     setHighlightT: (t) => applyHighlight(highlightMats, t),

@@ -4,6 +4,9 @@ import { prepareHighlightMaterials, applyHighlight } from '../systems/highlight.
 import { playSound, startLoopAfterSound, stopLoopingSound } from '../systems/audioManager.js';
 import { addToInventory, ITEM_TYPES } from '../ui/inventory.js';
 
+import { unlockAchievement, onWallTorchLit, onHandTorchLit } from '../systems/achievementManager.js';
+
+
 const DEFAULT_WALL_TORCH_URL = './assets/models/torch/scene.gltf';
 const DEFAULT_PICKUP_TORCH_URL = './assets/models/manor_torch/manor_torch.glb';
 
@@ -89,8 +92,18 @@ function clearTorchEmbers(torch) {
 }
 
 // In setTorchLitState, invece di settare opacity direttamente:
-export function setTorchLitState(torch, isLit, instant = false) {
+export function setTorchLitState(torch, isLit, instant = false, byPlayer = false) {
   if (!torch) return;
+
+  const wasLit = torch.isLit;              // ← leggi lo stato ATTUALE prima di cambiarlo
+
+  if (isLit && !wasLit && byPlayer) {      // ← era spenta, ora si accende, ed è il player
+    if (torch.id === 'held-torch') {
+      onHandTorchLit();
+    } else {
+      onWallTorchLit();
+    }
+  }
 
   torch.isLit = isLit;
   torch._litTarget = isLit ? 1.0 : 0.0;
@@ -357,7 +370,7 @@ export function makeWallTorchIgnitionSource(torch, state) {
       if (!state.hasTorch || !state.heldTorch) return;
 
       if (!state.heldTorch.isLit && torch.isLit) {
-        setTorchLitState(state.heldTorch, true);
+        setTorchLitState(state.heldTorch, true, false, true);
         // Ignition → poi loop torcia in mano
         startLoopAfterSound(
           'fireIgnition', 'torchOnView',
@@ -368,7 +381,7 @@ export function makeWallTorchIgnitionSource(torch, state) {
       }
 
       if (state.heldTorch.isLit && !torch.isLit) {
-        setTorchLitState(torch, true);
+        setTorchLitState(torch, true, false, true);
         playSound('fireIgnition', { volume: 0.75 });
       }
     }
@@ -528,6 +541,7 @@ export function makeTorchPickupable(torch, state) {
     type: 'torch-pickup',
     getPrompt: () => 'Press E to collect the torch',
     canInteract: () => !state.hasTorch,
+
     interact: () => {
       if (state.hasTorch) return;
       playSound('pickupItem', { volume: 0.6 });
@@ -535,6 +549,10 @@ export function makeTorchPickupable(torch, state) {
       removeTorchFromStateList(state, torch);
       torch.group.parent?.remove(torch.group);
       if (state.heldTorch?.group) state.heldTorch.group.visible = false;
+
+      
+      unlockAchievement('PICK_TORCH'); // ← questa riga basta
+
       addToInventory(state, ITEM_TYPES.TORCH);
     },
     setHighlightT: (t) => applyHighlight(highlightMats, t)

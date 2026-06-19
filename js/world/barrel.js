@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import { playSound } from '../systems/audioManager.js';
+import { unlockAchievement } from '../systems/achievementManager.js';
+
 
 const SPLINTER_PARTICLE_COUNT = 62;
 
@@ -428,7 +430,14 @@ export function createBarrel({
         if (this.hp <= 0) {
           emitBarrelDestroyBaseSplinters(this);
           this.destroy();
+          unlockAchievement('BREAK_BARREL');
+          state.barrelsDestroyed = (state.barrelsDestroyed ?? 0) + 1;
+          if (state.barrelsDestroyed >= 4) unlockAchievement('SUPER_DESTROYER');
         }
+        
+        
+        
+
       },
 
     destroy() {

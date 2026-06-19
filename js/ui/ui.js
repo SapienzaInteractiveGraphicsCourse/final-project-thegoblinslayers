@@ -71,6 +71,7 @@ export function createUI(state) {
     <p style="margin:0">⌨️ <b>Shift</b> — run</p>
     <p style="margin:0">⌨️ <b>E</b> — interact</p>
     <p style="margin:0">⌨️ <b>F</b> — open / close inventory</p>
+    <p style="margin:0">⌨️ <b>X</b> — open achivements </p>
     <p style="margin:0">⌨️ <b>Q</b> — swap utility (secondary ↔ bag)</p>
     <p style="margin:0">🖱️ <b>Scroll</b> — swap weapon (primary ↔ bag)</p>
     <p style="margin:0">🖱️ <b>Left click</b> — attack</p>

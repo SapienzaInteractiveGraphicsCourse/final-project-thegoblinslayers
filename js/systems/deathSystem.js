@@ -3,6 +3,8 @@ import { setDeathFlash, showDeathOverlay, hideDeathOverlay } from '../ui/deathOv
 import { playSound, stopLoopingSound } from '../systems/audioManager.js';
 import { resetMovementInput } from '../player/input.js';
 import { stopFootsteps } from './audioManager.js';
+import { unlockAchievement } from '../systems/achievementManager.js'; 
+
 
 const _playerWorld = new THREE.Vector3();
 
@@ -113,6 +115,8 @@ export function initDeathSystem(state) {
 export function killPlayer(state) {
   if (state.isDead) return;
 
+  state.playerDiedAtLeastOnce = true;
+
   state.isDead = true;
   state.inputLockedByDeath = true;
   state.isBlocking = false;
@@ -135,6 +139,7 @@ export function killPlayer(state) {
   // ── Stop whoosh and play impact sound ─────────────────────────────────
   stopLoopingSound('whoosh');
   playSound('axeTrapHit', { volume: 0.65 });
+  
 
   showDeathOverlay(state);
 }

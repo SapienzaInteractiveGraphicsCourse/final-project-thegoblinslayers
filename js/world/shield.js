@@ -6,6 +6,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { playSound } from '../systems/audioManager.js';
 import { prepareHighlightMaterials, applyHighlight } from '../systems/highlight.js';
+import { unlockAchievement } from '../systems/achievementManager.js'; 
 
 const SHIELD_MODEL_URL = './assets/models/shield_1/scene.gltf';
 const _shieldLoader = new GLTFLoader();
@@ -66,6 +67,7 @@ export function createShieldPickup({ state, position, rotationY = 0, rotationZ =
       playSound('pickupItem', { volume: 0.6 });
       import('../ui/inventory.js').then(({ addToInventory, ITEM_TYPES }) => {
         addToInventory(state, ITEM_TYPES.SHIELD);
+        unlockAchievement('PICK_SHIELD');
       });
     },
     // ← NUOVA riga: chiamata da interactionSystem ogni frame con t ∈ [0,1]
