@@ -1,44 +1,121 @@
 export function createUI(state) {
-  state.uiElement = document.getElementById('ui');
 
-  if (!state.uiElement) {
-    state.uiElement = document.createElement('div');
-    state.uiElement.id = 'ui';
-    document.body.appendChild(state.uiElement);
-  }
-
-  Object.assign(state.uiElement.style, {
-    position:   'absolute',
-    top:        '16px',
-    left:       '16px',
-    zIndex:     '10',
-    padding:    '12px 16px',
-    background: 'rgba(0, 0, 0, 0.45)',
-    border:     '1px solid rgba(255, 255, 255, 0.12)',
-    borderRadius: '10px',
-    color:      '#f5f5f5',
-    fontFamily: 'Arial, sans-serif',
-    pointerEvents: 'none'
+  // ── Widget controlli collassabile ─────────────────────────────────────────
+  const widget = document.createElement('div');
+  widget.id = 'controls-widget';
+  Object.assign(widget.style, {
+    position:      'absolute',
+    top:           '16px',
+    left:          '16px',
+    zIndex:        '10',
+    fontFamily:    'Arial, sans-serif',
+    userSelect:    'none',
+    pointerEvents: 'auto',
   });
 
-  state.uiElement.innerHTML = `
-    <p>Click to activate first-person view</p> 
-    <p>WASD to move, mouse to look around</p> 
-    <p>ESC to free the cursor</p> 
-    <p>F to open/close inventory</p> 
-    <p>Shift to start running</p>
-    <p>Left click to attack, right click to block</p>
+  // ── Header: emoji + label cliccabile ─────────────────────────────────────
+  const header = document.createElement('div');
+  header.id = 'controls-header';
+  Object.assign(header.style, {
+    display:        'flex',
+    flexDirection:  'column',
+    alignItems:     'center',
+    cursor:         'pointer',
+    background:     'rgba(0,0,0,0.50)',
+    border:         '1px solid rgba(255,255,255,0.15)',
+    borderRadius:   '10px',
+    padding:        '8px 14px',
+    color:          '#f5f5f5',
+    transition:     'background 0.15s',
+  });
+
+  const emoji = document.createElement('span');
+  emoji.textContent = '🎮';
+  emoji.style.fontSize = '26px';
+  emoji.style.lineHeight = '1';
+
+  const label = document.createElement('span');
+  label.textContent = 'Controls (C)';
+  Object.assign(label.style, {
+    fontSize:      '10px',
+    color:         '#aaa',
+    marginTop:     '4px',
+    letterSpacing: '0.04em',
+    textAlign:     'center',
+  });
+
+  header.appendChild(emoji);
+  header.appendChild(label);
+
+  // ── Tendina controlli ─────────────────────────────────────────────────────
+  const panel = document.createElement('div');
+  panel.id = 'controls-panel';
+  Object.assign(panel.style, {
+    marginTop:     '6px',
+    background:    'rgba(0,0,0,0.72)',
+    border:        '1px solid rgba(255,255,255,0.12)',
+    borderRadius:  '10px',
+    padding:       '10px 14px',
+    color:         '#f5f5f5',
+    fontSize:      '12px',
+    lineHeight:    '1.9',
+    display:       'none',       // chiusa di default
+    whiteSpace:    'nowrap',
+    pointerEvents: 'none',
+  });
+
+  panel.innerHTML = `
+    <p style="margin:0">🖱️ <b>Click</b> — activate first-person view</p>
+    <p style="margin:0">🖱️ <b>ESC</b> — free cursor</p>
+    <p style="margin:0">⌨️ <b>W A S D</b> — move</p>
+    <p style="margin:0">⌨️ <b>Shift</b> — run</p>
+    <p style="margin:0">⌨️ <b>E</b> — interact</p>
+    <p style="margin:0">⌨️ <b>F</b> — open / close inventory</p>
+    <p style="margin:0">⌨️ <b>Q</b> — swap utility (secondary ↔ bag)</p>
+    <p style="margin:0">🖱️ <b>Scroll</b> — swap weapon (primary ↔ bag)</p>
+    <p style="margin:0">🖱️ <b>Left click</b> — attack</p>
+    <p style="margin:0">🖱️ <b>Right click</b> — block (shield)</p>
   `;
 
-  // ── Testo interazione: elemento indipendente, centrato in basso ──────────
+  widget.appendChild(header);
+  widget.appendChild(panel);
+  document.body.appendChild(widget);
+  state.uiElement = widget;
+
+  // ── Toggle logic ──────────────────────────────────────────────────────────
+  let _open = false;
+
+  function toggleControls() {
+    _open = !_open;
+    panel.style.display       = _open ? 'block' : 'none';
+    header.style.background   = _open
+      ? 'rgba(255,209,102,0.18)'
+      : 'rgba(0,0,0,0.50)';
+    header.style.borderColor  = _open
+      ? 'rgba(255,209,102,0.45)'
+      : 'rgba(255,255,255,0.15)';
+  }
+
+  // Click sull'header
+  header.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleControls();
+  });
+
+  // Tasto C — toggle anche da tastiera (rilascia pointer lock se serve)
+  window.addEventListener('keydown', (e) => {
+    if (e.code === 'KeyC' && !state.isDead && !state.inputLockedByDeath) {
+      toggleControls();
+    }
+  });
+
+  // ── Testo interazione ─────────────────────────────────────────────────────
   let interactionText = document.getElementById('interaction-text');
   if (!interactionText) {
     interactionText = document.createElement('div');
     interactionText.id = 'interaction-text';
     document.body.appendChild(interactionText);
   }
-
-  // Stili separati da textContent (Object.assign su .style NON tocca il DOM)
   Object.assign(interactionText.style, {
     position:      'fixed',
     bottom:        '80px',
@@ -54,14 +131,10 @@ export function createUI(state) {
     pointerEvents: 'none',
     textAlign:     'center',
     whiteSpace:    'nowrap',
-    display:       'block'    // ← assicura che sia visibile
-    
+    display:       'block',
   });
-
-  // Inizializzazione del testo sul DOM (NON dentro Object.assign)
   interactionText.textContent = '';
-
-state.interactionTextElement = interactionText;
+  state.interactionTextElement = interactionText;
 
   // ── Crosshair ─────────────────────────────────────────────────────────────
   let crosshair = document.getElementById('crosshair');
@@ -69,22 +142,22 @@ state.interactionTextElement = interactionText;
     crosshair = document.createElement('div');
     crosshair.id = 'crosshair';
     Object.assign(crosshair.style, {
-      position:     'absolute',
-      left:         '50%',
-      top:          '50%',
-      width:        '10px',
-      height:       '10px',
-      marginLeft:   '-5px',
-      marginTop:    '-5px',
-      border:       '2px solid rgba(255,255,255,0.85)',
-      borderRadius: '50%',
-      zIndex:       '9',
-      pointerEvents:'none'
+      position:      'absolute',
+      left:          '50%',
+      top:           '50%',
+      width:         '10px',
+      height:        '10px',
+      marginLeft:    '-5px',
+      marginTop:     '-5px',
+      border:        '2px solid rgba(255,255,255,0.85)',
+      borderRadius:  '50%',
+      zIndex:        '9',
+      pointerEvents: 'none',
     });
     document.body.appendChild(crosshair);
   }
 
-  return state.uiElement;
+  return widget;
 }
 
 export function showErrorOverlay(message) {

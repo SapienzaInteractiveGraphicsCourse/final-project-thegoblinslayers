@@ -84,7 +84,7 @@ export function createInventoryUI(state) {
   overlayEl.id = 'inventory-overlay';
   Object.assign(overlayEl.style, {
     position:      'absolute',
-    top:           '190px',
+    top:           '290px',
     left:          '16px',
     zIndex:        '20',
     padding:       '12px 16px',
