@@ -65,7 +65,7 @@ Each room requires completing a specific interaction to unlock the passage to th
 
 ---
 
-### Achievement System
+### 🏅 Achievement System
 
 The game includes a custom achievement system built entirely in JavaScript, without external libraries, structured in three tiers:
 
