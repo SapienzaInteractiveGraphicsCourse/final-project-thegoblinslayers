@@ -673,3 +673,39 @@ export function swapWeaponWithBag(state) {
 }
 
 
+// ─── Q: cicla utility in secondary con utility in bag ─────────────────────────
+export function swapUtilityWithBag(state) {
+  const inv = state.inventory;
+
+  // Guard 1: secondary deve esistere ed essere un non-weapon
+  if (!inv.secondary) return;
+  if (WEAPON_TYPES.has(inv.secondary)) return;
+
+  // Guard 2: trova il primo bag con un non-weapon
+  const bagSlot = ['bag1', 'bag2'].find(
+    (s) => inv[s] && !WEAPON_TYPES.has(inv[s])
+  );
+  if (!bagSlot) return;
+
+  const utilitySecondary = inv.secondary;
+  const utilityBag       = inv[bagSlot];
+
+  // Unequip entrambi
+  applyUnequip(state, 'secondary', utilitySecondary);
+  applyUnequip(state, bagSlot,     utilityBag);
+
+  // Swap
+  inv.secondary = utilityBag;
+  inv[bagSlot]  = utilitySecondary;
+
+  // Equip nei nuovi slot
+  applyEquip(state, 'secondary', utilityBag);
+  applyEquip(state, bagSlot,     utilitySecondary);
+
+  // Suono feedback
+  if (utilityBag === ITEM_TYPES.SHIELD) playSound('shieldEquip', { volume: 0.80, duration: 1.0 });
+  if (utilityBag === ITEM_TYPES.TORCH)  playSound('bagZip',      { volume: 0.55, duration: 0.4 });
+
+  syncLegacyFlags(state);
+  refreshInventoryUI(state);
+}

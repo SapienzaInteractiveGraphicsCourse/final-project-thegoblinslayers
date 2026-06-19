@@ -41,6 +41,12 @@ export function setupInput(state, onInteract, onPrimaryAction) {
       if (hud) hud.style.display = state.noclip ? 'block' : 'none';
     }
 
+    if (event.code === 'KeyQ') {
+      import('../ui/inventory.js').then(({ swapUtilityWithBag }) => {
+        swapUtilityWithBag(state);
+      });
+    }
+
 
   });
 
