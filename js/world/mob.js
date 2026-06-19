@@ -5,7 +5,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { registerObstacle } from '../player/collision.js';
-import { playSound, startLoopingSound, stopLoopingSound } from '../systems/audioManager.js';
+import { playSound, startLoopingSound, stopLoopingSound, fadeOutLoopingSound  } from '../systems/audioManager.js';
 import { triggerDamageVignette,   } from '../ui/screenEffects.js';
 
 import { MOB_HP_MAX, MOB_SPEED, MOB_ATTACK_RANGE,MOB_CHAIN_HIT_RANGE,MOB_POWER_HIT_RANGE,MOB_SHIELD_BASH_HIT_RANGE,MOB_STOP_RADIUS,
@@ -541,6 +541,7 @@ _stopAllCombatSounds() {
     this._stopWalkSound();
     // I growl sono one-shot su AudioContext nativo: non hanno un handle
     // da stoppare, si esauriscono da soli. Non serve stop esplicito.
+    
 },
 
 
@@ -1232,6 +1233,7 @@ _die(state) {
   this._hitCounter = 0;
 
   this._stopAllCombatSounds();
+  fadeOutLoopingSound('host_battle', 3);       // dissolvenza 3 secondi solo alla morte
 
   this._deathState = 'stagger';
   this._deathTimer = 0;

@@ -210,3 +210,38 @@ let _dmgBookmark = 0;      // ← position saved on last stop
 let _dmgStopTimeout = null;
 
 const DAMAGE_SOUND_SUSTAIN = 1.0; // seconds of audio after the last hit
+
+
+export function fadeOutLoopingSound(key, duration = 3) {
+  const entry = _loopingSources[key];
+  if (!entry) return;
+
+  const ctx  = getCtx();
+  const gain = entry.gainNode.gain;
+  const now  = ctx.currentTime;
+
+  // Leggi il volume corrente tramite computedValue prima di schedulare
+  const currentVolume = gain.value;
+
+  // Cancella qualsiasi automazione precedente
+  gain.cancelScheduledValues(0);
+
+  // Ancora il valore corrente ADESSO, poi scendi a 0
+  gain.setValueAtTime(currentVolume, now);
+  gain.linearRampToValueAtTime(0.0001, now + duration); // non zero esatto: evita click audio
+
+  // Stop dopo la dissolvenza — usa ctx.currentTime al momento del timeout
+  const timeoutId = setTimeout(() => {
+    const e = _loopingSources[key];
+    if (!e) return; // già stoppato da qualcun altro
+
+    try { e.source.stop(ctx.currentTime); } catch (_) {}
+    try { e.source.disconnect(); }         catch (_) {}
+    try { e.gainNode.disconnect(); }       catch (_) {}
+    delete _loopingSources[key];
+
+  }, (duration + 0.1) * 1000); // +0.1s margine sicurezza
+
+  // Salva il timeoutId per eventuale cancellazione anticipata
+  entry.fadeTimeoutId = timeoutId;
+}

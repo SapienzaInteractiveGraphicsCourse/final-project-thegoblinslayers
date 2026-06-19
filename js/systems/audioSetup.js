@@ -72,7 +72,7 @@ export async function initAmbientAudio() {
     preloadSound('fireIgnition', './assets/audio/fire_ignition.mp3');
     preloadSound('torchOnView',  './assets/audio/fire_manor_torch_onview.mp3');
 
-    preloadSound('hostBattle', './assets/audio/host_battle.mp3');
+    preloadSound('host_battle', './assets/audio/host_battle.mp3');
 
     preloadSound('damagePlayer', './assets/audio/damage_for_player.mp3');
     preloadSound('deathByMob', './assets/audio/death_player_by_mob.mp3');
