@@ -1505,6 +1505,7 @@ function damagePlayer(state, amount) {
 
   if (state.playerHP <= 0) {
     playSound('deathByMob', { volume: 0.8 });
+    fadeOutLoopingSound('host_battle', 3);
     import('../systems/deathSystem.js').then(({ killPlayer }) => {
       state._deathCause = 'mob';
       killPlayer(state);
