@@ -72,6 +72,8 @@ export async function initAmbientAudio() {
     preloadSound('fireIgnition', './assets/audio/fire_ignition.mp3');
     preloadSound('torchOnView',  './assets/audio/fire_manor_torch_onview.mp3');
 
+    preloadSound('hostBattle', './assets/audio/host_battle.mp3');
+
     preloadSound('damagePlayer', './assets/audio/damage_for_player.mp3');
     preloadSound('deathByMob', './assets/audio/death_player_by_mob.mp3');
 
@@ -85,4 +87,6 @@ export async function initAmbientAudio() {
     preloadSound('ogre_attack', './assets/audio/ogre_attack.mp3');
     preloadSound('roll', './assets/audio/rolling_stone.mp3');
     preloadSound('impact', './assets/audio/impact.mp3');
+
+    preloadSound('win', './assets/audio/win_sound.mp3');
   }

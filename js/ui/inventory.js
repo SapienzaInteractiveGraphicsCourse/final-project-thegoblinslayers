@@ -84,8 +84,9 @@ export function createInventoryUI(state) {
   overlayEl.id = 'inventory-overlay';
   Object.assign(overlayEl.style, {
     position:      'absolute',
-    top:           '290px',
-    left:          '16px',
+    top:           '16px',
+    right:         '16px',
+    left:          'auto',
     zIndex:        '20',
     padding:       '12px 16px',
     background:    'rgba(0, 0, 0, 0.72)',
@@ -191,9 +192,9 @@ export function createInventoryUI(state) {
   tooltipEl.id = 'inventory-tooltip';
   Object.assign(tooltipEl.style, {
     position:      'absolute',
-    bottom:        '72px',          // appare sopra lo slot (60px slot + 8px gap + 4px)
+    bottom:        'auto',          
     left:          '50%',
-    transform:     'translateX(-50%) translateY(4px)',
+    transform:     'translateX(-50%) translateY(-4px)',
     background:    'rgba(10, 10, 10, 0.88)',
     border:        '1px solid rgba(255, 209, 102, 0.35)',
     borderRadius:  '7px',
@@ -433,7 +434,7 @@ function showTooltip(slotName) {
 
   // Mostra con transizione
   tooltipEl.style.opacity   = '0';
-  tooltipEl.style.transform = 'translateX(-50%) translateY(4px)';
+  tooltipEl.style.transform = 'translateX(-50%) translateY(-4px)';
   // Forza reflow prima della transizione (pattern standard per trigger CSS transition)
   tooltipEl.offsetHeight;
   tooltipEl.style.opacity   = '1';

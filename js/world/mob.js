@@ -381,7 +381,7 @@ anim:${this._currentAnimName} | dist:${distNow.toFixed(2)} | range:${MOB_CHAIN_H
 
 dealDamageToPlayer(state, MOB_CHAIN_DAMAGE);
 showMobHealthBar();
-if (shouldPlayAttackSound(state)) playSound('ogre_attack', { volume: 0.8 });
+if (shouldPlayAttackSound(state)) playSound('ogre_attack', { volume: 0.6 });
 } else {
 this._normalAttackHitLanded = false;
 _log(
@@ -534,7 +534,7 @@ _stopWalkSound() {
 
 _playRandomGrowl() {
     const idx = Math.floor(Math.random() * 2) + 1;
-    playSound(`ogre_growl${idx}`, { volume: 0.85 });
+    playSound(`ogre_growl${idx}`, { volume: 0.55 });
 },
 
 _stopAllCombatSounds() {
@@ -1508,7 +1508,7 @@ function damagePlayer(state, amount) {
       killPlayer(state);
     });
   } else {
-    playSound('damagePlayer', { volume: 0.75, duration: 1.0 });
+    playSound('damagePlayer', { volume: 0.55, duration: 1.0 });
   }
 }
 

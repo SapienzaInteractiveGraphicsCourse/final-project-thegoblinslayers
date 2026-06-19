@@ -4,6 +4,7 @@ import { createDoor }          from '../world/door.js';
 import { setTorchLitState }    from '../world/torch.js';
 import { createMob, showMobHealthBar, showPlayerHealthBar, updateMobHealthBar, updatePlayerHealthBar } from '../world/mob.js';
 import { registerObstacle } from '../player/collision.js';
+import { playSound } from '../systems/audioManager.js';
 
 // Costanti pedana
 const PLATE_WIDTH    = 1.6;
@@ -115,7 +116,8 @@ export async function createRoomTwoSystem(state, { showErrorOverlay }) {
               showPlayerHealthBar?.();
               updateMobHealthBar?.(state.mob.hp, 100);
               updatePlayerHealthBar?.(state.playerHP ?? 100, state.playerHPMax ?? 100);
-            }, 2000); // ← 2 secondi dopo la chiusura porta
+            }, 1000); // ← 1 secondi dopo la chiusura porta
+            playSound('hostBattle', {volume: 0.65});
           } else {
             console.warn('[RoomTwo] Mob non ancora disponibile.');
           }

@@ -460,6 +460,7 @@ function triggerWin(){
   gameState.isDead = true; // reused for freezeng the gameplay
   gameState.isInitialized = false;
   stopLoopingSound('footsteps');
+  playSound('win', {volume: 0.8}); // play the win sound
 
   const winScreen = document.getElementById("win-screen");
   winScreen.classList.add("active"); // changes css  for the winning screen
