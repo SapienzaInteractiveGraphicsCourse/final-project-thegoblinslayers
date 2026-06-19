@@ -80,6 +80,28 @@ export function setupInput(state, onInteract, onPrimaryAction) {
     }
   });
 
+  window.addEventListener('wheel', (event) => {
+    if (state.isDead || state.inputLockedByDeath) return;
+    if (document.pointerLockElement !== state.renderer?.domElement) return;
+    if (state.isReading) return;
+
+    event.preventDefault();
+
+    const isCtrl = event.ctrlKey || event.metaKey;
+
+    if (isCtrl) {
+      // CTRL + scroll → swap utility (secondary ↔ bag)
+      import('../ui/inventory.js').then(({ swapUtilityWithBag }) => {
+        swapUtilityWithBag(state);
+      });
+    } else {
+      // scroll normale → swap weapon (primary ↔ bag)
+      import('../ui/inventory.js').then(({ swapWeaponWithBag }) => {
+        swapWeaponWithBag(state);
+      });
+    }
+  }, { passive: false });
+
   window.addEventListener('contextmenu', (e) => e.preventDefault());
 }
 

@@ -629,3 +629,47 @@ export function refreshInventoryUI(state) {
     }
   });
 }
+
+// ─── Scroll wheel: cicla arma in primary con armi in bag ──────────────────────
+/**
+ * Chiamata dalla rotella del mouse durante il gameplay.
+ * Se primary ha un'arma E almeno un bag ha un'arma, cicla l'equipaggiata.
+ * direction: +1 (scroll down) o -1 (scroll up) — entrambi fanno la stessa cosa
+ * perché ci sono al massimo 2 armi in borsa, il ciclo è sempre "prossima".
+ */
+export function swapWeaponWithBag(state) {
+  const inv = state.inventory;
+
+  // Serve un'arma in primary
+  if (!inv.primary || !WEAPON_TYPES.has(inv.primary)) return;
+
+  // Trova il primo bag con un'arma
+  const bagSlot = ['bag1', 'bag2'].find(
+    (s) => inv[s] && WEAPON_TYPES.has(inv[s])
+  );
+  if (!bagSlot) return; // nessuna arma in borsa → niente da fare
+
+  const weaponPrimary = inv.primary;
+  const weaponBag     = inv[bagSlot];
+
+  // Unequip entrambi
+  applyUnequip(state, 'primary', weaponPrimary);
+  applyUnequip(state, bagSlot,   weaponBag);
+
+  // Swap nei slot
+  inv.primary   = weaponBag;
+  inv[bagSlot]  = weaponPrimary;
+
+  // Equip nei nuovi slot
+  applyEquip(state, 'primary', weaponBag);
+  applyEquip(state, bagSlot,   weaponPrimary);
+
+  // Suono feedback
+  if (weaponBag === ITEM_TYPES.AXE)   playSound('axeSwing',   { volume: 0.65 });
+  if (weaponBag === ITEM_TYPES.SWORD) playSound('swordEquip', { volume: 0.75 });
+
+  syncLegacyFlags(state);
+  refreshInventoryUI(state);
+}
+
+

@@ -412,7 +412,7 @@ export function createBarrel({
 
         emitBarrelHitParticles(this, hitPoint);
         // Colpo: wood_destroy a velocità 1.5 (suono secco e rapido)
-        playSound('woodDestroy', { volume: 0.5, playbackRate: 0.9 });
+        playSound('woodDestroy', { volume: 0.4, playbackRate: 0.9 });
 
         // Le fasi visive ora si basano sulla percentuale di vita rimanente
         const hpRatio = this.hp / this.maxHp;
@@ -438,7 +438,7 @@ export function createBarrel({
       removeObstacle(state, this.obstacleObject);
       root.parent?.remove(root);
       // Distruzione: wood_destroy a velocità normale (più pesante e definitivo)
-      playSound('woodDestroy', { volume: 0.90, playbackRate: 1.0 });
+      playSound('woodDestroy', { volume: 0.60, playbackRate: 1.0 });
     }
   };
 

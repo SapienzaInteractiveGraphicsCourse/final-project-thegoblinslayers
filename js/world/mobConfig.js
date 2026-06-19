@@ -1,12 +1,12 @@
 // ── Costanti di gioco (invariate) ─────────────────────────────────────────────
 export const MOB_HP_MAX       = 300;
-export const MOB_SPEED        = 3.8;
+export const MOB_SPEED        = 3.7;
 export const MOB_ATTACK_RANGE = 2.0;
-export const MOB_CHAIN_HIT_RANGE = 2.25;   // hit effettiva attackChain
+export const MOB_CHAIN_HIT_RANGE = 2.35;   // hit effettiva attackChain
 export const MOB_POWER_HIT_RANGE = 2.45;   // hit effettiva powerAttack
 export const MOB_SHIELD_BASH_HIT_RANGE = 2.55; // hit effettiva bash
 //const MOB_ATTACK_RATE  = 1.8;
-export const MOB_STOP_RADIUS  = 1.0;
+export const MOB_STOP_RADIUS  = 1.2;
 export const ACTIVATE_DELAY   = 1.5;
 export const MOB_HALF_W       = 0.35;
 
@@ -19,7 +19,7 @@ export const MOB_SHIELD_BASH_DAMAGE  = 25;   // shield bash: break guardia + dan
 
 // timeScale > 1 = animazione più veloce, < 1 = più lenta.
 // Calibra questo valore fino a ottenere ~1.5s per catena completa.
-export const ATK_TIME_SCALE = 1.6;
+export const ATK_TIME_SCALE = 1.5;
 export const POWER_ATTACK_TIME_SCALE = 1.35;
 export const SHIELD_BASH_TIME_SCALE = 1.45;
 

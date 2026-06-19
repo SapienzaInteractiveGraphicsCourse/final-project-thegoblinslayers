@@ -343,7 +343,7 @@ _updatePowerAttackHitWindow(state) {
     `danno:${MOB_POWER_DAMAGE} | dist:${distNow.toFixed(2)} | range:${MOB_POWER_HIT_RANGE} | t:${this._powerAttackAction.time.toFixed(2)}/${clip.duration.toFixed(2)}`);
     dealDamageToPlayer(state, MOB_POWER_DAMAGE);
     showMobHealthBar();
-    if (shouldPlayAttackSound(state)) playSound('ogre_attack', { volume: 1.0 });
+    if (shouldPlayAttackSound(state)) playSound('ogre_attack', { volume: 0.70 });
   } else {
     this._powerAttackHitLanded = false;
     _log(`🔥 PowerAttack MISS`, `dist:${distNow.toFixed(2)} | range:${MOB_ATTACK_RANGE} | t:${this._powerAttackAction.time.toFixed(2)}/${clip.duration.toFixed(2)}`);
@@ -1036,7 +1036,7 @@ _playShieldSequence(state) {
   _log(`🛡️ Shield BASH colpisce`, `danno:${MOB_SHIELD_BASH_DAMAGE}`);
   damagePlayer(state, MOB_SHIELD_BASH_DAMAGE);
   showMobHealthBar();
-  if (shouldPlayAttackSound(state)) playSound('ogre_attack', { volume: 0.9 });
+  if (shouldPlayAttackSound(state)) playSound('ogre_attack', { volume: 0.5 });
   } else {
   _log(`🛡️ Shield BASH mancato`, `player fuori range`);
   }
@@ -1502,7 +1502,7 @@ function damagePlayer(state, amount) {
   updatePlayerHealthBar(state.playerHP, state.playerHPMax ?? 100);
 
   if (state.playerHP <= 0) {
-    playSound('deathByMob', { volume: 0.9 });
+    playSound('deathByMob', { volume: 0.8 });
     import('../systems/deathSystem.js').then(({ killPlayer }) => {
       state._deathCause = 'mob';
       killPlayer(state);

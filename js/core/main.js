@@ -236,130 +236,157 @@ async function init() {
   createCombatHUD();
 
 
-  setLoadingProgress(85, 'Compiling shader...');
+  setLoadingProgress(85, 'Compiling shaders...');
 
+// ════════════════════════════════════════════════════════════════════════════
+// PREWARM UNIFICATO — sostituisce tutti i blocchi precedenti
+// Strategia: compiliamo le varianti shader in ordine crescente di luci attive:
+//   [0] nessuna luce puzzle → variante base
+//   [1] torcia in mano accesa (+SpotLight +fillLight)
+//   [2] torcia in mano accesa + 1a torcia puzzle (+PointLight)
+//   [3] torcia in mano accesa + 2 torce puzzle
+//   [N] traverse finale: tutte le luci accese contemporaneamente
+// Ogni step aggiunge luci senza mai rimuoverle → ogni variante N+k è compilata.
+// ════════════════════════════════════════════════════════════════════════════
 
-  // ── NUOVO BLOCCO: pre-warm variante "torcia nello zaino" ─────────────────
-  // Compila la variante shader con SpotLight + fillLight della torcia SPENTI.
-  // Senza questo, il primo unequip della torcia causa uno shader recompile on-the-fly.
-  if (gameState.heldTorch?.spotLight)  gameState.heldTorch.spotLight.visible = false;
-  if (gameState.heldTorch?.fillLight)  gameState.heldTorch.fillLight.visible = false;
-  if (gameState.heldTorch?.group)      gameState.heldTorch.group.visible     = true;
-
-  if (typeof gameState.renderer.compileAsync === 'function') {
-    await gameState.renderer.compileAsync(gameState.scene, gameState.camera);
-  } else {
-    gameState.renderer.compile(gameState.scene, gameState.camera);
-  }
-
-  if (gameState.heldTorch?.group) gameState.heldTorch.group.visible = false;
-  // ─────────────────────────────────────────────────────────────────────────
-
-  // ── NUOVO BLOCCO 3: pre-warm variante "torce puzzle accese" ──────────────
-  // Le torce puzzle partono spente. La prima accensione aggiunge una PointLight
-  // alla scena → nuova variante shader. Pre-compiliamo con 1 e poi 2 torce puzzle
-  // temporaneamente accese per coprire entrambe le transizioni.
-  const _puzzleTorches = [
-    ...(gameState.roomOnePuzzleTorches  ?? []),
-    ...(gameState.roomTwoPuzzleTorches  ?? [])
-  ];
-
-  // Pass A: accendi solo la prima torcia puzzle → variante N+1 luci
-  if (_puzzleTorches[0]?.light) {
-    _puzzleTorches[0].light.visible = true;
-    if (typeof gameState.renderer.compileAsync === 'function') {
-      await gameState.renderer.compileAsync(gameState.scene, gameState.camera);
-    } else {
-      gameState.renderer.compile(gameState.scene, gameState.camera);
-    }
-    _puzzleTorches[0].light.visible = false;
-  }
-
-  // Pass B: accendi le prime due torce puzzle → variante N+2 luci
-  if (_puzzleTorches[0]?.light && _puzzleTorches[1]?.light) {
-    _puzzleTorches[0].light.visible = true;
-    _puzzleTorches[1].light.visible = true;
-    if (typeof gameState.renderer.compileAsync === 'function') {
-      await gameState.renderer.compileAsync(gameState.scene, gameState.camera);
-    } else {
-      gameState.renderer.compile(gameState.scene, gameState.camera);
-    }
-    _puzzleTorches[0].light.visible = false;
-    _puzzleTorches[1].light.visible = false;
-  }
-  // ─────────────────────────────────────────────────────────────────────────
-
-// ── Unified warm-up: one traverse for textures + shaders + lights ───────
-// Theory: WebGL compiles different variant shaders for each light combination
-// active. initTexture() preloads textures into VRAM. Doing everything in one
-// single traverse we avoid 3 separate passes on the scene graph (O(n) instead O(3n)).
-const _warmHiddenLights   = [];
-const _warmRescaledPivots = [];
-const _warmHiddenMeshes   = [];
+// ── Step 0: raccogli mesh nascoste + texture upload in VRAM ─────────────
+const _allHiddenMeshes   = [];
+const _allRescaledPivots = [];
+const _allHiddenLights   = [];
 
 gameState.scene.traverse((child) => {
+  const isLight = child.isPointLight || child.isSpotLight || child.isDirectionalLight;
+  const isMesh  = child.isMesh;
+  const isFlame = child.name?.toLowerCase().includes('flame') && child.scale.x < 0.001;
 
-  // ── Early return: salta Group vuoti, Bone, Object3D decorativi ───────────
-  const isLight  = child.isPointLight || child.isSpotLight || child.isDirectionalLight;
-  const isMesh   = child.isMesh;
-  const isFlame  = child.name?.toLowerCase().includes('flame') && child.scale.x < 0.001;
-  
-  if (!isLight && !isMesh && !isFlame) return;
-  
-  //Temporarily turn off lights -> compile variant "lights on"
   if (isLight && !child.visible) {
-    child.visible = true;
-    _warmHiddenLights.push(child);
+    _allHiddenLights.push(child);
   }
-
   if (isFlame) {
     child.scale.setScalar(1.0);
-    _warmRescaledPivots.push(child);
+    _allRescaledPivots.push(child);
   }
-
+  if (isMesh && !child.visible) {
+    child.visible = true;
+    _allHiddenMeshes.push(child);
+  }
   if (isMesh) {
-    if (!child.visible) {
-      child.visible = true;
-      _warmHiddenMeshes.push(child);
-    }
     const mats = Array.isArray(child.material) ? child.material : [child.material];
     for (const mat of mats) {
       if (!mat) continue;
-      const textures = [
-        mat.map, mat.normalMap, mat.roughnessMap,
-        mat.metalnessMap, mat.displacementMap,
-        mat.aoMap, mat.emissiveMap
-      ];
-      for (const tex of textures) {
+      for (const tex of [mat.map, mat.normalMap, mat.roughnessMap,
+                         mat.metalnessMap, mat.aoMap, mat.emissiveMap]) {
         if (tex) gameState.renderer.initTexture(tex);
       }
     }
   }
 });
 
-// ── DOPO — orienta la camera in avanti prima di compilare ───────────────
-// Il frustum con pitch=0 include muri, pavimento e torce da muro.
-// Con pitch=PI/2 (soffitto) la maggior parte della scena è fuori frustum
-// e i suoi shader verrebbero compilati on-the-fly al primo movimento.
+// orienta camera in avanti → frustum ottimale per il compile
 const _origPitch = gameState.pitch ?? 0;
-gameState.pitch = 0;
+gameState.pitch  = 0;
 updateCameraTransform(gameState);
 
+// compile variante base (solo luci always-on, mesh tutte visibili)
 if (typeof gameState.renderer.compileAsync === 'function') {
   await gameState.renderer.compileAsync(gameState.scene, gameState.camera);
 } else {
   gameState.renderer.compile(gameState.scene, gameState.camera);
 }
 
+// ── Step 1: torcia in mano ACCESA (+SpotLight +fillLight) ───────────────
+// Copre la variante "player raccoglie torcia e la accende"
+if (gameState.heldTorch?.group) {
+  gameState.heldTorch.group.visible = true;
+  if (gameState.heldTorch.spotLight) gameState.heldTorch.spotLight.visible = true;
+  if (gameState.heldTorch.fillLight) gameState.heldTorch.fillLight.visible = true;
+  if (typeof gameState.renderer.compileAsync === 'function') {
+    await gameState.renderer.compileAsync(gameState.scene, gameState.camera);
+  } else {
+    gameState.renderer.compile(gameState.scene, gameState.camera);
+  }
+}
+
+// ── Step 2: torcia in mano + 1a torcia puzzle (+PointLight) ─────────────
+// Copre la variante "player accende la prima torcia a muro"
+const _puzzleTorches = [
+  ...(gameState.roomOnePuzzleTorches ?? []),
+  ...(gameState.roomTwoPuzzleTorches ?? []),
+];
+if (_puzzleTorches[0]?.light) {
+  _puzzleTorches[0].light.visible = true;
+  if (typeof gameState.renderer.compileAsync === 'function') {
+    await gameState.renderer.compileAsync(gameState.scene, gameState.camera);
+  } else {
+    gameState.renderer.compile(gameState.scene, gameState.camera);
+  }
+}
+
+// ── Step 3: + 2a torcia puzzle ───────────────────────────────────────────
+// Copre la variante "player accende la seconda torcia a muro"
+if (_puzzleTorches[1]?.light) {
+  _puzzleTorches[1].light.visible = true;
+  if (typeof gameState.renderer.compileAsync === 'function') {
+    await gameState.renderer.compileAsync(gameState.scene, gameState.camera);
+  } else {
+    gameState.renderer.compile(gameState.scene, gameState.camera);
+  }
+}
+
+// ── Step 1b: 1a torcia puzzle accesa, torcia mano SPENTA ────────────────
+// Copre: "player accende torcia muro, poi mette torcia in mano nello zaino"
+if (gameState.heldTorch?.spotLight) gameState.heldTorch.spotLight.visible = false;
+if (gameState.heldTorch?.fillLight) gameState.heldTorch.fillLight.visible = false;
+if (gameState.heldTorch?.group)     gameState.heldTorch.group.visible     = false;
+// _puzzleTorches[0].light è ancora true da Step 2
+if (_puzzleTorches[0]?.light) {
+  _puzzleTorches[0].light.visible = true;
+  if (_puzzleTorches[1]?.light) _puzzleTorches[1].light.visible = false; // solo 1
+  if (typeof gameState.renderer.compileAsync === 'function') {
+    await gameState.renderer.compileAsync(gameState.scene, gameState.camera);
+  } else {
+    gameState.renderer.compile(gameState.scene, gameState.camera);
+  }
+}
+
+// ── Step 1c: 2 torce puzzle accese, torcia mano SPENTA ──────────────────
+// Copre: "player accende entrambe le torce muro, poi mette torcia in mano nello zaino"
+if (_puzzleTorches[0]?.light && _puzzleTorches[1]?.light) {
+  _puzzleTorches[0].light.visible = true;
+  _puzzleTorches[1].light.visible = true;
+  // torcia mano ancora spenta dal pass precedente
+  if (typeof gameState.renderer.compileAsync === 'function') {
+    await gameState.renderer.compileAsync(gameState.scene, gameState.camera);
+  } else {
+    gameState.renderer.compile(gameState.scene, gameState.camera);
+  }
+}
+
+
+// ── Step finale: accendi TUTTE le luci nascoste rimaste → variante N_max ─
+for (const light of _allHiddenLights) {
+  light.visible = true;
+}
+if (typeof gameState.renderer.compileAsync === 'function') {
+  await gameState.renderer.compileAsync(gameState.scene, gameState.camera);
+} else {
+  gameState.renderer.compile(gameState.scene, gameState.camera);
+}
+
+// ── Ripristina tutto ─────────────────────────────────────────────────────
+if (gameState.heldTorch?.group)    gameState.heldTorch.group.visible    = false;
+if (gameState.heldTorch?.spotLight) gameState.heldTorch.spotLight.visible = false;
+if (gameState.heldTorch?.fillLight) gameState.heldTorch.fillLight.visible = false;
+if (gameState.viewShieldHolder)    gameState.viewShieldHolder.visible    = false;
+
+for (const light of _allHiddenLights)   light.visible = false;
+for (const mesh  of _allHiddenMeshes)   mesh.visible  = false;
+for (const pivot of _allRescaledPivots) pivot.scale.setScalar(0.0001);
+
+// ripristina pitch originale
 gameState.pitch = _origPitch;
 updateCameraTransform(gameState);
-// ───────────────────────────────────────────────────────────────────────
-
-// Restore everything to its original state
-for (const l of _warmHiddenLights) l.visible = false;
-for (const p of _warmRescaledPivots) p.scale.setScalar(0.0001);
-for (const m of _warmHiddenMeshes) m.visible = false;
-// ─────────────────────────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════════════════════
 
 setLoadingProgress(100, 'Ready!');
 
