@@ -65,6 +65,18 @@ Each room requires completing a specific interaction to unlock the passage to th
 
 ---
 
+### Achievement System
+
+The game includes a custom achievement system built entirely in JavaScript, without external libraries, structured in three tiers:
+
+- **Base achievements** — unlocked by completing specific in-game actions (picking up items, lighting torches, pulling levers, reading the note, defeating the mob, winning without dying).
+- **Super achievements** — unlocked automatically when all required base achievements are collected (e.g. *Collector*, *Warrior*, *Fire Man*, *SpeedRunner*).
+- **Final achievement** — *100% Platinum*, unlocked only when every base and super achievement has been obtained.
+
+Unlocking an achievement enqueues a toast notification. A queue ensures that multiple simultaneous unlocks are displayed one after the other without overlap, with color coding distinguishing the three tiers: green for base, purple for super, gold for final.
+
+---
+
 ### 🛠️ Technical Features
 
 #### Hierarchical Models
