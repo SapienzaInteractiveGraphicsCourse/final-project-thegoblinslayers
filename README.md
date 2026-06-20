@@ -126,12 +126,7 @@ Unlocking an achievement enqueues a toast notification. A queue ensures that mul
 To ensure fast loading times and smooth performance in the browser, several optimization passes were applied to the project's assets.
 
 #### 3D Models — gltf-transform
-All 3D models (`.glb` / `.gltf`) were optimized using [gltf-transform](https://gltf-transform.dev/), an industry-standard CLI tool for GLTF asset processing. The following pipeline was applied to every model:
-
-- **Deduplication** — identical meshes, materials, and accessors merged into single instances
-- **Welding** — duplicate vertices removed and geometry cleaned up
-- **Pruning** — unused nodes, accessors, and metadata stripped from the scene graph
-- **WebP texture compression** — all embedded textures converted from PNG/JPG to WebP format, preserving visual quality at a fraction of the size
+All 3D models (`.glb` / `.gltf`) were optimized using [gltf-transform](https://gltf-transform.dev/), an industry-standard CLI tool for GLTF asset processing.
 
 #### PBR Textures — Squoosh
 All PBR texture maps (albedo, normal, roughness, displacement) were downscaled from **4K (4096×4096) to 1K (1024×1024)** using [Squoosh](https://squoosh.app), reducing texture memory footprint by approximately **93%** with no perceptible visual difference at typical in-game viewing distances.
